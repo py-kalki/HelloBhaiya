@@ -1,0 +1,68 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "tests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",       "order": "ASCENDING" },
+        { "fieldPath": "completed_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "questions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "exam",       "order": "ASCENDING" },
+        { "fieldPath": "subject",    "order": "ASCENDING" },
+        { "fieldPath": "chapter_id", "order": "ASCENDING" },
+        { "fieldPath": "difficulty", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "questions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "exam",       "order": "ASCENDING" },
+        { "fieldPath": "subject",    "order": "ASCENDING" },
+        { "fieldPath": "is_pyq",     "order": "ASCENDING" },
+        { "fieldPath": "pyq_year",   "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "questions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "exam",       "order": "ASCENDING" },
+        { "fieldPath": "chapter_id", "order": "ASCENDING" },
+        { "fieldPath": "type",       "order": "ASCENDING" },
+        { "fieldPath": "difficulty", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "notes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "subject",          "order": "ASCENDING" },
+        { "fieldPath": "chapter_id",       "order": "ASCENDING" },
+        { "fieldPath": "aggregate_rating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "weekly",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "city",         "order": "ASCENDING" },
+        { "fieldPath": "xp_this_week", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "weekly",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "invite_code",  "order": "ASCENDING" },
+        { "fieldPath": "xp_this_week", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

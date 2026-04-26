@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Notes PDFs — any authenticated user can read, Admin SDK only writes
+    match /notes/{noteId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Note thumbnails
+    match /thumbnails/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Community note uploads (Phase 3) — owner uploads, all authenticated read
+    match /community/{uid}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+                   && request.auth.uid == uid
+                   && request.resource.size < 10 * 1024 * 1024  // 10 MB max
+                   && request.resource.contentType.matches('application/pdf');
+    }
+  }
+}
