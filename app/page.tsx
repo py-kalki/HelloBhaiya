@@ -454,7 +454,7 @@ export default async function LandingPage() {
             </div>
 
             <p className="font-hv text-[9px] uppercase tracking-[0.2em] text-[#666] text-center md:text-right leading-loose">
-              Engineered with Precision for India's 2.4M Aspirants <br/>
+              Engineered with Precision for India&apos;s 2.4M Aspirants <br/>
               <span className="text-white/30">© 2026 All Rights Reserved</span>
             </p>
           </div>
