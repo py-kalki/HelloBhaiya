@@ -23,7 +23,7 @@ service cloud.firestore {
                            && request.auth.uid == uid;
       }
 
-      match /dailyGoal {
+      match /dailyGoal/{docId} {
         allow read: if request.auth != null
                     && request.auth.uid == uid;
         allow write: if false; // Server Action only

@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import type { UserProfile } from "@/types/student"
+import type { PlainUserProfile } from "@/types/student"
 
 const WeaknessRadarChart = dynamic(() => import("./WeaknessRadarChart"), {
   ssr: false,
@@ -17,7 +17,7 @@ function getSubjects(exam: string): string[] {
   return NEET_SUBJECTS
 }
 
-type Props = { profile: UserProfile }
+type Props = { profile: PlainUserProfile }
 
 export function WeaknessRadar({ profile }: Props) {
   const subjects = getSubjects(profile.exam)
@@ -30,27 +30,31 @@ export function WeaknessRadar({ profile }: Props) {
   const hasData = data.some((d) => d.accuracy > 0)
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-5 flex flex-col gap-3">
-      <p className="text-text-secondary text-xs font-medium uppercase tracking-widest">
-        Weakness Radar
-      </p>
+    <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-3 animate-slide-up delay-75">
+      <div className="flex items-center justify-between">
+        <p className="text-text-muted text-xs font-semibold uppercase tracking-widest">
+          📡 Weakness Radar
+        </p>
+      </div>
 
       {hasData ? (
         <WeaknessRadarChart data={data} />
       ) : (
-        <div className="h-56 flex flex-col items-center justify-center gap-2 text-center">
-          <span className="text-3xl">🎯</span>
-          <p className="text-text-secondary text-sm">
-            Take your first test to see your radar.
-          </p>
+        <div className="h-48 flex flex-col items-center justify-center gap-3 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-surface-2 border border-border flex items-center justify-center text-3xl">
+            📡
+          </div>
+          <div>
+            <p className="text-text-primary font-semibold text-sm">No data yet</p>
+            <p className="text-text-muted text-xs mt-1">Take your first test to see your radar.</p>
+          </div>
         </div>
       )}
 
-      {/* Legend */}
-      <div className="flex items-center gap-4 flex-wrap">
-        <LegendDot color="#90D4A8" label="Solid (≥75%)" />
-        <LegendDot color="#E0C078" label="Needs Work (50–74%)" />
-        <LegendDot color="#E09090" label="Danger Zone (<50%)" />
+      <div className="flex items-center gap-4 flex-wrap pt-1">
+        <LegendDot color="#6EE7B7" label="Solid (≥75%)" />
+        <LegendDot color="#FCD34D" label="Needs Work (50–74%)" />
+        <LegendDot color="#F87171" label="Danger (<50%)" />
       </div>
     </div>
   )
@@ -59,8 +63,8 @@ export function WeaknessRadar({ profile }: Props) {
 function LegendDot({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
-      <span className="text-text-secondary text-xs">{label}</span>
+      <div className="w-2 h-2 rounded-full" style={{ background: color, boxShadow: `0 0 6px ${color}60` }} />
+      <span className="text-text-muted text-[11px]">{label}</span>
     </div>
   )
 }

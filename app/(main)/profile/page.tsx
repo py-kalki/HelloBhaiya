@@ -8,6 +8,7 @@ import { XPStats } from "@/components/profile/XPStats"
 import { StatsGrid } from "@/components/profile/StatsGrid"
 import { BadgeGrid } from "@/components/gamification/BadgeGrid"
 import type { UserProfile } from "@/types/student"
+import { serializeProfile } from "@/lib/serializeProfile"
 import Link from "next/link"
 import { Settings } from "lucide-react"
 
@@ -19,7 +20,7 @@ export default async function ProfilePage() {
   const db = getFirestore(adminApp)
 
   const userSnap = await db.collection("users").doc(uid).get()
-  const profile = userSnap.data() as UserProfile
+  const profile = serializeProfile(userSnap.data() as UserProfile)
 
   const testsSnap = await db
     .collection("users")

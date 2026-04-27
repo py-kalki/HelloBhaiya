@@ -1,10 +1,10 @@
 "use client"
 
 import { Flame, CheckSquare, HelpCircle } from "lucide-react"
-import type { UserProfile } from "@/types/student"
+import type { PlainUserProfile } from "@/types/student"
 
 type Props = {
-  profile: UserProfile
+  profile: PlainUserProfile
   testsCompleted: number
 }
 

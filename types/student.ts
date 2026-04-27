@@ -45,6 +45,17 @@ export type UserProfile = {
   created_at: Timestamp
 }
 
+/** Serializable version of UserProfile — use when passing from Server to Client components. */
+export type PlainUserProfile = Omit<
+  UserProfile,
+  "target_date" | "last_active" | "goal_refresh_date" | "created_at" | "notes_highlights"
+> & {
+  target_date: number      // ms since epoch
+  last_active: number
+  goal_refresh_date: number
+  created_at: number
+}
+
 export type DailyGoal = {
   date: string
   text: string

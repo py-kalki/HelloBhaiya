@@ -1,10 +1,10 @@
 "use client"
 
 import { XPProgressBar } from "@/components/gamification/XPProgressBar"
-import type { UserProfile } from "@/types/student"
+import type { PlainUserProfile } from "@/types/student"
 
 type Props = {
-  profile: UserProfile
+  profile: PlainUserProfile
 }
 
 export function XPStats({ profile }: Props) {
