@@ -1,14 +1,39 @@
-import { BookOpen } from "lucide-react"
+import { getFirestore } from "firebase-admin/firestore"
+import { adminApp } from "@/lib/firebase/admin"
+import type { Note } from "@/types/note"
+import { NotesLibrary } from "@/components/notes/NotesLibrary"
 
-export default function NotesPage() {
+type NoteDoc = Note & { note_id: string }
+
+export default async function NotesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ chapter?: string; subject?: string }>
+}) {
+  const { chapter, subject } = await searchParams
+  const db = getFirestore(adminApp)
+
+  const snap = await db.collection("notes").orderBy("view_count", "desc").limit(50).get()
+
+  const notes: NoteDoc[] = snap.docs.map((doc) => ({
+    ...(doc.data() as Note),
+    note_id: doc.id,
+  }))
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4 py-20 px-4">
-      <div className="w-14 h-14 rounded-2xl bg-surface-2 border border-border flex items-center justify-center">
-        <BookOpen size={24} className="text-text-secondary" />
-      </div>
-      <div className="text-center">
-        <h1 className="text-text-primary font-bold text-lg">Notes</h1>
-        <p className="text-text-secondary text-sm mt-1">Coming soon in Phase 2.</p>
+    <div className="min-h-screen bg-background pb-24">
+      <div className="max-w-2xl mx-auto px-4 pt-6 space-y-5">
+        <div>
+          <h1 className="text-xl font-bold text-text-primary">Notes Library</h1>
+          <p className="text-sm text-text-secondary mt-0.5">
+            {notes.length} curated notes from top creators
+          </p>
+        </div>
+        <NotesLibrary
+          notes={notes}
+          initialChapter={chapter}
+          initialSubject={subject}
+        />
       </div>
     </div>
   )
