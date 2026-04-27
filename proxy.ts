@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-export async function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const session = request.cookies.get("session")?.value
 
   if (!session) {
-    const loginUrl = new URL("/auth/login", request.url)
+    const loginUrl = new URL("/login", request.url)
     loginUrl.searchParams.set("redirect", request.nextUrl.pathname)
     return NextResponse.redirect(loginUrl)
   }
@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Protect all routes inside (main) layout
   matcher: [
     "/dashboard/:path*",
     "/test/:path*",

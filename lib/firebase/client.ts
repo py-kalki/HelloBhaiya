@@ -18,10 +18,11 @@ const firebaseConfig = {
   appId:             process.env.NEXT_PUBLIC_FIREBASE_APP_ID              ?? "",
 }
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
+const isNew = !getApps().length
+const app = isNew ? initializeApp(firebaseConfig) : getApp()
 
-// Firestore with offline persistence (IndexedDB)
-const db = getApps().length === 1
+// Firestore with offline persistence — initializeFirestore can only be called once
+const db = isNew
   ? initializeFirestore(app, { localCache: persistentLocalCache() })
   : getFirestore(app)
 

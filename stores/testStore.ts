@@ -26,7 +26,7 @@ type TestStore = {
 
 export const useTestStore = create<TestStore>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       testId:               null,
       questions:            [],
       answers:              {},
