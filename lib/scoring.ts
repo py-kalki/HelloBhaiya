@@ -74,8 +74,8 @@ export function calculateXP(
 ): number {
   const base = 100
   const accuracyBonus = accuracy > 80 ? 200 : accuracy >= 60 ? 100 : 0
-  const speedThreshold = timerMinutes !== null ? timerMinutes * 60 * 0.7 : Infinity
-  const speedBonus = timeTakenSeconds < speedThreshold ? 50 : 0
+  const speedBonus =
+    timerMinutes !== null && timeTakenSeconds < timerMinutes * 60 * 0.7 ? 50 : 0
   return base + accuracyBonus + speedBonus
 }
 
