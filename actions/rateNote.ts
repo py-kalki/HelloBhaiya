@@ -22,26 +22,30 @@ export async function rateNote(noteId: string, rating: number): Promise<void> {
   const ratingRef = db.collection("notes").doc(noteId).collection("ratings").doc(uid)
   const noteRef   = db.collection("notes").doc(noteId)
 
-  const existing = await ratingRef.get()
-  const batch = db.batch()
+  await db.runTransaction(async (tx) => {
+    const [existingSnap, noteSnap] = await Promise.all([
+      tx.get(ratingRef),
+      tx.get(noteRef),
+    ])
 
-  batch.set(ratingRef, { rating, created_at: FieldValue.serverTimestamp() }, { merge: true })
+    const ratingCount: number = noteSnap.data()?.rating_count ?? 0
+    const aggRating:   number = noteSnap.data()?.aggregate_rating ?? 0
 
-  if (existing.exists) {
-    const prev: number = existing.data()?.rating ?? 0
-    const noteDoc = await noteRef.get()
-    const ratingCount: number = noteDoc.data()?.rating_count ?? 1
-    const aggRating:   number = noteDoc.data()?.aggregate_rating ?? prev
+    tx.set(ratingRef, { rating, created_at: FieldValue.serverTimestamp() }, { merge: true })
 
-    const newAgg = (aggRating * ratingCount - prev + rating) / ratingCount
-    batch.update(noteRef, { aggregate_rating: Math.round(newAgg * 10) / 10 })
-  } else {
-    batch.update(noteRef, {
-      aggregate_rating: FieldValue.increment(rating),
-      rating_count:     FieldValue.increment(1),
-    })
-  }
-
-  await batch.commit()
+    if (existingSnap.exists) {
+      const prev: number = existingSnap.data()?.rating ?? 0
+      const count = Math.max(ratingCount, 1)
+      const newAgg = (aggRating * count - prev + rating) / count
+      tx.update(noteRef, { aggregate_rating: Math.round(newAgg * 10) / 10 })
+    } else {
+      const newCount = ratingCount + 1
+      const newAgg = (aggRating * ratingCount + rating) / newCount
+      tx.update(noteRef, {
+        aggregate_rating: Math.round(newAgg * 10) / 10,
+        rating_count:     FieldValue.increment(1),
+      })
+    }
+  })
   revalidatePath(`/notes/${noteId}`)
 }

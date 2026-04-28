@@ -16,7 +16,7 @@ export async function checkRateLimit(
   const result = await db.runTransaction(async (tx) => {
     const snap = await tx.get(ref)
     const count: number = snap.exists ? (snap.data()?.count ?? 0) : 0
-    if (count >= maxPerMinute) return count
+    if (count >= maxPerMinute) return count + 1   // signal over-limit without writing
     tx.set(ref, { count: FieldValue.increment(1), expires: Date.now() + WINDOW_MS * 2 }, { merge: true })
     return count + 1
   })
