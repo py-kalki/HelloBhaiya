@@ -7,6 +7,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import { adminApp } from "@/lib/firebase/admin"
 import { buildDoubtSolverPrompt } from "@/lib/promptTemplates"
 import { toISTDateString } from "@/lib/dateUtils"
+import { checkRateLimit } from "@/lib/rateLimit"
 
 async function verifySession(): Promise<string> {
   const sessionCookie = (await cookies()).get("session")?.value
@@ -27,6 +28,12 @@ export async function askDoubt(
   imageBase64: string | null
 ): Promise<AskDoubtResult> {
   const uid = await verifySession()
+
+  const rl = await checkRateLimit(uid, "askDoubt", 60)
+  if (!rl.allowed) {
+    throw new Error("Rate limit exceeded")
+  }
+
   const db  = getFirestore(adminApp)
 
   const today    = toISTDateString()
