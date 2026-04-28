@@ -2,14 +2,14 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, FlaskConical, BookOpen, Map, User } from "lucide-react"
+import { Home, FlaskConical, BookOpen, Map, Swords } from "lucide-react"
 
 const NAV_ITEMS = [
-  { href: "/dashboard",  label: "Home",    Icon: Home         },
-  { href: "/test/build", label: "Test",    Icon: FlaskConical },
-  { href: "/notes",      label: "Notes",   Icon: BookOpen     },
-  { href: "/roadmap",    label: "Roadmap", Icon: Map          },
-  { href: "/profile",    label: "Profile", Icon: User         },
+  { href: "/dashboard",  label: "Home",   Icon: Home         },
+  { href: "/test/build", label: "Test",   Icon: FlaskConical },
+  { href: "/battle",     label: "Battle", Icon: Swords       },
+  { href: "/notes",      label: "Notes",  Icon: BookOpen     },
+  { href: "/roadmap",    label: "Roadmap",Icon: Map          },
 ]
 
 export function BottomNav() {
