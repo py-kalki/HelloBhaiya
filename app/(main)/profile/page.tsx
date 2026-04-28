@@ -10,7 +10,7 @@ import { BadgeGrid } from "@/components/gamification/BadgeGrid"
 import type { UserProfile } from "@/types/student"
 import { serializeProfile } from "@/lib/serializeProfile"
 import Link from "next/link"
-import { Settings } from "lucide-react"
+import { Settings, BarChart2 } from "lucide-react"
 
 export default async function ProfilePage() {
   const sessionCookie = (await cookies()).get("session")?.value
@@ -35,12 +35,20 @@ export default async function ProfilePage() {
     <div className="flex flex-col gap-4 p-4 max-w-2xl mx-auto w-full pb-10">
       <div className="flex items-center justify-between">
         <h1 className="text-text-primary font-bold text-lg">Profile</h1>
-        <Link
-          href="/settings"
-          className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors rounded-lg"
-        >
-          <Settings size={18} />
-        </Link>
+        <div className="flex items-center gap-1">
+          <Link
+            href="/analytics"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors rounded-lg"
+          >
+            <BarChart2 size={18} />
+          </Link>
+          <Link
+            href="/settings"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors rounded-lg"
+          >
+            <Settings size={18} />
+          </Link>
+        </div>
       </div>
 
       <IdentityCard profile={profile} />

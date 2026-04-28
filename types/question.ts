@@ -38,6 +38,7 @@ export type Question = {
 }
 
 export type TestConfig = {
+  exam: "NEET" | "JEE_MAINS" | "JEE_ADV"
   subjects: string[]
   chapters: string[]
   difficulty: { easy: number; medium: number; hard: number }
