@@ -17,7 +17,7 @@ export default async function LandingPage() {
 
   return (
     <SmoothScrollProvider>
-      <div className="font-sans min-h-dvh bg-background text-text-primary selection:bg-accent selection:text-black overflow-x-hidden">
+      <div className="font-sans min-h-dvh bg-background text-text-primary selection:bg-accent selection:text-black">
 
         {/* ══ NAV + HERO (client component with GSAP) ═══════════════════════ */}
         <HeroSection />

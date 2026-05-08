@@ -50,7 +50,7 @@ export default function RoadmapsSection() {
       }
     )
 
-    // Steps Stagger
+    // Steps Stagger + Stacking Depth
     const steps = gsap.utils.toArray<HTMLElement>(".roadmap-step")
     steps.forEach((step, i) => {
       const tl = gsap.timeline({
@@ -73,6 +73,21 @@ export default function RoadmapsSection() {
           "-=0.4"
         )
       }
+
+      // Stacking Depth (Mobile)
+      const nextStep = steps[i + 1]
+      if (nextStep) {
+        gsap.to(step, {
+          scale: 0.94,
+          autoAlpha: 0.5,
+          scrollTrigger: {
+            trigger: nextStep,
+            start: "top 35%",
+            end: "top 15%",
+            scrub: true,
+          }
+        })
+      }
     })
 
     // Parallax background elements
@@ -90,9 +105,11 @@ export default function RoadmapsSection() {
   }, { scope: container })
 
   return (
-    <section ref={container} id="roadmaps" className="py-32 relative overflow-visible bg-background">
-      <div className="roadmap-glow absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/5 blur-[150px] rounded-full pointer-events-none" />
-      <div className="roadmap-glow absolute bottom-1/4 left-0 w-[600px] h-[600px] bg-violet/5 blur-[150px] rounded-full pointer-events-none" />
+    <section ref={container} id="roadmaps" className="relative py-32 pb-64 bg-background overflow-visible">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="roadmap-glow absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/5 blur-[150px] rounded-full" />
+        <div className="roadmap-glow absolute bottom-1/4 left-0 w-[600px] h-[600px] bg-violet/5 blur-[150px] rounded-full" />
+      </div>
 
       <div className="max-w-6xl mx-auto px-6 sm:px-8 relative z-10">
         <div className="roadmap-header text-center mb-24">
@@ -120,10 +137,10 @@ export default function RoadmapsSection() {
                 className={`roadmap-step sticky top-[var(--mob-top)] md:relative md:top-auto flex flex-col md:flex-row items-center gap-8 md:gap-0 ${
                   i % 2 === 0 ? "md:flex-row-reverse" : ""
                 } md:min-h-[300px]`}
-                style={{ "--mob-top": `calc(15vh + ${i * 1.5}rem)` } as React.CSSProperties}
+                style={{ "--mob-top": `calc(10vh + ${i * 2}rem)` } as React.CSSProperties}
               >
                 {/* Content Side */}
-                <div className="w-full md:w-[45%] pl-14 md:pl-0">
+                <div className="w-full md:w-[45%] pl-14 md:pl-0 bg-background md:bg-transparent rounded-2xl p-4 md:p-0">
                   <div className={`p-6 sm:p-8 rounded-[32px] border border-white/5 bg-[#0a0a0a] md:bg-surface/30 md:backdrop-blur-xl hover:border-white/20 transition-all group cursor-default relative overflow-hidden shadow-2xl`}>
                     <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700`} />
                     

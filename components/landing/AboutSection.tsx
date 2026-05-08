@@ -81,17 +81,35 @@ export default function AboutSection() {
       }
     )
 
-    // ── Values grid stagger ────────────────────────────────────────────
-    gsap.fromTo(".value-card",
-      { autoAlpha: 0, y: 50, scale: 0.92 },
-      {
-        autoAlpha: 1, y: 0, scale: 1,
-        stagger: 0.1,
-        duration: 0.7,
-        ease: "back.out(1.4)",
-        scrollTrigger: { trigger: ".values-grid", start: "top 85%" }
+    // ── Values grid stagger + Stacking Depth ──────────────────────────
+    const values = gsap.utils.toArray<HTMLElement>(".value-card")
+    values.forEach((card, i) => {
+      // 1. Entrance
+      gsap.fromTo(card,
+        { autoAlpha: 0, y: 40, scale: 0.94 },
+        {
+          autoAlpha: 1, y: 0, scale: 1,
+          duration: 0.7,
+          ease: "back.out(1.4)",
+          scrollTrigger: { trigger: card, start: "top 92%" }
+        }
+      )
+
+      // 2. Stacking Depth (Mobile)
+      const nextCard = values[i + 1]
+      if (nextCard) {
+        gsap.to(card, {
+          scale: 0.94,
+          autoAlpha: 0.5,
+          scrollTrigger: {
+            trigger: nextCard,
+            start: "top 35%",
+            end: "top 15%",
+            scrub: true,
+          }
+        })
       }
-    )
+    })
 
     // ── Parallax glows ─────────────────────────────────────────────────
     gsap.to(".about-glow", {
@@ -110,11 +128,12 @@ export default function AboutSection() {
   const quoteWords = "We built the study platform we wished existed when we were preparing.".split(" ")
 
   return (
-    <section ref={container} id="about" className="py-32 relative overflow-visible bg-background border-t border-white/5">
+    <section ref={container} id="about" className="py-32 pb-64 relative overflow-visible bg-background border-t border-white/5">
 
-      {/* Ambient Glows */}
-      <div className="about-glow absolute top-0 left-1/4 w-[700px] h-[700px] bg-accent/5 blur-[150px] rounded-full pointer-events-none" />
-      <div className="about-glow absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-violet/5 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="about-glow absolute top-0 left-1/4 w-[700px] h-[700px] bg-accent/5 blur-[150px] rounded-full" />
+        <div className="about-glow absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-violet/5 blur-[150px] rounded-full" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
 
@@ -217,10 +236,10 @@ export default function AboutSection() {
               <div 
                 key={i} 
                 className="sticky top-[var(--mob-top)] sm:relative sm:top-auto block"
-                style={{ "--mob-top": `calc(15vh + ${i * 1.5}rem)` } as React.CSSProperties}
+                style={{ "--mob-top": `calc(10vh + ${i * 2}rem)` } as React.CSSProperties}
               >
                 <div
-                  className={`value-card relative p-7 rounded-2xl bg-[#0a0a0a] sm:bg-surface/30 border border-white/5 ${v.border} transition-all duration-300 group overflow-hidden shadow-2xl`}
+                  className={`value-card relative p-7 rounded-2xl bg-[#0a0a0a] border border-white/10 ${v.border} transition-all duration-300 group overflow-hidden shadow-2xl`}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${v.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                   <div className="relative z-10">

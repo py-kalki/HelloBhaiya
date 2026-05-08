@@ -80,7 +80,7 @@ export default function StatsCounter() {
           <span className={`font-sans font-extrabold text-white leading-none tracking-tight text-[18px] sm:text-3xl lg:text-4xl stat-val-${i}`}>
             {stat.display}
           </span>
-          <span className="font-sans font-bold uppercase mt-1 sm:mt-2 text-[#9e9689] text-[6.5px] sm:text-[9px] tracking-wider sm:tracking-[0.25em]">
+          <span className="font-sans font-bold uppercase mt-1 sm:mt-2 text-[#9e9689] text-[8px] sm:text-[9px] tracking-widest sm:tracking-[0.25em]">
             {stat.label}
           </span>
         </div>
