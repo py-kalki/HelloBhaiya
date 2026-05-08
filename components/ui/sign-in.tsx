@@ -35,6 +35,8 @@ interface SignInPageProps {
   heroImageSrc?: string;
   testimonials?: Testimonial[];
   onSignIn?: (event: React.FormEvent<HTMLFormElement>) => void;
+  onGoogleSignIn?: () => void;
+  onCreateAccount?: (event: React.FormEvent<HTMLFormElement>) => void;
   onSwitchMode?: (mode: 'signin' | 'signup' | 'reset' | 'verify') => void;
   isLoading?: boolean;
   mode?: 'signin' | 'signup' | 'reset' | 'verify';
@@ -225,7 +227,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
           
           {testimonials.length > 0 && (
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 px-8 w-full justify-center">
-              <TestimonialCard testimonial={testimonials[0]} className="anim-testimonial" />
+              {testimonials[0] && <TestimonialCard testimonial={testimonials[0]} className="anim-testimonial" />}
               {testimonials[1] && <div className="hidden xl:flex"><TestimonialCard testimonial={testimonials[1]} className="anim-testimonial" /></div>}
               {testimonials[2] && <div className="hidden 2xl:flex"><TestimonialCard testimonial={testimonials[2]} className="anim-testimonial" /></div>}
             </div>

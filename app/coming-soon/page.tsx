@@ -182,7 +182,9 @@ const ROADMAP_ITEMS = [
   },
 ]
 
-const STATUS_CONFIG: Record<string, { color: string; dot: string; border: string; bg: string }> = {
+type StatusType = "live" | "building" | "planned" | "vision";
+
+const STATUS_CONFIG: Record<StatusType, { color: string; dot: string; border: string; bg: string }> = {
   live:     { color: "text-accent",   dot: "bg-accent",   border: "border-accent/30",   bg: "bg-accent/5"   },
   building: { color: "text-violet",   dot: "bg-violet",   border: "border-violet/30",   bg: "bg-violet/5"   },
   planned:  { color: "text-blue-400", dot: "bg-blue-400", border: "border-blue-400/30", bg: "bg-blue-400/5" },
@@ -288,7 +290,7 @@ export default function ComingSoonPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {ROADMAP_ITEMS.map((phase, i) => {
-            const s = STATUS_CONFIG[phase.status]
+            const s = STATUS_CONFIG[phase.status as StatusType]
             return (
               <div
                 key={i}
