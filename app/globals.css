@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import "../node_modules/tw-animate-css/dist/tw-animate.css";
+@import "../node_modules/shadcn/dist/tailwind.css";
 
 /* ─── Custom keyframes ──────────────────────────────────────────── */
 @keyframes slide-up   { from { opacity:0; transform:translateY(20px)} to { opacity:1; transform:translateY(0) } }
@@ -33,10 +33,12 @@
   --color-text-muted:     var(--text-muted);
 
   /* ── Semantic tokens */
-  --color-accent:  var(--accent);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger:  var(--danger);
+  --color-violet:      var(--violet);
+  --color-violet-dim:  var(--violet-dim);
+  --color-accent:      var(--accent);
+  --color-success:     var(--success);
+  --color-warning:     var(--warning);
+  --color-danger:      var(--danger);
 
   /* ── Animations */
   --animate-slide-up:   slide-up  0.4s cubic-bezier(.16,1,.3,1) both;
@@ -84,51 +86,57 @@
   --font-mono:    var(--font-jetbrains-mono);
 }
 
-/* ── Design token values — Monochrome dark theme ── */
+/* ── Design token values — ExamForge dark theme ── */
 :root {
   /* ── Surfaces (true blacks & near-blacks) */
-  --background: #050505;
-  --surface:    #0D0D0D;
-  --surface-2:  #161616;
+  --background: #18181A;
+  --surface:    #222224;
+  --surface-2:  #2C2C2F;
+
+  /* ── Purple accent */
+  --violet:          #A27BFA;
+  --violet-dim:      #6B4CC6;
+  --violet-glow:     rgba(162, 123, 250, 0.15);
+  --violet-ultra:    rgba(162, 123, 250, 0.06);
 
   /* ── Text (pure white hierarchy) */
-  --foreground:       #F5F5F5;
-  --text-primary:     #F5F5F5;
-  --text-secondary:   #888888;
-  --text-muted:       #444444;
+  --foreground:       #FFFFFF;
+  --text-primary:     #FFFFFF;
+  --text-secondary:   #A1A1AA;
+  --text-muted:       #71717A;
 
-  /* ── Accent — pure white (monochrome) */
-  --accent:   #E8E8E8;
-  --success:  #A0A0A0;
-  --warning:  #BBBBBB;
-  --danger:   #888888;
+  /* ── Semantic (Neon green as primary accent) */
+  --accent:   #D4FF59;
+  --success:  #D4FF59;
+  --warning:  #FACC15;
+  --danger:   #F87171;
 
   /* ── shadcn token mappings */
-  --card:                #0D0D0D;
-  --card-foreground:     #F5F5F5;
-  --popover:             #0D0D0D;
-  --popover-foreground:  #F5F5F5;
-  --primary:             #F5F5F5;
-  --primary-foreground:  #050505;
-  --secondary:           #161616;
-  --secondary-foreground:#F5F5F5;
-  --muted:               #161616;
-  --muted-foreground:    #666666;
-  --destructive:         #888888;
-  --border:              #222222;
-  --input:               #222222;
-  --ring:                #F5F5F5;
-  --radius:              0.75rem;
+  --card:                #222224;
+  --card-foreground:     #FFFFFF;
+  --popover:             #222224;
+  --popover-foreground:  #FFFFFF;
+  --primary:             #D4FF59;
+  --primary-foreground:  #000000;
+  --secondary:           #2C2C2F;
+  --secondary-foreground:#FFFFFF;
+  --muted:               #2C2C2F;
+  --muted-foreground:    #A1A1AA;
+  --destructive:         #F87171;
+  --border:              #333338;
+  --input:               #333338;
+  --ring:                #D4FF59;
+  --radius:              1.5rem;
 
   /* ── Sidebar */
-  --sidebar:                     #0A0A0A;
+  --sidebar:                     #18181A;
   --sidebar-foreground:          #E0E0E0;
-  --sidebar-primary:             #DDDDDD;
-  --sidebar-primary-foreground:  #050505;
-  --sidebar-accent:              #141414;
-  --sidebar-accent-foreground:   #E0E0E0;
-  --sidebar-border:              #1E1E1E;
-  --sidebar-ring:                #DDDDDD;
+  --sidebar-primary:             #D4FF59;
+  --sidebar-primary-foreground:  #000000;
+  --sidebar-accent:              #222224;
+  --sidebar-accent-foreground:   #FFFFFF;
+  --sidebar-border:              #333338;
+  --sidebar-ring:                #D4FF59;
 }
 
 /* ── Base styles ─────────────────────────────────────────────── */

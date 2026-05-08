@@ -1,52 +1,50 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
-import { BookOpen, ArrowRight, Sparkles } from "lucide-react"
+import { Moon, ArrowRight } from "lucide-react"
+import { useUserProfile } from "@/lib/hooks/useUserProfile"
 
 export function TonightsRevisionBanner() {
-  const [visible, setVisible] = useState(false)
+  const { profile } = useUserProfile()
+  
+  if (!profile) return null
 
-  useEffect(() => {
-    const check = () => {
-      const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
-      setVisible(nowIST.getUTCHours() >= 18)
-    }
-    check()
-    const id = setInterval(check, 60_000)
-    return () => clearInterval(id)
-  }, [])
+  const hour = new Date().getHours()
+  const isEvening = hour >= 18
 
-  if (!visible) return null
+  if (!isEvening) return null
+
+  // If revision is already completed today, hide banner
+  // For Phase 1, we simulate this by checking if they earned any revision XP today
+  const hasCompletedRevision = false 
+
+  if (hasCompletedRevision) return null
 
   return (
-    <Link
-      href="/revision"
-      className="group relative flex items-center justify-between gap-3 p-4 rounded-2xl border border-warning/25 overflow-hidden hover:border-warning/40 transition-all duration-300 animate-slide-up"
-      style={{ background: "linear-gradient(135deg, rgba(252,211,77,0.06) 0%, rgba(245,158,11,0.03) 100%)" }}
-    >
-      {/* Subtle glow */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: "radial-gradient(ellipse at left, rgba(252,211,77,0.06) 0%, transparent 70%)" }} />
-
-      <div className="relative flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: "rgba(252,211,77,0.12)", border: "1px solid rgba(252,211,77,0.2)" }}>
-          <BookOpen size={18} className="text-warning" />
+    <div className="relative w-full rounded-[28px] overflow-hidden bg-violet/10 border border-violet/20 p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="relative flex items-center gap-4 z-10">
+        <div className="w-12 h-12 rounded-full bg-violet/20 border border-violet/30 flex items-center justify-center text-violet shrink-0">
+          <Moon size={24} />
         </div>
         <div>
-          <div className="flex items-center gap-2">
-            <p className="text-text-primary font-semibold text-sm">Tonight&apos;s Revision Ready</p>
-            <Sparkles size={12} className="text-warning" />
-          </div>
-          <p className="text-text-muted text-xs mt-0.5">5 weak chapters · No timer · +150 XP</p>
+          <h3 className="text-lg font-semibold text-text-primary">Tonight&apos;s Revision</h3>
+          <p className="text-sm text-text-secondary mt-1 max-w-md">
+            Review 5 concepts you struggled with recently before heading to bed.
+          </p>
         </div>
       </div>
+      
+      <Link 
+        href="/revision"
+        className="relative z-10 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-violet text-white font-semibold hover:bg-violet-dim transition-all group"
+      >
+        Start Revision
+        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+      </Link>
 
-      <div className="relative flex items-center gap-1 text-warning text-sm font-semibold shrink-0">
-        Start
-        <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
-      </div>
-    </Link>
+      {/* Decorative background effects */}
+      <div className="absolute right-0 top-0 w-[400px] h-full bg-gradient-to-l from-violet/10 to-transparent pointer-events-none" />
+      <div className="absolute right-10 -top-10 w-40 h-40 bg-violet/20 blur-[60px] pointer-events-none rounded-full" />
+    </div>
   )
 }

@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: { bodySizeLimit: "2mb" },
   },
+  // Keep firebase-admin and pdfjs server-only — never bundle into the client chunk
+  serverExternalPackages: ["firebase-admin", "pdfjs-dist"],
+  turbopack: {
+    resolveAlias: {
+      // pdfjs-dist tries to require('canvas') for server-side rendering; stub it out
+      canvas: "./empty-module.js",
+    },
+  },
   async headers() {
     return [
       {

@@ -2,69 +2,106 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ── User profiles ──────────────────────────────────────────────────
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isInstitutionAdmin(institutionId) {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/institutions/$(institutionId))
+        && get(/databases/$(database)/documents/institutions/$(institutionId)).data.admin_uid
+           == request.auth.uid;
+    }
+
+    // ── User profiles ──────────────────────────────────────────────────────
     match /users/{uid} {
-      allow read, write: if request.auth != null
-                         && request.auth.uid == uid;
+      allow read, write: if isOwner(uid);
 
       match /tests/{testId} {
-        allow read: if request.auth != null
-                    && request.auth.uid == uid;
-        allow write: if false; // Server Action (Admin SDK) only
+        allow read: if isOwner(uid);
+        allow write: if false; // Admin SDK only
       }
 
       match /templates/{templateId} {
-        allow read, write: if request.auth != null
-                           && request.auth.uid == uid;
+        allow read, write: if isOwner(uid);
       }
 
       match /timetable/{dayId} {
-        allow read, write: if request.auth != null
-                           && request.auth.uid == uid;
+        allow read, write: if isOwner(uid);
       }
 
       match /dailyGoal/{docId} {
-        allow read: if request.auth != null
-                    && request.auth.uid == uid;
-        allow write: if false; // Server Action only
+        allow read: if isOwner(uid);
+        allow write: if false; // Admin SDK only
       }
     }
 
-    // ── Question bank ──────────────────────────────────────────────────
+    // ── Question bank ──────────────────────────────────────────────────────
     match /questions/{questionId} {
-      allow read: if request.auth != null;
+      allow read: if isAuthenticated();
       allow write: if false; // Admin SDK only
     }
 
-    // ── Notes library ──────────────────────────────────────────────────
+    // ── Notes library ──────────────────────────────────────────────────────
     match /notes/{noteId} {
-      allow read: if request.auth != null;
+      allow read: if isAuthenticated();
       allow write: if false; // Admin SDK only
 
-      match /ratings/{uid} {
-        allow read: if request.auth != null;
-        allow write: if request.auth != null
-                     && request.auth.uid == uid;
+      match /ratings/{raterUid} {
+        allow read: if isAuthenticated();
+        allow write: if isOwner(raterUid);
       }
     }
 
-    // ── Battles (Phase 3) ──────────────────────────────────────────────
+    // ── Battles ────────────────────────────────────────────────────────────
     match /battles/{battleId} {
-      allow read, write: if request.auth != null
-                         && (resource == null
-                             || request.auth.uid == resource.data.player1_uid
-                             || request.auth.uid == resource.data.player2_uid);
+      allow read: if isAuthenticated()
+                  && (resource == null
+                      || request.auth.uid == resource.data.player1_uid
+                      || request.auth.uid == resource.data.player2_uid);
+      allow write: if false; // Admin SDK only (submitBattleAnswers action)
     }
 
-    // ── Leaderboard ────────────────────────────────────────────────────
-    match /leaderboard/weekly/{uid} {
-      allow read: if request.auth != null;
-      allow write: if false; // Server Action only
+    // ── Leaderboard ────────────────────────────────────────────────────────
+    match /leaderboard/weekly/entries/{uid} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Admin SDK only
     }
 
-    match /leaderboard/archive/{weekId}/{uid} {
-      allow read: if request.auth != null;
+    match /leaderboard/archive/{weekId}/entries/{uid} {
+      allow read: if isAuthenticated();
       allow write: if false; // Cloud Function only
+    }
+
+    // ── Institutions ───────────────────────────────────────────────────────
+    match /institutions/{institutionId} {
+      // Public metadata readable to any authenticated user (e.g., for join flows)
+      allow read: if isAuthenticated();
+      // Only the admin can update the institution doc
+      allow write: if isInstitutionAdmin(institutionId);
+
+      match /classes/{classId} {
+        // Any authenticated user can read class data (to verify join_code)
+        allow read: if isAuthenticated();
+        // Only institution admin can create/update classes via Admin SDK
+        allow write: if false; // Admin SDK only
+      }
+    }
+
+    // ── Rate limits ────────────────────────────────────────────────────────
+    match /_rate_limits/{docId} {
+      allow read, write: if false; // Admin SDK only (server-side rate limiting)
+    }
+
+    // ── Syllabus / static data ─────────────────────────────────────────────
+    match /syllabus/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Admin SDK only
     }
   }
 }

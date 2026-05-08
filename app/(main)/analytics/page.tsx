@@ -7,13 +7,8 @@ import { predictNEETScore } from "@/lib/predictedScore"
 import { getSyllabus } from "@/lib/syllabusData"
 import { PredictedScoreCard } from "@/components/analytics/PredictedScoreCard"
 import { ChapterHeatmap } from "@/components/analytics/ChapterHeatmap"
-import dynamic from "next/dynamic"
 import type { AccuracyDataPoint } from "@/components/analytics/SubjectAccuracyChart"
-
-const SubjectAccuracyChart = dynamic(
-  () => import("@/components/analytics/SubjectAccuracyChart").then((m) => ({ default: m.SubjectAccuracyChart })),
-  { ssr: false }
-)
+import { SubjectAccuracyChart } from "@/components/analytics/SubjectAccuracyChartWrapper"
 
 export default async function AnalyticsPage() {
   const sessionCookie = (await cookies()).get("session")?.value

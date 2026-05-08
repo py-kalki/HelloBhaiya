@@ -2,24 +2,43 @@
 
 import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
+import { 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  sendPasswordResetEmail,
+  sendEmailVerification
+} from "firebase/auth"
 import { auth } from "@/lib/firebase/client"
+import { SignInPage, Testimonial } from "@/components/ui/sign-in"
 
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-    </svg>
-  )
-}
+const sampleTestimonials: Testimonial[] = [
+  {
+    avatarSrc: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+    name: "Priya Sharma",
+    handle: "NEET ASPIRANT",
+    text: "HelloBhaiya completely changed my revision strategy. The weakness radar is scarily accurate."
+  },
+  {
+    avatarSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+    name: "Rahul Verma",
+    handle: "JEE ADVANCED",
+    text: "The custom paper builder saves me hours of searching. Leveling up makes studying actually fun."
+  },
+  {
+    avatarSrc: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
+    name: "Ananya Gupta",
+    handle: "AIIMS DELHI 2024",
+    text: "I used this for my last 90 days. The spaced repetition algorithm is the best I've ever seen."
+  },
+];
 
 function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
+  const [mode, setMode] = useState<'signin' | 'signup' | 'reset' | 'verify'>('signin')
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -27,84 +46,126 @@ function LoginContent() {
     if (redirect) sessionStorage.setItem("auth_redirect", redirect)
   }, [searchParams])
 
-  async function handleGoogleSignIn() {
+  const createSessionAndRedirect = async (idToken: string, forceOnboarding = false, rememberMe = false) => {
+    const res = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken, rememberMe }),
+    })
+    if (!res.ok) throw new Error("Session creation failed")
+
+    let redirectTo = sessionStorage.getItem("auth_redirect") ?? "/dashboard"
+    if (forceOnboarding) redirectTo = "/onboarding"
+
+    sessionStorage.removeItem("auth_redirect")
+    router.push(redirectTo)
+  }
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+    const rememberMe = formData.get("rememberMe") === "on"
+
+    try {
+      if (mode === 'signup') {
+        const result = await createUserWithEmailAndPassword(auth, email, password)
+        await sendEmailVerification(result.user)
+        setMode('verify')
+      } else if (mode === 'verify') {
+        // Force refresh the user object from Firebase
+        await auth.currentUser?.reload()
+        const user = auth.currentUser
+        
+        if (user && user.emailVerified) {
+          const idToken = await user.getIdToken()
+          await createSessionAndRedirect(idToken, true) // force to onboarding
+        } else {
+          throw new Error("Email not verified yet. Please click the link in your inbox.")
+        }
+      } else if (mode === 'signin') {
+        const result = await signInWithEmailAndPassword(auth, email, password)
+        const idToken = await result.user.getIdToken()
+        await createSessionAndRedirect(idToken, false, rememberMe)
+      } else if (mode === 'reset') {
+        await sendPasswordResetEmail(auth, email)
+        alert("Password reset email sent! Please check your inbox.")
+        setMode('signin')
+      }
+    } catch (err: any) {
+      let errorMessage = err.message || "An error occurred. Please try again."
+      if (err.code === 'auth/email-already-in-use') errorMessage = "This email is already registered. Please sign in."
+      else if (err.code === 'auth/invalid-credential') errorMessage = "Invalid email or password."
+      else if (err.code === 'auth/user-not-found') errorMessage = "No account found with this email."
+      else if (err.code === 'auth/weak-password') errorMessage = "Password should be at least 6 characters."
+      
+      setError(errorMessage)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
     setLoading(true)
     setError(null)
     try {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)
       const idToken = await result.user.getIdToken()
-
-      const res = await fetch("/api/auth/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      })
-      if (!res.ok) throw new Error("Session creation failed")
-
-      const redirectTo = sessionStorage.getItem("auth_redirect") ?? "/dashboard"
-      sessionStorage.removeItem("auth_redirect")
-      router.push(redirectTo)
+      await createSessionAndRedirect(idToken)
     } catch {
-      setError("Sign-in failed. Please try again.")
+      setError("Google sign-in failed. Please try again.")
       setLoading(false)
     }
   }
 
+  const handleSwitchMode = (newMode: 'signin' | 'signup' | 'reset' | 'verify') => {
+    setMode(newMode)
+    setError(null)
+  }
+
+  // Dynamic titles based on mode
+  const titles = {
+    signin: <span className="font-bold text-white tracking-tighter">Welcome back</span>,
+    signup: <span className="font-bold text-white tracking-tighter">Join the Elite</span>,
+    reset: <span className="font-bold text-white tracking-tighter">Reset Password</span>,
+    verify: <span className="font-bold text-white tracking-tighter">Verify Email</span>,
+  }
+
+  const descriptions = {
+    signin: "Access your dashboard and continue your journey to the top rank.",
+    signup: "Create an account to unlock custom tests and weakness radar.",
+    reset: "Enter your email and we'll send you a link to reset your password.",
+    verify: "A secure verification link has been sent to your inbox.",
+  }
+
   return (
-    <div className="w-full max-w-sm flex flex-col items-center gap-8 animate-slide-up">
-      {/* Logo */}
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-2xl bg-accent/20 blur-xl" />
-          <div className="relative w-16 h-16 rounded-2xl bg-surface border border-accent/20 flex items-center justify-center text-3xl shadow-lg">
-            📚
-          </div>
-        </div>
-        <div className="text-center">
-          <h1 className="text-2xl font-bold gradient-text tracking-tight">HelloBhaiya</h1>
-          <p className="text-text-muted text-sm mt-1">Study harder. Level up.</p>
-        </div>
-      </div>
-
-      {/* Card */}
-      <div className="w-full bg-surface border border-border rounded-2xl p-6 flex flex-col gap-4 shadow-2xl shadow-black/40">
-        <div className="text-center">
-          <p className="text-text-primary font-semibold text-sm">Welcome back</p>
-          <p className="text-text-muted text-xs mt-1">Sign in to continue your study streak</p>
-        </div>
-
-        <button
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-          className="relative w-full h-12 rounded-xl border border-border bg-surface-2 flex items-center justify-center gap-3 text-sm font-medium text-text-primary hover:bg-border hover:border-text-muted transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
-        >
-          {loading ? (
-            <div className="w-4 h-4 rounded-full border-2 border-text-muted border-t-accent animate-spin" />
-          ) : (
-            <GoogleIcon />
-          )}
-          {loading ? "Signing in…" : "Continue with Google"}
-        </button>
-
-        {error && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-danger/8 border border-danger/20 text-danger text-xs">
-            <span>⚠</span>
-            {error}
-          </div>
-        )}
-      </div>
-
-      <p className="text-center text-text-muted text-xs px-6 leading-relaxed">
-        By continuing, you agree to our Terms of Service and Privacy Policy.
-      </p>
-    </div>
-  )
+    <SignInPage
+      title={titles[mode]}
+      description={descriptions[mode]}
+      heroImageSrc="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop"
+      testimonials={sampleTestimonials}
+      onSignIn={handleFormSubmit}
+      onGoogleSignIn={handleGoogleSignIn}
+      onSwitchMode={handleSwitchMode}
+      mode={mode}
+      isLoading={loading}
+      error={error}
+    />
+  );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={
+      <div className="min-h-dvh bg-background flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+      </div>
+    }>
       <LoginContent />
     </Suspense>
   )

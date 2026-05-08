@@ -116,6 +116,13 @@
       "fields": [
         { "fieldPath": "admin_uid", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "classes",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "student_uids", "arrayConfig": "CONTAINS" }
+      ]
     }
   ],
   "fieldOverrides": []
