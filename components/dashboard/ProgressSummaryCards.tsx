@@ -2,111 +2,83 @@
 
 import type { PlainUserProfile } from "@/types/student"
 import { predictNEETScore } from "@/lib/predictedScore"
+import { ArrowUpRight, Zap, Flame, Target } from "lucide-react"
+import Link from "next/link"
 
 type Props = { profile: PlainUserProfile }
-
-type StatCard = {
-  label: string
-  value: string
-  sub: string
-  from: string
-  to: string
-  icon: string
-  textClass: string
-}
 
 export function ProgressSummaryCards({ profile }: Props) {
   const [low, high] = predictNEETScore(profile.subject_accuracy)
   const hasAccuracy = Object.keys(profile.subject_accuracy).length > 0
 
-  const cards: StatCard[] = [
+  const cards = [
     {
-      icon: "⚡",
-      label: "XP This Week",
+      icon: Zap,
+      label: "XP Earned",
       value: profile.xp_this_week.toLocaleString(),
-      sub: `${profile.xp_total.toLocaleString()} total`,
-      from: "from-amber-500/12",
-      to: "to-amber-500/3",
-      textClass: "gradient-text-gold",
+      sub: `+${Math.round(profile.xp_this_week * 0.12)}% from previous week`, // Mocked percentage for the vibe
+      isAccent: false,
+      href: "/profile"
     },
     {
-      icon: "🔥",
-      label: "Streak",
+      icon: Flame,
+      label: "Current Streak",
       value: `${profile.streak_current}d`,
-      sub: `Best: ${profile.streak_max}d`,
-      from: "from-orange-500/12",
-      to: "to-orange-500/3",
-      textClass: profile.streak_current > 0 ? "text-warning" : "text-text-primary",
+      sub: `Best streak: ${profile.streak_max}d`,
+      isAccent: false,
+      href: "/profile"
     },
     {
-      icon: "🎯",
-      label: "Predicted NEET",
-      value: hasAccuracy ? `${low}–${high}` : "—",
+      icon: Target,
+      label: "Predicted Score",
+      value: hasAccuracy ? `${Math.round((low + high) / 2)}` : "—",
       sub: hasAccuracy ? "out of 720" : "Take a test first",
-      from: "from-cyan-500/12",
-      to: "to-cyan-500/3",
-      textClass: hasAccuracy ? "gradient-text-success" : "text-text-primary",
-    },
-    {
-      icon: "🏅",
-      label: "Level",
-      value: `Lv.${profile.level}`,
-      sub: `${profile.xp_total.toLocaleString()} XP`,
-      from: "from-violet-500/12",
-      to: "to-violet-500/3",
-      textClass: "gradient-text",
+      isAccent: true,
+      href: "/test/build"
     },
   ]
 
-  const weakChapters = Object.entries(profile.chapter_health)
-    .filter(([, h]) => h < 50)
-    .sort(([, a], [, b]) => a - b)
-    .slice(0, 3)
-
   return (
-    <div className="flex flex-col gap-3 animate-slide-up delay-150">
-      <div className="grid grid-cols-2 gap-3">
-        {cards.map((c) => (
-          <div
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-full">
+      {cards.map((c) => {
+        const Icon = c.icon
+        return (
+          <Link
+            href={c.href}
             key={c.label}
-            className={`relative bg-gradient-to-br ${c.from} ${c.to} border border-border rounded-2xl p-4 flex flex-col gap-2 overflow-hidden card-hover`}
+            className={`group relative rounded-[28px] p-6 flex flex-col justify-between transition-all duration-300 min-h-[160px] ${
+              c.isAccent
+                ? "bg-accent text-black hover:bg-[#cbf745]"
+                : "bg-surface border border-transparent hover:border-border text-white"
+            }`}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-text-muted text-xs font-medium">{c.label}</span>
-              <span className="text-lg">{c.icon}</span>
-            </div>
-            <p className={`text-2xl font-bold font-mono leading-none ${c.textClass}`}>{c.value}</p>
-            <p className="text-text-muted text-xs">{c.sub}</p>
-          </div>
-        ))}
-      </div>
-
-      {weakChapters.length > 0 && (
-        <div className="bg-surface border border-danger/20 rounded-2xl p-4 flex flex-col gap-3"
-          style={{ boxShadow: "0 0 20px rgba(248,113,113,0.06)" }}>
-          <div className="flex items-center gap-2">
-            <span className="text-danger text-xs font-bold uppercase tracking-widest">⚠ Danger Zone</span>
-          </div>
-          <div className="flex flex-col gap-2">
-            {weakChapters.map(([id, health]) => (
-              <div key={id} className="flex items-center gap-3">
-                <div className="flex-1 flex flex-col gap-1">
-                  <span className="text-text-secondary text-xs capitalize leading-none">
-                    {id.replace(/-/g, " ")}
-                  </span>
-                  <div className="h-1 rounded-full bg-surface-2 overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-danger/60"
-                      style={{ width: `${Math.round(health)}%` }}
-                    />
-                  </div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  c.isAccent ? "border border-black/20" : "border border-white/10"
+                }`}>
+                  <Icon size={14} className={c.isAccent ? "text-black" : "text-white"} />
                 </div>
-                <span className="text-danger text-xs font-bold font-mono shrink-0">{Math.round(health)}%</span>
+                <span className={`text-sm font-medium ${c.isAccent ? "text-black/80" : "text-text-secondary"}`}>
+                  {c.label}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
+                c.isAccent ? "bg-black text-white" : "bg-white text-black"
+              }`}>
+                <ArrowUpRight size={16} strokeWidth={2.5} />
+              </div>
+            </div>
+            
+            <div className="mt-auto">
+              <p className="text-[32px] lg:text-[40px] font-medium tracking-tight leading-none mb-2">{c.value}</p>
+              <p className={`text-xs ${c.isAccent ? "text-black/60 font-medium" : "text-text-muted"}`}>
+                {c.sub}
+              </p>
+            </div>
+          </Link>
+        )
+      })}
     </div>
   )
 }

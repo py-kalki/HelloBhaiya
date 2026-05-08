@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "home": "होम",
+    "test": "टेस्ट",
+    "battle": "बैटल",
+    "notes": "नोट्स",
+    "roadmap": "रोडमैप"
+  },
+  "dashboard": {
+    "greeting_morning": "सुप्रभात",
+    "greeting_afternoon": "नमस्ते",
+    "greeting_evening": "शुभ संध्या",
+    "streak": "दिन की स्ट्रीक",
+    "xp": "XP",
+    "level": "स्तर",
+    "daily_goal": "आज का लक्ष्य",
+    "start_test": "टेस्ट शुरू करें",
+    "continue_test": "टेस्ट जारी रखें",
+    "recent_tests": "हाल के टेस्ट",
+    "no_tests": "अभी तक कोई टेस्ट नहीं — एक बनाएं!"
+  },
+  "test": {
+    "build": "टेस्ट बनाएं",
+    "subjects": "विषय",
+    "chapters": "अध्याय",
+    "difficulty": "कठिनाई",
+    "question_count": "प्रश्न",
+    "timer": "समय",
+    "mode": "मोड",
+    "generate": "टेस्ट बनाएं",
+    "generating": "बन रहा है…",
+    "no_questions": "कोई प्रश्न नहीं मिला। फ़िल्टर बदलकर दोबारा कोशिश करें।",
+    "custom": "कस्टम",
+    "pyq": "PYQ",
+    "rapid_fire": "रैपिड फ़ायर",
+    "mistake_replay": "गलतियाँ सुधारें",
+    "revision": "रिवीज़न"
+  },
+  "results": {
+    "score": "स्कोर",
+    "accuracy": "सटीकता",
+    "correct": "सही",
+    "wrong": "गलत",
+    "unattempted": "अनुत्तरित",
+    "xp_earned": "XP मिला",
+    "review": "उत्तर देखें",
+    "share": "परिणाम शेयर करें",
+    "new_test": "नया टेस्ट"
+  },
+  "battle": {
+    "title": "बैटल मोड",
+    "subtitle": "10 प्रश्न · एक समय · सबसे तेज़ जीतेगा",
+    "start": "बैटल शुरू करें",
+    "join": "जॉइन करें",
+    "enter_code": "कोड डालें",
+    "waiting": "प्रतिद्वंद्वी का इंतजार…",
+    "share_code": "यह कोड किसी दोस्त को भेजें",
+    "copy_code": "कोड कॉपी करें",
+    "copied": "कॉपी हो गया!",
+    "open_room": "बैटल रूम खोलें",
+    "cancel": "रद्द करें",
+    "requires_level": "अनलॉक के लिए Level 10 (Molecule) चाहिए"
+  },
+  "notes": {
+    "title": "नोट्स",
+    "upload": "नोट अपलोड करें",
+    "search": "नोट्स खोजें…",
+    "no_notes": "कोई नोट नहीं मिला",
+    "subject": "विषय",
+    "chapter": "अध्याय",
+    "rating": "रेटिंग"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "notifications": "सूचनाएं",
+    "notifications_soon": "सूचना प्राथमिकताएं जल्द उपलब्ध होंगी।",
+    "sign_out": "साइन आउट",
+    "danger_zone": "खतरनाक ज़ोन",
+    "delete_account": "अकाउंट डिलीट करें",
+    "delete_confirm": "आपका अकाउंट और सभी डेटा हमेशा के लिए हटा दिया जाएगा।",
+    "delete_type": "पुष्टि के लिए DELETE टाइप करें",
+    "confirm_delete": "डिलीट की पुष्टि करें",
+    "deleting": "हटाया जा रहा है...",
+    "cancel": "रद्द करें"
+  },
+  "common": {
+    "loading": "लोड हो रहा है…",
+    "error": "कुछ गलत हो गया",
+    "retry": "दोबारा कोशिश करें",
+    "back": "वापस",
+    "save": "सहेजें",
+    "submit": "जमा करें",
+    "close": "बंद करें",
+    "or": "या"
+  }
+}

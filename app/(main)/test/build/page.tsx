@@ -53,7 +53,13 @@ function BuildPageInner() {
     ? Math.ceil((questionCount * 30) / 60)
     : timerMinutes
 
+  const examValue: "NEET" | "JEE_MAINS" | "JEE_ADV" =
+    profile?.exam === "JEE_MAINS" || profile?.exam === "JEE_ADV"
+      ? profile.exam
+      : "NEET"
+
   const config: TestConfig = {
+    exam: examValue,
     subjects: selectedSubjects,
     chapters: selectedChapters,
     difficulty,

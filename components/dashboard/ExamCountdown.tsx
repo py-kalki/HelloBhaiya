@@ -1,6 +1,7 @@
 "use client"
 
 import { formatCountdown } from "@/lib/dateUtils"
+import { Calendar, ChevronDown } from "lucide-react"
 
 const EXAM_LABELS: Record<string, string> = {
   NEET:      "NEET",
@@ -8,9 +9,6 @@ const EXAM_LABELS: Record<string, string> = {
   JEE_ADV:   "JEE Advanced",
   OTHER:     "Your Exam",
 }
-
-const RADIUS = 44
-const CIRC = 2 * Math.PI * RADIUS
 
 type Props = { targetDateMs: number; exam: string }
 
@@ -20,74 +18,58 @@ export function ExamCountdown({ targetDateMs, exam }: Props) {
   const examLabel = EXAM_LABELS[exam] ?? "Your Exam"
 
   const formattedDate = targetDate.toLocaleDateString("en-IN", {
-    day: "numeric", month: "long", year: "numeric",
+    day: "numeric", month: "short", year: "numeric",
   })
 
-  // Ring fill — assume 365 day journey, show progress
-  const totalJourney = 365
-  const elapsed = Math.max(0, totalJourney - days)
-  const pct = Math.min(elapsed / totalJourney, 1)
-  const dashOffset = CIRC * (1 - pct)
-
-  const urgency = days <= 30 ? "danger" : days <= 90 ? "warning" : "accent"
-  const ringColor = urgency === "danger" ? "#F87171" : urgency === "warning" ? "#FCD34D" : "#A78BFA"
-  const glowColor = urgency === "danger" ? "rgba(248,113,113,0.15)" : urgency === "warning" ? "rgba(252,211,77,0.15)" : "rgba(167,139,250,0.15)"
+  // Simulated chart data for the "Time visit" aesthetic from the image
+  const chartBars = [45, 60, 30, 80, 50, 90, 70]
 
   return (
-    <div
-      className="relative bg-surface border border-border rounded-2xl p-5 overflow-hidden animate-slide-up"
-      style={{ boxShadow: `0 0 40px ${glowColor}` }}
-    >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent pointer-events-none" />
-
-      <div className="relative flex items-center gap-5">
-        {/* SVG Ring */}
-        <div className="shrink-0">
-          <svg width={120} height={120} viewBox="0 0 120 120" className="-rotate-90">
-            {/* Track */}
-            <circle
-              cx={60} cy={60} r={RADIUS}
-              fill="none"
-              stroke="rgba(255,255,255,0.04)"
-              strokeWidth={8}
-            />
-            {/* Progress */}
-            <circle
-              cx={60} cy={60} r={RADIUS}
-              fill="none"
-              stroke={ringColor}
-              strokeWidth={8}
-              strokeLinecap="round"
-              strokeDasharray={CIRC}
-              strokeDashoffset={dashOffset}
-              style={{ transition: "stroke-dashoffset 1s ease, stroke 0.5s ease" }}
-            />
-          </svg>
-          {/* Days in center */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ width: 120, height: 120 }}>
-            <span className="text-3xl font-bold text-text-primary font-mono leading-none">{days}</span>
-            <span className="text-[10px] text-text-muted mt-0.5">days</span>
-          </div>
+    <div className="relative h-full min-h-[300px] bg-surface rounded-[28px] p-6 flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Calendar size={18} className="text-text-secondary" />
+          <span className="text-sm font-medium text-text-secondary">Countdown</span>
         </div>
+        
+        <button className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-background border border-border text-xs font-medium text-text-primary">
+          {examLabel} <ChevronDown size={14} className="text-text-muted" />
+        </button>
+      </div>
 
-        {/* Text info */}
-        <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: ringColor }}>
-            {examLabel} Countdown
-          </span>
-          <p className="text-text-primary font-bold text-xl leading-tight">
-            {days === 0 ? "Today!" : days === 1 ? "Tomorrow!" : `${days} days to go`}
-          </p>
-          <p className="text-text-muted text-sm">{formattedDate}</p>
-
-          {days <= 90 && (
-            <div className="mt-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold"
-              style={{ background: `${ringColor}15`, color: ringColor, border: `1px solid ${ringColor}25` }}>
-              {days <= 30 ? "🔥 Final sprint" : "⚡ Less than 3 months"}
+      <div className="flex-1 flex flex-col justify-center">
+        <div className="flex flex-col items-center">
+          {/* Main metric */}
+          <div className="relative">
+            <span className="text-[64px] font-medium leading-none tracking-tighter text-text-primary">
+              {days}
+            </span>
+            {/* Overlay pill like the chart tooltip in image */}
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-accent text-black text-xs font-bold whitespace-nowrap shadow-[0_0_20px_rgba(212,255,89,0.3)]">
+              +{Math.round(days/30)} months
             </div>
-          )}
+          </div>
+          <p className="text-text-muted text-sm mt-4 uppercase tracking-widest">Days Remaining</p>
+          <p className="text-text-secondary text-base mt-2">{formattedDate}</p>
         </div>
+      </div>
+
+      {/* Decorative Bar Chart representing "progress" */}
+      <div className="mt-8 pt-6 border-t border-border flex items-end justify-between h-24 gap-2">
+        {chartBars.map((height, i) => (
+          <div key={i} className="w-full flex flex-col gap-2 items-center group relative">
+            <div className="w-full bg-surface-2 rounded-t-md rounded-b-sm overflow-hidden h-full flex items-end">
+              <div 
+                className="w-full bg-violet rounded-t-md rounded-b-sm transition-all duration-500 ease-out group-hover:bg-accent"
+                style={{ height: `${height}%` }}
+              />
+            </div>
+            <span className="text-[10px] text-text-muted font-medium">
+              {['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   )

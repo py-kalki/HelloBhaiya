@@ -14,9 +14,9 @@ type Props = {
 }
 
 function getColor(accuracy: number): string {
-  if (accuracy >= 75) return "#90D4A8"
-  if (accuracy >= 50) return "#E0C078"
-  return "#E09090"
+  if (accuracy >= 75) return "#6EE7B7"
+  if (accuracy >= 50) return "#FCD34D"
+  return "#F87171"
 }
 
 function CustomDot(props: {
@@ -26,14 +26,16 @@ function CustomDot(props: {
 }) {
   const { cx, cy, payload } = props
   if (cx == null || cy == null || !payload) return null
+  const color = getColor(payload.accuracy)
   return (
     <circle
       cx={cx}
       cy={cy}
-      r={5}
-      fill={getColor(payload.accuracy)}
-      stroke="#141416"
+      r={4}
+      fill={color}
+      stroke="#0D0D0D"
       strokeWidth={2}
+      style={{ filter: `drop-shadow(0 0 4px ${color}80)` }}
     />
   )
 }
@@ -47,30 +49,34 @@ export default function WeaknessRadarChart({ data }: Props) {
   const fillColor = getColor(avgAccuracy)
 
   return (
-    <div className="scroll-x w-full">
-      <div className="min-w-[260px] h-56">
+    <div className="w-full">
+      <div className="min-w-[240px] h-52">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart data={data} margin={{ top: 10, right: 20, bottom: 10, left: 20 }}>
-            <PolarGrid stroke="#272729" />
+          <RadarChart data={data} margin={{ top: 8, right: 24, bottom: 8, left: 24 }}>
+            <PolarGrid stroke="rgba(255,255,255,0.05)" strokeDasharray="2 2" />
             <PolarAngleAxis
               dataKey="subject"
-              tick={{ fill: "#888888", fontSize: 11 }}
+              tick={{ fill: "#666666", fontSize: 10, fontWeight: 600 }}
             />
             <Radar
               name="Accuracy"
               dataKey="accuracy"
               stroke={fillColor}
               fill={fillColor}
-              fillOpacity={0.18}
+              fillOpacity={0.12}
+              strokeWidth={2}
               dot={<CustomDot />}
             />
             <Tooltip
               contentStyle={{
-                background: "#141416",
-                border: "1px solid #272729",
-                borderRadius: 8,
+                background: "#0D0D0D",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 12,
                 color: "#E8E8E8",
-                fontSize: 12,
+                fontSize: 11,
+                fontWeight: 600,
+                padding: "8px 12px",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
               }}
               formatter={(v) => [`${v ?? 0}%`, "Accuracy"]}
             />

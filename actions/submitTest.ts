@@ -4,7 +4,7 @@ import { getAuth } from "firebase-admin/auth"
 import { getFirestore, FieldValue, WriteBatch } from "firebase-admin/firestore"
 import { cookies } from "next/headers"
 import { adminApp } from "@/lib/firebase/admin"
-import { calculateScore, calculateXP, calculateChapterHealth, lookupLevel, rollingAccuracy } from "@/lib/scoring"
+import { calculateScore, calculateXP, calculateChapterHealth, lookupLevel, rollingAccuracy, schemeForExam } from "@/lib/scoring"
 import { revalidatePath } from "next/cache"
 import type { Question, TestSession } from "@/types/question"
 import { toISTDateString } from "@/lib/dateUtils"
@@ -51,8 +51,9 @@ export async function submitTest(payload: SubmitPayload): Promise<void> {
   }
 
   // Calculate score
-  const scheme = { correct: 4, wrong: -1, unattempted: 0 }
-  const scoreResult = calculateScore(allQuestions, payload.answers, scheme)
+  const exam = session.config.exam ?? "NEET"
+  const scheme = schemeForExam(exam)
+  const scoreResult = calculateScore(allQuestions, payload.answers, scheme, exam)
   const xpEarned = calculateXP(
     scoreResult.accuracy,
     payload.timeTakenSeconds,

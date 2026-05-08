@@ -5,6 +5,8 @@ import {
   calculateChapterHealth,
   lookupLevel,
   rollingAccuracy,
+  schemeForExam,
+  MARKING_SCHEMES,
 } from "./scoring"
 import type { Question } from "@/types/question"
 import type { Timestamp } from "firebase/firestore"
@@ -167,6 +169,83 @@ describe("lookupLevel", () => {
 
   it("boundary: 45000 XP → Scholar", () => {
     expect(lookupLevel(45_000).level).toBe(20)
+  })
+})
+
+describe("JEE MCQ_MULTI scoring", () => {
+  function makeMultiQ(id: string, correct: string): Question {
+    return {
+      question_id: id,
+      exam: "JEE_MAINS",
+      subject: "Physics",
+      unit: "Unit",
+      chapter: "Chapter",
+      chapter_id: "ch1",
+      topic: "Topic",
+      type: "MCQ_MULTI",
+      difficulty: "HARD",
+      question_text: "Q?",
+      options: ["A", "B", "C", "D"],
+      correct_answer: correct,
+      explanation: "",
+      is_pyq: false,
+      pyq_year: null,
+      image_url: null,
+      created_at: fakeTimestamp,
+    }
+  }
+
+  const JEE_SCHEME = MARKING_SCHEMES["JEE_MAINS"]!
+
+  it("JEE_MAINS: all correct options selected → +4", () => {
+    const qs = [makeMultiQ("q1", "A,C")]
+    const r = calculateScore(qs, { q1: "A,C" }, JEE_SCHEME, "JEE_MAINS")
+    expect(r.score).toBe(4)
+    expect(r.correct).toBe(1)
+    expect(r.wrong).toBe(0)
+  })
+
+  it("JEE_MAINS: any wrong option → -2", () => {
+    const qs = [makeMultiQ("q1", "A,C")]
+    const r = calculateScore(qs, { q1: "A,B" }, JEE_SCHEME, "JEE_MAINS")
+    expect(r.score).toBe(-2)
+    expect(r.wrong).toBe(1)
+  })
+
+  it("JEE_MAINS: partial correct no wrong → 0", () => {
+    const qs = [makeMultiQ("q1", "A,C")]
+    const r = calculateScore(qs, { q1: "A" }, JEE_SCHEME, "JEE_MAINS")
+    expect(r.score).toBe(0)
+    expect(r.correct).toBe(1) // partial correct counts as non-wrong
+  })
+
+  it("JEE_ADV: partial correct no wrong → +N per correct option", () => {
+    const advScheme = MARKING_SCHEMES["JEE_ADV"]!
+    const qs = [makeMultiQ("q1", "A,B,C")]
+    // Selected 2 of 3 correct, none wrong → +2
+    const r = calculateScore(qs, { q1: "A,B" }, advScheme, "JEE_ADV")
+    expect(r.score).toBe(2)
+    expect(r.correct).toBe(1)
+  })
+
+  it("JEE_ADV: all 3 correct → +4 (not +3)", () => {
+    const advScheme = MARKING_SCHEMES["JEE_ADV"]!
+    const qs = [makeMultiQ("q1", "A,B,C")]
+    const r = calculateScore(qs, { q1: "A,B,C" }, advScheme, "JEE_ADV")
+    expect(r.score).toBe(4)
+  })
+
+  it("JEE_MAINS: unattempted → 0", () => {
+    const qs = [makeMultiQ("q1", "A,C")]
+    const r = calculateScore(qs, {}, JEE_SCHEME, "JEE_MAINS")
+    expect(r.score).toBe(0)
+    expect(r.unattempted).toBe(1)
+  })
+
+  it("schemeForExam returns correct schemes", () => {
+    expect(schemeForExam("NEET")).toEqual({ correct: 4, wrong: -1, unattempted: 0 })
+    expect(schemeForExam("JEE_ADV")).toEqual({ correct: 4, wrong: -2, unattempted: 0 })
+    expect(schemeForExam("UNKNOWN")).toEqual(schemeForExam("NEET"))
   })
 })
 
