@@ -215,10 +215,10 @@ export default function HeroSection() {
       {/* ══ HERO ═════════════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="relative bg-background overflow-hidden pt-24"
+        className="relative bg-background pt-24"
       >
-        {/* Background Gradients/Arcs */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Background Gradients/Arcs - Isolated Overflow */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
           <div
             className="hero-glow-arc absolute top-[15%] left-1/2 -translate-x-1/2 w-[140%] max-w-[1400px] h-[600px] rounded-[100%] border-t-[3px] border-accent/60 shadow-[0_-20px_80px_-20px_rgba(212,255,89,0.2)] opacity-90"

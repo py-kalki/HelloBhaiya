@@ -84,15 +84,16 @@ export default function AnimatedFeatures() {
       }
     )
 
-    // ── Right column cards: scrubbed 3-D flip reveal ───────────────────────
+    // ── Right column cards: Reveal + Stacking Depth ───────────────────────
     const cards = gsap.utils.toArray<HTMLElement>(".feature-card")
-    cards.forEach((card) => {
+    cards.forEach((card, i) => {
+      // 1. Entrance animation (Flip reveal)
       gsap.fromTo(card,
         {
           autoAlpha: 0,
-          y: 120,
-          scale: 0.82,
-          rotationX: 35,
+          y: 100,
+          scale: 0.9,
+          rotationX: 25,
           transformOrigin: "50% 0%",
         },
         {
@@ -104,12 +105,27 @@ export default function AnimatedFeatures() {
           ease: "expo.out",
           scrollTrigger: {
             trigger: card,
-            start: "top 90%",
-            end:   "top 55%",
-            scrub: 1,
+            start: "top 95%",
+            end:   "top 60%",
+            scrub: 1.5,
           }
         }
       )
+
+      // 2. Stacking Depth: Scale down this card as the NEXT card comes on top
+      const nextCard = cards[i + 1]
+      if (nextCard) {
+        gsap.to(card, {
+          scale: 0.92,
+          autoAlpha: 0.5,
+          scrollTrigger: {
+            trigger: nextCard,
+            start: "top 35%",
+            end: "top 15%",
+            scrub: true,
+          }
+        })
+      }
 
       // Icon subtle bounce on card entrance
       const icon = card.querySelector(".feat-icon")
@@ -156,10 +172,12 @@ export default function AnimatedFeatures() {
     <section
       ref={container}
       id="features"
-      className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-12 sm:pt-16 pb-32 sm:pb-48 [perspective:1000px] overflow-visible"
+      className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-12 sm:pt-16 pb-64 sm:pb-80 overflow-visible"
     >
-      <div className="features-glow absolute top-1/3 right-0 w-[500px] h-[500px] bg-accent/10 blur-[150px] rounded-full pointer-events-none" />
-      <div className="features-glow absolute bottom-1/3 left-0 w-[600px] h-[600px] bg-violet/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="features-glow absolute top-1/3 right-0 w-[500px] h-[500px] bg-accent/10 blur-[150px] rounded-full" />
+        <div className="features-glow absolute bottom-1/3 left-0 w-[600px] h-[600px] bg-violet/10 blur-[150px] rounded-full" />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 relative z-10">
 
@@ -188,13 +206,13 @@ export default function AnimatedFeatures() {
             <div 
               key={i} 
               className="sticky block"
-              style={{ top: `calc(15vh + ${i * 1.5}rem)` }}
+              style={{ top: `calc(10vh + ${i * 2.5}rem)` }}
             >
               <div
-                className={`feature-card group relative p-8 sm:p-10 backdrop-blur-xl rounded-[32px] border transition-colors [transform-style:preserve-3d] shadow-2xl ${
+                className={`feature-card group relative p-8 sm:p-10 rounded-[32px] border transition-colors [transform-style:preserve-3d] shadow-2xl will-change-transform ${
                   f.badge
-                    ? "bg-[#0d0d0d] border-dashed border-white/10 hover:border-white/20"
-                    : "bg-[#0a0a0a] border-white/5 hover:border-white/20"
+                    ? "bg-surface border-dashed border-white/10 hover:border-white/20"
+                    : "bg-surface border-white/10 hover:border-white/20"
                 }`}
               >
                 {/* Card hover gradient */}
