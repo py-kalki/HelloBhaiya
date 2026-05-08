@@ -64,11 +64,15 @@ export default function RoadmapsSection() {
         { autoAlpha: 0, x: i % 2 === 0 ? -40 : 40 },
         { autoAlpha: 1, x: 0, duration: 0.8, ease: "expo.out" }
       )
-      .fromTo(step.querySelector(".step-line"),
-        { scaleY: 0, transformOrigin: "top center" },
-        { scaleY: 1, duration: 0.6, ease: "power2.inOut" },
-        "-=0.4"
-      )
+
+      const line = step.querySelector(".step-line")
+      if (line) {
+        tl.fromTo(line,
+          { scaleY: 0, transformOrigin: "top center" },
+          { scaleY: 1, duration: 0.6, ease: "power2.inOut" },
+          "-=0.4"
+        )
+      }
     })
 
     // Parallax background elements
@@ -86,7 +90,7 @@ export default function RoadmapsSection() {
   }, { scope: container })
 
   return (
-    <section ref={container} id="roadmaps" className="py-32 relative overflow-hidden bg-background">
+    <section ref={container} id="roadmaps" className="py-32 relative overflow-visible bg-background">
       <div className="roadmap-glow absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="roadmap-glow absolute bottom-1/4 left-0 w-[600px] h-[600px] bg-violet/5 blur-[150px] rounded-full pointer-events-none" />
 
@@ -113,13 +117,14 @@ export default function RoadmapsSection() {
             {STEPS.map((step, i) => (
               <div 
                 key={i} 
-                className={`roadmap-step relative flex flex-col md:flex-row items-center gap-8 md:gap-0 ${
+                className={`roadmap-step sticky top-[var(--mob-top)] md:relative md:top-auto flex flex-col md:flex-row items-center gap-8 md:gap-0 ${
                   i % 2 === 0 ? "md:flex-row-reverse" : ""
                 } md:min-h-[300px]`}
+                style={{ "--mob-top": `calc(15vh + ${i * 1.5}rem)` } as React.CSSProperties}
               >
                 {/* Content Side */}
-                <div className="w-full md:w-[45%]">
-                  <div className={`p-8 rounded-[32px] border border-white/5 bg-surface/30 backdrop-blur-xl hover:border-white/20 transition-all group cursor-default relative overflow-hidden`}>
+                <div className="w-full md:w-[45%] pl-14 md:pl-0">
+                  <div className={`p-6 sm:p-8 rounded-[32px] border border-white/5 bg-[#0a0a0a] md:bg-surface/30 md:backdrop-blur-xl hover:border-white/20 transition-all group cursor-default relative overflow-hidden shadow-2xl`}>
                     <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700`} />
                     
                     <div className="flex items-center gap-4 mb-6">
@@ -156,9 +161,9 @@ export default function RoadmapsSection() {
                 </div>
 
                 {/* Center Dot */}
-                <div className="absolute left-[20px] md:left-1/2 md:-translate-x-1/2 top-0 md:top-1/2 md:-translate-y-1/2 z-20">
-                  <div className="w-10 h-10 rounded-full bg-background border-4 border-surface flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                    <div className={`w-3 h-3 rounded-full ${
+                <div className="absolute left-[0px] md:left-1/2 md:-translate-x-1/2 top-[24px] md:top-1/2 md:-translate-y-1/2 z-20">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-background border-4 border-surface flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                    <div className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full ${
                       step.status === "Completed" ? "bg-accent shadow-[0_0_12px_rgba(212,255,89,0.8)]" : 
                       step.status === "In Progress" ? "bg-blue-400 animate-pulse" : "bg-white/10"
                     }`} />

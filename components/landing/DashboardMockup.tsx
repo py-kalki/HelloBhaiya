@@ -27,6 +27,7 @@ export default function DashboardMockup() {
                 width={160} 
                 height={40} 
                 className="h-8 w-auto"
+                style={{ width: "auto" }}
               />
             </div>
 

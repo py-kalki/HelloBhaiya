@@ -82,32 +82,38 @@ export const SignInPage: React.FC<SignInPageProps> = ({
 
   useGSAP(() => {
     // Left side stagger
-    gsap.fromTo(".anim-item", 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: "expo.out", delay: 0.2 }
-    );
+    if (gsap.utils.toArray(".anim-item", container.current).length > 0) {
+      gsap.fromTo(".anim-item", 
+        { opacity: 0, y: 20 }, 
+        { opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: "expo.out", delay: 0.2 }
+      );
+    }
 
     // Right side image slide
-    gsap.fromTo(".anim-hero",
-      { opacity: 0, x: 40 },
-      { opacity: 1, x: 0, duration: 1, ease: "expo.out", delay: 0.4 }
-    );
+    if (gsap.utils.toArray(".anim-hero", container.current).length > 0) {
+      gsap.fromTo(".anim-hero",
+        { opacity: 0, x: 40 },
+        { opacity: 1, x: 0, duration: 1, ease: "expo.out", delay: 0.4 }
+      );
+    }
 
     // Testimonials float up
-    gsap.fromTo(".anim-testimonial",
-      { opacity: 0, y: 30, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.8, ease: "back.out(1.2)", delay: 0.8 }
-    );
+    if (gsap.utils.toArray(".anim-testimonial", container.current).length > 0) {
+      gsap.fromTo(".anim-testimonial",
+        { opacity: 0, y: 30, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.8, ease: "back.out(1.2)", delay: 0.8 }
+      );
+    }
   }, { scope: container });
 
   return (
     <div ref={container} className="h-dvh overflow-hidden flex flex-col md:flex-row font-sans w-full bg-background selection:bg-accent selection:text-black">
       {/* Left column: sign-in form */}
-      <section className="flex-1 flex items-center justify-center p-6 lg:p-8 relative overflow-y-auto">
+      <section className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-y-auto">
         {/* Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="w-full max-w-md relative z-10 py-6">
+        <div className="w-full max-w-md relative z-10 py-4 sm:py-6">
           {/* Back Button */}
           <div className="anim-item mb-6">
             <Link href="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-white text-xs sm:text-sm font-medium transition-colors group">
@@ -117,10 +123,10 @@ export const SignInPage: React.FC<SignInPageProps> = ({
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
-            <div className="anim-item mb-2">
-              <Image src="/hellobhaiya-logo.svg" alt="HelloBhaiya" width={200} height={48} className="h-8 sm:h-10 w-auto mb-4 sm:mb-6" />
+            <div className="anim-item mb-1 sm:mb-2">
+              <Image src="/hellobhaiya-logo.svg" alt="HelloBhaiya" width={200} height={48} className="h-8 sm:h-10 w-auto mb-4 sm:mb-6" style={{ width: "auto" }} />
               <h1 className="text-3xl sm:text-4xl font-bold leading-tight">{title}</h1>
-              <p className="mt-2 text-text-secondary text-sm leading-relaxed">{description}</p>
+              <p className="mt-2 text-text-secondary text-xs sm:text-sm leading-relaxed">{description}</p>
             </div>
 
             <form className="space-y-4" onSubmit={onSignIn}>
