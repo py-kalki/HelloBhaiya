@@ -5,7 +5,7 @@ import { useRef } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
-import { Twitter, Instagram, Youtube, ArrowUpRight, Github } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 
 if (typeof window !== "undefined") {

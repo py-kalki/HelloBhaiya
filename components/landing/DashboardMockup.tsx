@@ -1,6 +1,6 @@
 "use client"
 
-import { Search, Bell, Settings, LayoutDashboard, Target, Activity, FileText, Zap, ChevronRight, User } from "lucide-react"
+import { Search, Bell, Settings, LayoutDashboard, Target, Activity, FileText, Zap, ChevronRight, User, Trophy, Clock } from "lucide-react"
 import Image from "next/image"
 
 export default function DashboardMockup() {

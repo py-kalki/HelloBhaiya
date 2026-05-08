@@ -17,7 +17,12 @@ type Step = 1 | 2 | 3 | "done"
 const STEP_LABELS = ["Profile", "Goal", "Weak Areas"]
 
 const CLASSES = ["Class 11", "Class 12", "Dropper"]
-const EXAMS: Exam[] = ["NEET", "JEE Main", "JEE Advanced", "BITSAT"]
+const EXAMS: { label: string, value: Exam }[] = [
+  { label: "NEET", value: "NEET" },
+  { label: "JEE Main", value: "JEE_MAINS" },
+  { label: "JEE Advanced", value: "JEE_ADV" },
+  { label: "Other", value: "OTHER" }
+]
 const SUBJECTS = ["Physics", "Chemistry", "Mathematics", "Biology", "Botany", "Zoology"]
 
 export default function OnboardingPage() {
@@ -211,13 +216,13 @@ export default function OnboardingPage() {
                       <div className="grid grid-cols-2 gap-2">
                         {EXAMS.map((ex) => (
                           <button
-                            key={ex}
-                            onClick={() => setExam(ex)}
+                            key={ex.value}
+                            onClick={() => setExam(ex.value)}
                             className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                              exam === ex ? "bg-accent/10 border-accent text-accent" : "bg-white/5 border-white/10 text-text-muted hover:border-white/20 hover:text-white"
+                              exam === ex.value ? "bg-accent/10 border-accent text-accent" : "bg-white/5 border-white/10 text-text-muted hover:border-white/20 hover:text-white"
                             }`}
                           >
-                            {ex}
+                            {ex.label}
                           </button>
                         ))}
                       </div>
