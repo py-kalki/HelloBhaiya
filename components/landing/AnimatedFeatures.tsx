@@ -185,37 +185,42 @@ export default function AnimatedFeatures() {
         {/* Scrolling Right Column */}
         <div className="lg:col-span-7 flex flex-col gap-8 sm:gap-12 pt-10 lg:pt-0">
           {FEATURES.map((f, i) => (
-            <div
-              key={i}
-              className={`feature-card group relative p-8 sm:p-10 backdrop-blur-xl rounded-[32px] border transition-colors [transform-style:preserve-3d] ${
-                f.badge
-                  ? "bg-white/[0.02] border-dashed border-white/10 hover:border-white/20"
-                  : "bg-surface/50 border-white/5 hover:border-white/20"
-              }`}
+            <div 
+              key={i} 
+              className="sticky block"
+              style={{ top: `calc(15vh + ${i * 1.5}rem)` }}
             >
-              {/* Card hover gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${f.color} opacity-0 group-hover:opacity-[0.04] rounded-[32px] transition-opacity duration-700`} />
+              <div
+                className={`feature-card group relative p-8 sm:p-10 backdrop-blur-xl rounded-[32px] border transition-colors [transform-style:preserve-3d] shadow-2xl ${
+                  f.badge
+                    ? "bg-[#0d0d0d] border-dashed border-white/10 hover:border-white/20"
+                    : "bg-[#0a0a0a] border-white/5 hover:border-white/20"
+                }`}
+              >
+                {/* Card hover gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${f.color} opacity-0 group-hover:opacity-[0.04] rounded-[32px] transition-opacity duration-700`} />
 
-              {/* "Coming Soon" badge */}
-              {f.badge && (
-                <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 text-[10px] font-bold tracking-widest uppercase">
-                  {f.badge}
-                </div>
-              )}
+                {/* "Coming Soon" badge */}
+                {f.badge && (
+                  <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 text-[10px] font-bold tracking-widest uppercase">
+                    {f.badge}
+                  </div>
+                )}
 
-              <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start relative z-10">
-                <div className={`feat-icon shrink-0 w-16 h-16 rounded-2xl bg-background border border-white/10 flex items-center justify-center text-white relative overflow-hidden group-hover:scale-110 transition-transform duration-500 ease-out shadow-2xl`}>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${f.color} opacity-20`} />
-                  {f.icon}
-                </div>
+                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start relative z-10">
+                  <div className={`feat-icon shrink-0 w-16 h-16 rounded-2xl bg-background border border-white/10 flex items-center justify-center text-white relative overflow-hidden group-hover:scale-110 transition-transform duration-500 ease-out shadow-2xl`}>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${f.color} opacity-20`} />
+                    {f.icon}
+                  </div>
 
-                <div className="flex-1">
-                  <h3 className="font-sans font-bold text-text-primary text-2xl mb-4 tracking-tight group-hover:text-white transition-colors">
-                    {f.title}
-                  </h3>
-                  <p className="font-sans text-text-secondary text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
-                    {f.desc}
-                  </p>
+                  <div className="flex-1">
+                    <h3 className="font-sans font-bold text-text-primary text-2xl mb-4 tracking-tight group-hover:text-white transition-colors">
+                      {f.title}
+                    </h3>
+                    <p className="font-sans text-text-secondary text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
+                      {f.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

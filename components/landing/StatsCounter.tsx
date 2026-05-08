@@ -71,16 +71,16 @@ export default function StatsCounter() {
   }, { scope: container })
 
   return (
-    <div ref={container} className="relative flex flex-col sm:flex-row">
+    <div ref={container} className="relative flex flex-row w-full divide-x divide-white/5 border-y sm:border-y-0 border-white/5">
       {STATS.map((stat, i) => (
         <div
           key={i}
-          className={`stat-item flex-1 flex flex-col items-center justify-center py-8 px-4 ${i < STATS.length - 1 ? "sm:border-r border-b sm:border-b-0 border-white/5" : ""}`}
+          className="stat-item flex-1 flex flex-col items-center justify-start pt-5 pb-2 sm:py-8 px-1 sm:px-4 text-center"
         >
-          <span className={`font-sans font-extrabold text-white leading-none tracking-tight text-3xl lg:text-4xl stat-val-${i}`}>
+          <span className={`font-sans font-extrabold text-white leading-none tracking-tight text-[18px] sm:text-3xl lg:text-4xl stat-val-${i}`}>
             {stat.display}
           </span>
-          <span className="font-sans font-bold uppercase mt-2 text-[#9e9689] text-[9px] tracking-[0.25em]">
+          <span className="font-sans font-bold uppercase mt-1 sm:mt-2 text-[#9e9689] text-[6.5px] sm:text-[9px] tracking-wider sm:tracking-[0.25em]">
             {stat.label}
           </span>
         </div>

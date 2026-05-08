@@ -110,7 +110,7 @@ export default function AboutSection() {
   const quoteWords = "We built the study platform we wished existed when we were preparing.".split(" ")
 
   return (
-    <section ref={container} id="about" className="py-32 relative overflow-hidden bg-background border-t border-white/5">
+    <section ref={container} id="about" className="py-32 relative overflow-visible bg-background border-t border-white/5">
 
       {/* Ambient Glows */}
       <div className="about-glow absolute top-0 left-1/4 w-[700px] h-[700px] bg-accent/5 blur-[150px] rounded-full pointer-events-none" />
@@ -119,7 +119,7 @@ export default function AboutSection() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
 
         {/* ── Section Header ─────────────────────────────────────────────── */}
-        <div className="about-mission text-center mb-24">
+        <div className="about-mission text-center mb-16 md:mb-24">
           <div className="inline-block px-4 py-1.5 rounded-full border border-accent/20 bg-accent/5 backdrop-blur-md mb-6">
             <span className="text-accent text-[10px] font-bold tracking-widest uppercase">
               ✦ Our Story
@@ -139,7 +139,7 @@ export default function AboutSection() {
         </div>
 
         {/* ── Big Pull Quote ─────────────────────────────────────────────── */}
-        <div className="about-quote max-w-4xl mx-auto mb-32 relative">
+        <div className="about-quote hidden md:block max-w-4xl mx-auto mb-32 relative">
           <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-accent via-violet to-transparent rounded-full" />
           <div className="pl-8">
             <p className="text-2xl md:text-4xl font-bold text-white tracking-tight leading-snug">
@@ -154,7 +154,7 @@ export default function AboutSection() {
         </div>
 
         {/* ── Two-Column Mission + Image ─────────────────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-32 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 md:mb-32 items-center">
           <div className="about-mission">
             <h3 className="text-3xl font-bold text-white tracking-tight mb-6">
               The problem with competitive exam prep<br />
@@ -166,7 +166,7 @@ export default function AboutSection() {
                 killing their score. They do generic mock tests, get a number, and move on — with
                 no real understanding of what to fix.
               </p>
-              <p>
+              <p className="hidden md:block">
                 HelloBhaiya changes that. Every test you take feeds a live Weakness Radar. Every
                 chapter you complete is verified by your scores — not self-reported. Every revision
                 session is scheduled by spaced repetition, not habit.
@@ -200,8 +200,8 @@ export default function AboutSection() {
         </div>
 
         {/* ── Core Values Grid ───────────────────────────────────────────── */}
-        <div className="mb-32">
-          <div className="text-center mb-16 about-mission">
+        <div className="mb-20 md:mb-32">
+          <div className="text-center mb-12 md:mb-16 about-mission">
             <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-4">
               <span className="text-text-secondary text-[10px] font-bold tracking-widest uppercase">
                 What we stand for
@@ -212,19 +212,24 @@ export default function AboutSection() {
             </h3>
           </div>
 
-          <div className="values-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="values-grid flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {VALUES.map((v, i) => (
-              <div
-                key={i}
-                className={`value-card relative p-7 rounded-2xl bg-surface/30 border border-white/5 ${v.border} transition-all duration-300 group overflow-hidden`}
+              <div 
+                key={i} 
+                className="sticky top-[var(--mob-top)] sm:relative sm:top-auto block"
+                style={{ "--mob-top": `calc(15vh + ${i * 1.5}rem)` } as React.CSSProperties}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${v.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-xl bg-background border border-white/10 flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform duration-300">
-                    {v.icon}
+                <div
+                  className={`value-card relative p-7 rounded-2xl bg-[#0a0a0a] sm:bg-surface/30 border border-white/5 ${v.border} transition-all duration-300 group overflow-hidden shadow-2xl`}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${v.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-background border border-white/10 flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform duration-300">
+                      {v.icon}
+                    </div>
+                    <h4 className="text-white font-bold text-lg mb-2 tracking-tight">{v.title}</h4>
+                    <p className="text-text-secondary text-sm leading-relaxed">{v.desc}</p>
                   </div>
-                  <h4 className="text-white font-bold text-lg mb-2 tracking-tight">{v.title}</h4>
-                  <p className="text-text-secondary text-sm leading-relaxed">{v.desc}</p>
                 </div>
               </div>
             ))}

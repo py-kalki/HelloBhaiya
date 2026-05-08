@@ -49,16 +49,16 @@ export default function CityTicker() {
   }, { scope: container })
 
   return (
-    <section ref={container} className="py-32 bg-background relative overflow-hidden border-t border-white/5">
+    <section ref={container} className="py-16 sm:py-32 bg-background relative overflow-hidden border-t border-white/5">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
-      <div className="text-center max-w-7xl mx-auto px-8 mb-16">
-        <div className="ticker-badge inline-block px-4 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-md mb-6">
+      <div className="text-center max-w-7xl mx-auto px-6 sm:px-8 mb-8 sm:mb-16">
+        <div className="ticker-badge inline-block px-4 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-md mb-4 sm:mb-6">
           <span className="text-text-secondary text-[9px] font-bold tracking-[0.2em] uppercase">
             Join students across India
           </span>
         </div>
-        <h3 className="ticker-headline text-text-primary text-3xl font-bold tracking-tight">
+        <h3 className="ticker-headline text-text-primary text-2xl sm:text-3xl font-bold tracking-tight">
           From major hubs to your doorstep.
         </h3>
       </div>

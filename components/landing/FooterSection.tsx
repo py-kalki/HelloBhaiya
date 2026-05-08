@@ -70,16 +70,7 @@ export default function FooterSection() {
   const container = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    gsap.fromTo(".footer-col",
-      { autoAlpha: 0, y: 40 },
-      {
-        autoAlpha: 1, y: 0,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "expo.out",
-        scrollTrigger: { trigger: container.current, start: "top 90%" }
-      }
-    )
+    // Footer animation removed to prevent ScrollTrigger boundary issues
   }, { scope: container })
 
   return (
@@ -97,76 +88,81 @@ export default function FooterSection() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
 
         {/* ── Top Row ────────────────────────────────────────────────────── */}
-        <div className="footer-col grid grid-cols-1 lg:grid-cols-5 gap-12 py-16 border-b border-white/5">
+        <div className="grid grid-cols-12 gap-4 lg:gap-12 py-8 lg:py-16 border-b border-white/5">
 
-          {/* Brand Column */}
-          <div className="lg:col-span-2 flex flex-col gap-6 pr-0 lg:pr-12">
+          {/* Brand Column (Left) */}
+          <div className="col-span-5 lg:col-span-4 flex flex-col gap-4 lg:gap-6 pr-2 lg:pr-12">
             {/* Logo */}
-            <Link href="/" className="group flex items-center mb-6">
+            <Link href="/" className="group flex items-center">
               <Image 
                 src="/hellobhaiya-logo.svg" 
                 alt="HelloBhaiya Logo" 
                 width={200} 
                 height={48} 
-                className="h-12 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
+                className="h-7 sm:h-10 lg:h-12 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
+                style={{ width: "auto" }}
               />
             </Link>
 
-            <p className="text-text-secondary text-sm leading-relaxed max-w-xs">
+            <p className="hidden sm:block text-text-secondary text-sm leading-relaxed max-w-xs">
               The gamified platform for NEET, JEE & beyond. Built by aspirants, for aspirants.
               Study smarter. Level up. Crack it.
             </p>
 
-            {/* CTA mini */}
-            <Link
-              href="/login"
-              className="group w-fit flex items-center gap-2 bg-accent text-black font-bold text-xs uppercase tracking-widest rounded-full px-5 h-9 hover:bg-[#cbf745] transition-colors"
-            >
-              Get Started Free
-              <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
+            <div className="flex flex-col items-start gap-4 lg:gap-4 lg:mt-2">
+              {/* CTA mini */}
+              <Link
+                href="/login"
+                className="group w-fit flex items-center gap-1.5 bg-accent text-black font-bold text-[9px] lg:text-xs uppercase tracking-widest rounded-full px-4 lg:px-5 h-8 lg:h-9 hover:bg-[#cbf745] transition-colors"
+              >
+                Get Started
+                <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </Link>
 
-            {/* Socials */}
-            <div className="flex items-center gap-2 mt-2">
-              {SOCIALS.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="w-9 h-9 rounded-xl bg-surface border border-white/5 hover:border-white/20 flex items-center justify-center text-text-secondary hover:text-white transition-all hover:bg-surface/80"
-                >
-                  {s.icon}
-                </a>
-              ))}
+              {/* Socials */}
+              <div className="flex flex-wrap items-center gap-2 lg:gap-2">
+                {SOCIALS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    aria-label={s.label}
+                    className="w-8 h-8 lg:w-9 lg:h-9 rounded-lg lg:rounded-xl bg-surface border border-white/5 hover:border-white/20 flex items-center justify-center text-text-secondary hover:text-white transition-all hover:bg-surface/80"
+                  >
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Link Columns */}
-          {Object.entries(LINKS).map(([group, links]) => (
-            <div key={group} className="footer-col flex flex-col gap-4">
-              <h4 className="text-white text-xs font-bold uppercase tracking-widest">
-                {group}
-              </h4>
-              <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-text-muted text-sm hover:text-white transition-colors group flex items-center gap-1"
-                    >
-                      <span className="group-hover:translate-x-0.5 transition-transform inline-block">
-                        {link.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Link Columns Wrapper (Right) */}
+          <div className="col-span-7 lg:col-span-8 grid grid-cols-3 gap-x-1 sm:gap-x-3 gap-y-8 lg:gap-12">
+            {Object.entries(LINKS).map(([group, links]) => (
+              <div key={group} className="flex flex-col gap-2 lg:gap-4">
+                <h4 className="text-white text-[8px] sm:text-[9px] lg:text-xs font-bold uppercase tracking-widest break-words">
+                  {group}
+                </h4>
+                <ul className="space-y-1.5 lg:space-y-3">
+                  {links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-text-muted text-[8px] sm:text-[10px] lg:text-sm hover:text-white transition-colors group flex items-center gap-1"
+                      >
+                        <span className="group-hover:translate-x-0.5 transition-transform inline-block break-words max-w-[50px] sm:max-w-none">
+                          {link.label}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ── Bottom Row ─────────────────────────────────────────────────── */}
-        <div className="footer-col flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
           <p className="text-text-muted text-xs">
             © {new Date().getFullYear()} HelloBhaiya. Made with ♥ in India for NEET & JEE aspirants.
           </p>

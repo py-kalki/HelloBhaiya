@@ -1,7 +1,8 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
+import { Menu, X } from "lucide-react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
@@ -25,6 +26,7 @@ export default function HeroSection() {
   // Outer wrapper is GSAP scope — nav + hero text both live inside it
   const containerRef = useRef<HTMLDivElement>(null)
   const heroRef      = useRef<HTMLElement>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useGSAP(() => {
     // ── 0. Set initial states ──
@@ -51,16 +53,18 @@ export default function HeroSection() {
       .to(".hero-cta",   { autoAlpha: 1, y: 0, scale: 1, stagger: 0.12, duration: 0.7, ease: "back.out(1.4)" }, "-=0.5")
 
     // ── 2. Parallax glow arc while scrolling ─────────────────────────────
-    gsap.to(".hero-glow-arc", {
-      yPercent: 40,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.5,
-      },
-    })
+    if (heroRef.current && gsap.utils.toArray(".hero-glow-arc", containerRef.current).length > 0) {
+      gsap.to(".hero-glow-arc", {
+        yPercent: 40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      })
+    }
 
   }, { scope: containerRef })
 
@@ -76,7 +80,7 @@ export default function HeroSection() {
       </div>
 
       {/* H1 */}
-      <h1 className="font-sans font-bold text-6xl md:text-8xl lg:text-[100px] tracking-tighter leading-[1] mb-8 pb-2 [perspective:600px]">
+      <h1 className="font-sans font-bold text-5xl sm:text-6xl md:text-8xl lg:text-[100px] tracking-tighter leading-[1.1] sm:leading-[1] mb-6 sm:mb-8 pb-2 [perspective:600px]">
         <span className="hero-word inline-block text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/60">
           Dominate
         </span>{" "}
@@ -115,18 +119,19 @@ export default function HeroSection() {
   )
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="relative">
 
       {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
-      <header className="hero-nav fixed top-6 left-6 right-6 z-50 flex items-center justify-center">
-        <div className="absolute left-0">
+      <header className="hero-nav fixed top-4 sm:top-6 left-4 right-4 sm:left-6 sm:right-6 z-50 flex items-center justify-between md:justify-center bg-surface/40 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border border-white/10 md:border-transparent shadow-[0_8px_32px_rgba(0,0,0,0.5)] md:shadow-none rounded-full px-3 py-2 md:p-0 transition-all">
+        <div className="md:absolute md:left-0 flex shrink-0">
           <Link href="/" className="group flex items-center relative">
             <Image 
               src="/hellobhaiya-logo.svg" 
               alt="HelloBhaiya Logo" 
               width={200} 
               height={48} 
-              className="h-10 w-auto group-hover:opacity-80 transition-opacity"
+              className="h-8 sm:h-10 w-auto group-hover:opacity-80 transition-opacity"
+              style={{ width: "auto" }}
             />
           </Link>
         </div>
@@ -157,15 +162,54 @@ export default function HeroSection() {
           )}
         </nav>
 
-        <div className="absolute right-0">
+        <div className="md:absolute md:right-0 flex items-center gap-2 shrink-0">
           <Link
             href="/login"
-            className="relative group font-sans font-bold uppercase flex items-center justify-center text-black bg-accent hover:bg-[#cbf745] active:scale-95 transition-all rounded-full h-[34px] px-6 text-[11px] tracking-widest overflow-hidden shadow-[0_8px_32px_rgba(212,255,89,0.2)]"
+            className="relative group font-sans font-bold uppercase flex items-center justify-center text-black bg-accent hover:bg-[#cbf745] active:scale-95 transition-all rounded-full h-[32px] sm:h-[34px] px-5 sm:px-6 text-[10px] sm:text-[11px] tracking-widest overflow-hidden shadow-[0_8px_32px_rgba(212,255,89,0.2)]"
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
             <span className="relative z-10 flex items-center justify-center h-full leading-none mt-[1px]">Sign In</span>
           </Link>
+          
+          {/* Hamburger Menu Toggle (Mobile Only) */}
+          <button 
+            className="md:hidden flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-[calc(100%+12px)] left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 shadow-2xl rounded-2xl p-3 flex flex-col gap-1 md:hidden">
+            {NAV_LINKS.map((link) =>
+              link.scroll ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIsMobileMenuOpen(false)
+                    scrollToSection(link.href.slice(1))
+                  }}
+                  className="font-sans flex items-center text-[11px] font-bold uppercase tracking-widest transition-all rounded-xl px-4 py-3.5 text-text-secondary hover:text-white hover:bg-white/10"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="font-sans flex items-center text-[11px] font-bold uppercase tracking-widest transition-all rounded-xl px-4 py-3.5 text-text-secondary hover:text-white hover:bg-white/10"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
+          </div>
+        )}
       </header>
 
       {/* ══ HERO ═════════════════════════════════════════════════════════════ */}
