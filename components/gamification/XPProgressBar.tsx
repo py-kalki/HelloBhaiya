@@ -33,37 +33,35 @@ export function XPProgressBar({ xp }: Props) {
   const nextLevel = LEVEL_KEYS[idx + 1]
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-accent/12 border border-accent/20 flex items-center justify-center">
-            <span className="text-xs font-bold text-accent">{level.level}</span>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-surface-2 flex items-center justify-center">
+            <span className="text-sm font-bold text-text-primary">{level.level}</span>
           </div>
           <div>
-            <p className="text-text-primary text-xs font-bold">{level.title}</p>
-            <p className="text-text-muted text-[10px]">Level {level.level}</p>
+            <p className="text-text-primary text-sm font-semibold tracking-tight">{level.title}</p>
+            <p className="text-text-secondary text-xs">Level {level.level}</p>
           </div>
         </div>
         {nextLevel !== undefined && (
           <div className="text-right">
-            <p className="text-text-muted text-[10px]">Next level</p>
-            <p className="text-text-primary text-xs font-bold">{lookupLevel(toXP).title}</p>
+            <p className="text-text-secondary text-xs">Next level</p>
+            <p className="text-text-primary text-sm font-semibold tracking-tight">{lookupLevel(toXP).title}</p>
           </div>
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <div className="h-3 rounded-full bg-surface-2 overflow-hidden relative">
+      <div className="flex flex-col gap-2">
+        <div className="h-4 rounded-full bg-surface-2 overflow-hidden relative">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-accent via-violet-400 to-indigo-400 transition-all duration-1000 relative"
+            className="h-full rounded-full bg-accent transition-all duration-1000 relative"
             style={{ width: `${pct}%` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent animate-shimmer" />
-          </div>
+          />
         </div>
-        <div className="flex items-center justify-between text-[10px] text-text-muted font-mono">
+        <div className="flex items-center justify-between text-xs text-text-secondary font-medium">
           <span>{(xp - fromXP).toLocaleString()} XP</span>
-          <span className="text-accent font-semibold">{pct}%</span>
+          <span className="text-accent font-bold">{pct}%</span>
           <span>{(toXP - fromXP).toLocaleString()} XP</span>
         </div>
       </div>

@@ -14,6 +14,8 @@ async function verifySession(): Promise<string> {
 }
 
 type CreateUserProfileInput = {
+  name: string
+  studentClass: string
   exam: Exam
   targetDate: string   // ISO date string "YYYY-MM-DD"
   weakSubjects: string[]
@@ -35,7 +37,8 @@ export async function createUserProfile(input: CreateUserProfileInput) {
   const userProfile = {
     uid,
     email:               firebaseUser.email ?? "",
-    name:                firebaseUser.displayName ?? "",
+    name:                input.name || firebaseUser.displayName || "",
+    student_class:       input.studentClass,
     photo_url:           firebaseUser.photoURL ?? "",
     exam:                input.exam,
     target_date:         Timestamp.fromDate(targetDateObj),

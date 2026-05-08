@@ -10,7 +10,7 @@ import { BadgeGrid } from "@/components/gamification/BadgeGrid"
 import type { UserProfile } from "@/types/student"
 import { serializeProfile } from "@/lib/serializeProfile"
 import Link from "next/link"
-import { Settings } from "lucide-react"
+import { Settings, BarChart2 } from "lucide-react"
 
 export default async function ProfilePage() {
   const sessionCookie = (await cookies()).get("session")?.value
@@ -32,21 +32,35 @@ export default async function ProfilePage() {
   const testsCompleted = testsSnap.data().count
 
   return (
-    <div className="flex flex-col gap-4 p-4 max-w-2xl mx-auto w-full pb-10">
-      <div className="flex items-center justify-between">
-        <h1 className="text-text-primary font-bold text-lg">Profile</h1>
-        <Link
-          href="/settings"
-          className="min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors rounded-lg"
-        >
-          <Settings size={18} />
-        </Link>
+    <div className="flex flex-col gap-8 p-6 md:p-10 max-w-4xl mx-auto w-full pb-20">
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-text-primary font-medium text-4xl tracking-tight">Profile</h1>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/analytics"
+            className="w-12 h-12 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors rounded-full"
+          >
+            <BarChart2 size={22} />
+          </Link>
+          <Link
+            href="/settings"
+            className="w-12 h-12 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors rounded-full"
+          >
+            <Settings size={22} />
+          </Link>
+        </div>
       </div>
 
       <IdentityCard profile={profile} />
-      <XPStats profile={profile} />
-      <StatsGrid profile={profile} testsCompleted={testsCompleted} />
-      <BadgeGrid streakMax={profile.streak_max ?? 0} />
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
+        <div className="flex flex-col gap-6">
+          <StatsGrid profile={profile} testsCompleted={testsCompleted} />
+          <BadgeGrid streakMax={profile.streak_max ?? 0} />
+        </div>
+        <div>
+          <XPStats profile={profile} />
+        </div>
+      </div>
     </div>
   )
 }

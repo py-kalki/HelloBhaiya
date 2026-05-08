@@ -1,9 +1,11 @@
 import type { NextConfig } from "next"
 import bundleAnalyzer from "@next/bundle-analyzer"
+import createNextIntlPlugin from "next-intl/plugin"
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
@@ -15,6 +17,14 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: { bodySizeLimit: "2mb" },
+  },
+  // Keep firebase-admin and pdfjs server-only — never bundle into the client chunk
+  serverExternalPackages: ["firebase-admin", "pdfjs-dist"],
+  turbopack: {
+    resolveAlias: {
+      // pdfjs-dist tries to require('canvas') for server-side rendering; stub it out
+      canvas: "./empty-module.js",
+    },
   },
   async headers() {
     return [
@@ -29,4 +39,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withBundleAnalyzer(nextConfig)
+export default withBundleAnalyzer(withNextIntl(nextConfig))

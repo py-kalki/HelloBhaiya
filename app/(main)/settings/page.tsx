@@ -2,14 +2,28 @@
 
 import { useState, useTransition } from "react"
 import { deleteAccount } from "@/actions/deleteAccount"
-import { ArrowLeft, Trash2, AlertTriangle } from "lucide-react"
+import { setLocale } from "@/actions/setLocale"
+import { useTranslations } from "next-intl"
+import { ArrowLeft, Trash2, AlertTriangle, Languages } from "lucide-react"
 import Link from "next/link"
 
 export default function SettingsPage() {
+  const t = useTranslations("settings")
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [confirmText, setConfirmText] = useState("")
   const [isPending, startTransition] = useTransition()
+  const [localeChanging, startLocaleTransition] = useTransition()
   const [error, setError] = useState("")
+  const [currentLocale, setCurrentLocale] = useState<"en" | "hi">(
+    () => (document.cookie.includes("locale=hi") ? "hi" : "en")
+  )
+
+  function handleLocaleChange(locale: "en" | "hi") {
+    setCurrentLocale(locale)
+    startLocaleTransition(async () => {
+      await setLocale(locale)
+    })
+  }
 
   function handleDelete() {
     if (confirmText !== "DELETE") return
@@ -32,15 +46,37 @@ export default function SettingsPage() {
         >
           <ArrowLeft size={18} />
         </Link>
-        <h1 className="text-text-primary font-bold text-lg">Settings</h1>
+        <h1 className="text-text-primary font-bold text-lg">{t("title")}</h1>
       </div>
 
-      {/* Notifications section — stub for Phase 2 */}
+      {/* Language toggle */}
       <section className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-surface">
-        <h2 className="text-text-primary font-semibold text-sm">Notifications</h2>
-        <p className="text-xs text-text-secondary">
-          Notification preferences will be available in a future update.
-        </p>
+        <div className="flex items-center gap-2">
+          <Languages size={16} className="text-text-secondary" />
+          <h2 className="text-text-primary font-semibold text-sm">{t("language")}</h2>
+        </div>
+        <div className="flex gap-2">
+          {(["en", "hi"] as const).map((loc) => (
+            <button
+              key={loc}
+              onClick={() => handleLocaleChange(loc)}
+              disabled={localeChanging}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors min-h-[44px] border disabled:opacity-60 ${
+                currentLocale === loc
+                  ? "border-accent bg-accent/10 text-accent"
+                  : "border-border text-text-secondary hover:border-text-secondary"
+              }`}
+            >
+              {loc === "en" ? "English" : "हिंदी"}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Notifications section */}
+      <section className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-surface">
+        <h2 className="text-text-primary font-semibold text-sm">{t("notifications")}</h2>
+        <p className="text-xs text-text-secondary">{t("notifications_soon")}</p>
       </section>
 
       {/* Sign out */}
@@ -50,7 +86,7 @@ export default function SettingsPage() {
             type="submit"
             className="w-full py-3 rounded-xl border border-border text-text-secondary text-sm font-semibold hover:border-text-secondary transition-colors min-h-[44px]"
           >
-            Sign Out
+            {t("sign_out")}
           </button>
         </form>
       </section>
@@ -59,11 +95,9 @@ export default function SettingsPage() {
       <section className="flex flex-col gap-3 p-4 rounded-xl border border-danger/30 bg-danger/5">
         <div className="flex items-center gap-2 text-danger text-sm font-semibold">
           <AlertTriangle size={16} />
-          Danger Zone
+          {t("danger_zone")}
         </div>
-        <p className="text-xs text-text-secondary">
-          Permanently delete your account and all data. This cannot be undone.
-        </p>
+        <p className="text-xs text-text-secondary">{t("delete_confirm")}</p>
         {!showDeleteConfirm ? (
           <button
             type="button"
@@ -71,12 +105,14 @@ export default function SettingsPage() {
             className="flex items-center justify-center gap-2 py-3 rounded-xl border border-danger/40 text-danger text-sm font-semibold hover:bg-danger/10 transition-colors min-h-[44px]"
           >
             <Trash2 size={14} />
-            Delete Account
+            {t("delete_account")}
           </button>
         ) : (
           <div className="flex flex-col gap-3">
             <p className="text-xs text-text-secondary">
-              Type <strong className="text-text-primary">DELETE</strong> to confirm
+              {t("delete_type").split("DELETE").map((part, i) =>
+                i === 0 ? part : <><strong key="d" className="text-text-primary">DELETE</strong>{part}</>
+              )}
             </p>
             <input
               type="text"
@@ -92,7 +128,7 @@ export default function SettingsPage() {
                 onClick={() => { setShowDeleteConfirm(false); setConfirmText("") }}
                 className="flex-1 border border-border rounded-xl py-3 text-sm text-text-secondary hover:border-text-secondary transition-colors min-h-[44px]"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 type="button"
@@ -100,7 +136,7 @@ export default function SettingsPage() {
                 disabled={confirmText !== "DELETE" || isPending}
                 className="flex-1 bg-danger text-background rounded-xl py-3 text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-40 min-h-[44px]"
               >
-                {isPending ? "Deleting..." : "Confirm Delete"}
+                {isPending ? t("deleting") : t("confirm_delete")}
               </button>
             </div>
           </div>

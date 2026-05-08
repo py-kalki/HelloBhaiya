@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "home": "Home",
+    "test": "Test",
+    "battle": "Battle",
+    "notes": "Notes",
+    "roadmap": "Roadmap"
+  },
+  "dashboard": {
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening",
+    "streak": "Day Streak",
+    "xp": "XP",
+    "level": "Level",
+    "daily_goal": "Daily Goal",
+    "start_test": "Start a Test",
+    "continue_test": "Continue Test",
+    "recent_tests": "Recent Tests",
+    "no_tests": "No tests yet — build one to start!"
+  },
+  "test": {
+    "build": "Build Test",
+    "subjects": "Subjects",
+    "chapters": "Chapters",
+    "difficulty": "Difficulty",
+    "question_count": "Questions",
+    "timer": "Timer",
+    "mode": "Mode",
+    "generate": "Generate Test",
+    "generating": "Generating…",
+    "no_questions": "No questions match your filters. Try broadening your selection.",
+    "custom": "Custom",
+    "pyq": "PYQ",
+    "rapid_fire": "Rapid Fire",
+    "mistake_replay": "Mistake Replay",
+    "revision": "Revision"
+  },
+  "results": {
+    "score": "Score",
+    "accuracy": "Accuracy",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "unattempted": "Unattempted",
+    "xp_earned": "XP Earned",
+    "review": "Review Answers",
+    "share": "Share Result",
+    "new_test": "New Test"
+  },
+  "battle": {
+    "title": "Battle Mode",
+    "subtitle": "10 questions · same timer · fastest wins",
+    "start": "Start a Battle",
+    "join": "Join",
+    "enter_code": "ENTER CODE",
+    "waiting": "Waiting for opponent…",
+    "share_code": "Share this code with a friend",
+    "copy_code": "Copy code",
+    "copied": "Copied!",
+    "open_room": "Open Battle Room",
+    "cancel": "Cancel",
+    "requires_level": "Requires Level 10 (Molecule) to unlock"
+  },
+  "notes": {
+    "title": "Notes",
+    "upload": "Upload Note",
+    "search": "Search notes…",
+    "no_notes": "No notes found",
+    "subject": "Subject",
+    "chapter": "Chapter",
+    "rating": "Rating"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "notifications_soon": "Notification preferences will be available in a future update.",
+    "sign_out": "Sign Out",
+    "danger_zone": "Danger Zone",
+    "delete_account": "Delete Account",
+    "delete_confirm": "Permanently delete your account and all data. This cannot be undone.",
+    "delete_type": "Type DELETE to confirm",
+    "confirm_delete": "Confirm Delete",
+    "deleting": "Deleting...",
+    "cancel": "Cancel"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "back": "Back",
+    "save": "Save",
+    "submit": "Submit",
+    "close": "Close",
+    "or": "or"
+  }
+}

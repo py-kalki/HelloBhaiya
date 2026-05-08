@@ -1,0 +1,674 @@
+[
+  {
+    "chapter_id": "bio-living-world",
+    "name": "The Living World",
+    "subject": "Biology",
+    "unit": "Diversity of Living Organisms",
+    "topic_count": 6,
+    "topics": ["What is Living?", "Diversity in the Living World", "Taxonomic Categories", "Taxonomical Aids", "Nomenclature", "Classification Systems"]
+  },
+  {
+    "chapter_id": "bio-biological-classification",
+    "name": "Biological Classification",
+    "subject": "Biology",
+    "unit": "Diversity of Living Organisms",
+    "topic_count": 5,
+    "topics": ["Kingdom Monera", "Kingdom Protista", "Kingdom Fungi", "Kingdom Plantae", "Kingdom Animalia"]
+  },
+  {
+    "chapter_id": "bio-plant-kingdom",
+    "name": "Plant Kingdom",
+    "subject": "Biology",
+    "unit": "Diversity of Living Organisms",
+    "topic_count": 7,
+    "topics": ["Algae", "Bryophytes", "Pteridophytes", "Gymnosperms", "Angiosperms", "Alternation of Generations", "Plant Life Cycles"]
+  },
+  {
+    "chapter_id": "bio-animal-kingdom",
+    "name": "Animal Kingdom",
+    "subject": "Biology",
+    "unit": "Diversity of Living Organisms",
+    "topic_count": 8,
+    "topics": ["Basis of Classification", "Porifera", "Coelenterata", "Platyhelminthes", "Nematoda", "Annelida", "Arthropoda", "Chordata"]
+  },
+  {
+    "chapter_id": "bio-morphology-flowering-plants",
+    "name": "Morphology of Flowering Plants",
+    "subject": "Biology",
+    "unit": "Structural Organisation in Plants & Animals",
+    "topic_count": 7,
+    "topics": ["The Root", "The Stem", "The Leaf", "The Inflorescence", "The Flower", "The Fruit", "The Seed"]
+  },
+  {
+    "chapter_id": "bio-anatomy-flowering-plants",
+    "name": "Anatomy of Flowering Plants",
+    "subject": "Biology",
+    "unit": "Structural Organisation in Plants & Animals",
+    "topic_count": 5,
+    "topics": ["Tissues", "Tissue Systems", "Anatomy of Dicot & Monocot Root", "Anatomy of Dicot & Monocot Stem", "Anatomy of Leaf"]
+  },
+  {
+    "chapter_id": "bio-structural-organisation-animals",
+    "name": "Structural Organisation in Animals",
+    "subject": "Biology",
+    "unit": "Structural Organisation in Plants & Animals",
+    "topic_count": 5,
+    "topics": ["Tissue", "Organ and Organ System", "Earthworm", "Cockroach", "Frog"]
+  },
+  {
+    "chapter_id": "bio-cell-unit-of-life",
+    "name": "Cell: The Unit of Life",
+    "subject": "Biology",
+    "unit": "Cell: Structure and Function",
+    "topic_count": 8,
+    "topics": ["Cell Theory", "Prokaryotic Cell", "Eukaryotic Cell", "Cell Membrane", "Cell Wall", "Endomembrane System", "Mitochondria", "Nucleus"]
+  },
+  {
+    "chapter_id": "bio-biomolecules",
+    "name": "Biomolecules",
+    "subject": "Biology",
+    "unit": "Cell: Structure and Function",
+    "topic_count": 6,
+    "topics": ["Carbohydrates", "Proteins", "Lipids", "Nucleic Acids", "Enzymes", "Metabolic Basis of Living"]
+  },
+  {
+    "chapter_id": "bio-cell-cycle-division",
+    "name": "Cell Cycle and Cell Division",
+    "subject": "Biology",
+    "unit": "Cell: Structure and Function",
+    "topic_count": 5,
+    "topics": ["Cell Cycle", "Mitosis", "Meiosis", "Significance of Mitosis", "Significance of Meiosis"]
+  },
+  {
+    "chapter_id": "bio-transport-plants",
+    "name": "Transport in Plants",
+    "subject": "Biology",
+    "unit": "Plant Physiology",
+    "topic_count": 6,
+    "topics": ["Means of Transport", "Osmosis", "Plasmolysis", "Water Potential", "Long Distance Transport", "Translocation"]
+  },
+  {
+    "chapter_id": "bio-mineral-nutrition",
+    "name": "Mineral Nutrition",
+    "subject": "Biology",
+    "unit": "Plant Physiology",
+    "topic_count": 5,
+    "topics": ["Essential Mineral Elements", "Mechanism of Absorption", "Translocation", "Soil as Reservoir", "Nitrogen Metabolism"]
+  },
+  {
+    "chapter_id": "bio-photosynthesis",
+    "name": "Photosynthesis in Higher Plants",
+    "subject": "Biology",
+    "unit": "Plant Physiology",
+    "topic_count": 7,
+    "topics": ["Early Experiments", "Where Does Photosynthesis Take Place?", "Light Reactions", "Electron Transport", "Calvin Cycle", "Photorespiration", "Factors Affecting Photosynthesis"]
+  },
+  {
+    "chapter_id": "bio-respiration-plants",
+    "name": "Respiration in Plants",
+    "subject": "Biology",
+    "unit": "Plant Physiology",
+    "topic_count": 5,
+    "topics": ["Do Plants Breathe?", "Glycolysis", "Fermentation", "Aerobic Respiration", "The Respiratory Balance Sheet"]
+  },
+  {
+    "chapter_id": "bio-plant-growth-development",
+    "name": "Plant Growth and Development",
+    "subject": "Biology",
+    "unit": "Plant Physiology",
+    "topic_count": 6,
+    "topics": ["Growth", "Differentiation", "Development", "Plant Growth Regulators", "Photoperiodism", "Vernalisation"]
+  },
+  {
+    "chapter_id": "bio-digestion-absorption",
+    "name": "Digestion and Absorption",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 6,
+    "topics": ["Alimentary Canal", "Digestive Glands", "Digestion of Food", "Absorption", "Disorders of Digestive System", "Hepatic Portal Circulation"]
+  },
+  {
+    "chapter_id": "bio-breathing-gas-exchange",
+    "name": "Breathing and Exchange of Gases",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 6,
+    "topics": ["Respiratory Organs", "Mechanism of Breathing", "Exchange of Gases", "Transport of Gases", "Regulation of Respiration", "Disorders"]
+  },
+  {
+    "chapter_id": "bio-body-fluids-circulation",
+    "name": "Body Fluids and Circulation",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 7,
+    "topics": ["Blood", "Lymph", "Human Circulatory System", "Cardiac Cycle", "ECG", "Double Circulation", "Disorders"]
+  },
+  {
+    "chapter_id": "bio-excretory-products",
+    "name": "Excretory Products and their Elimination",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 6,
+    "topics": ["Modes of Excretion", "Human Excretory System", "Urine Formation", "Function of Tubules", "Regulation of Kidney Function", "Disorders"]
+  },
+  {
+    "chapter_id": "bio-locomotion-movement",
+    "name": "Locomotion and Movement",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 5,
+    "topics": ["Types of Movement", "Muscle", "Skeletal System", "Joints", "Disorders"]
+  },
+  {
+    "chapter_id": "bio-neural-control",
+    "name": "Neural Control and Coordination",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 6,
+    "topics": ["Neuron", "Nervous System", "Reflex Arc", "Sensory Reception", "Eye", "Ear"]
+  },
+  {
+    "chapter_id": "bio-chemical-coordination",
+    "name": "Chemical Coordination and Integration",
+    "subject": "Biology",
+    "unit": "Human Physiology",
+    "topic_count": 6,
+    "topics": ["Endocrine Glands", "Hormones of Heart, Kidney, GIT", "Mechanism of Hormone Action", "Role of Hormones as Messengers", "Feedback Mechanisms", "Disorders"]
+  },
+  {
+    "chapter_id": "bio-reproduction-organisms",
+    "name": "Reproduction in Organisms",
+    "subject": "Biology",
+    "unit": "Reproduction",
+    "topic_count": 4,
+    "topics": ["Asexual Reproduction", "Sexual Reproduction", "Pre-fertilisation Events", "Post-fertilisation Events"]
+  },
+  {
+    "chapter_id": "bio-sexual-reproduction-flowering-plants",
+    "name": "Sexual Reproduction in Flowering Plants",
+    "subject": "Biology",
+    "unit": "Reproduction",
+    "topic_count": 7,
+    "topics": ["Flower — A Fascinating Organ", "Pre-fertilisation Structures & Events", "Double Fertilisation", "Post-fertilisation Events", "Apomixis", "Polyembryony", "Outbreeding Devices"]
+  },
+  {
+    "chapter_id": "bio-human-reproduction",
+    "name": "Human Reproduction",
+    "subject": "Biology",
+    "unit": "Reproduction",
+    "topic_count": 5,
+    "topics": ["Male Reproductive System", "Female Reproductive System", "Gametogenesis", "Menstrual Cycle", "Fertilisation and Embryonic Development"]
+  },
+  {
+    "chapter_id": "bio-reproductive-health",
+    "name": "Reproductive Health",
+    "subject": "Biology",
+    "unit": "Reproduction",
+    "topic_count": 4,
+    "topics": ["Reproductive Health & Problems", "Population Stabilisation", "Medical Termination of Pregnancy", "Sexually Transmitted Infections"]
+  },
+  {
+    "chapter_id": "bio-principles-inheritance",
+    "name": "Principles of Inheritance and Variation",
+    "subject": "Biology",
+    "unit": "Genetics and Evolution",
+    "topic_count": 8,
+    "topics": ["Mendel's Laws", "Inheritance of One Gene", "Inheritance of Two Genes", "Sex Determination", "Mutation", "Genetic Disorders", "Chromosomal Theory", "Linkage and Recombination"]
+  },
+  {
+    "chapter_id": "bio-molecular-basis-inheritance",
+    "name": "Molecular Basis of Inheritance",
+    "subject": "Biology",
+    "unit": "Genetics and Evolution",
+    "topic_count": 8,
+    "topics": ["DNA", "RNA", "DNA Packaging", "DNA Replication", "Transcription", "Translation", "Regulation of Gene Expression", "Human Genome Project"]
+  },
+  {
+    "chapter_id": "bio-evolution",
+    "name": "Evolution",
+    "subject": "Biology",
+    "unit": "Genetics and Evolution",
+    "topic_count": 6,
+    "topics": ["Origin of Life", "Evolution of Life Forms", "Mechanisms of Evolution", "Hardy-Weinberg Principle", "Brief Account of Evolution", "Adaptive Radiation"]
+  },
+  {
+    "chapter_id": "bio-human-health-disease",
+    "name": "Human Health and Disease",
+    "subject": "Biology",
+    "unit": "Biology in Human Welfare",
+    "topic_count": 5,
+    "topics": ["Common Diseases in Humans", "Immunity", "AIDS", "Cancer", "Drugs and Alcohol Abuse"]
+  },
+  {
+    "chapter_id": "bio-food-production",
+    "name": "Strategies for Enhancement in Food Production",
+    "subject": "Biology",
+    "unit": "Biology in Human Welfare",
+    "topic_count": 4,
+    "topics": ["Animal Husbandry", "Plant Breeding", "Single Cell Protein", "Tissue Culture"]
+  },
+  {
+    "chapter_id": "bio-microbes-human-welfare",
+    "name": "Microbes in Human Welfare",
+    "subject": "Biology",
+    "unit": "Biology in Human Welfare",
+    "topic_count": 4,
+    "topics": ["Microbes in Household Products", "Microbes in Industrial Products", "Microbes in Sewage Treatment", "Microbes in Biogas Production"]
+  },
+  {
+    "chapter_id": "bio-biotechnology-principles",
+    "name": "Biotechnology: Principles and Processes",
+    "subject": "Biology",
+    "unit": "Biotechnology and its Applications",
+    "topic_count": 5,
+    "topics": ["Principles of Biotechnology", "Tools of Recombinant DNA Technology", "Processes of Recombinant DNA Technology", "PCR", "Gel Electrophoresis"]
+  },
+  {
+    "chapter_id": "bio-biotechnology-applications",
+    "name": "Biotechnology and its Applications",
+    "subject": "Biology",
+    "unit": "Biotechnology and its Applications",
+    "topic_count": 4,
+    "topics": ["Biotechnology Applications in Agriculture", "Biotechnology in Medicine", "Transgenic Animals", "Ethical Issues"]
+  },
+  {
+    "chapter_id": "bio-organisms-populations",
+    "name": "Organisms and Populations",
+    "subject": "Biology",
+    "unit": "Ecology and Environment",
+    "topic_count": 5,
+    "topics": ["Organism and Its Environment", "Major Abiotic Factors", "Responses to Abiotic Factors", "Adaptations", "Population Attributes"]
+  },
+  {
+    "chapter_id": "bio-ecosystem",
+    "name": "Ecosystem",
+    "subject": "Biology",
+    "unit": "Ecology and Environment",
+    "topic_count": 6,
+    "topics": ["Ecosystem Structure and Function", "Productivity", "Decomposition", "Energy Flow", "Ecological Pyramids", "Nutrient Cycling"]
+  },
+  {
+    "chapter_id": "bio-biodiversity-conservation",
+    "name": "Biodiversity and Conservation",
+    "subject": "Biology",
+    "unit": "Ecology and Environment",
+    "topic_count": 5,
+    "topics": ["Biodiversity", "Patterns of Biodiversity", "Loss of Biodiversity", "Biodiversity Conservation", "Sacred Groves"]
+  },
+  {
+    "chapter_id": "bio-environmental-issues",
+    "name": "Environmental Issues",
+    "subject": "Biology",
+    "unit": "Ecology and Environment",
+    "topic_count": 5,
+    "topics": ["Air Pollution", "Water Pollution", "Solid Wastes", "Agro-chemicals and their Effects", "Greenhouse Effect and Global Warming"]
+  },
+  {
+    "chapter_id": "phy-physical-world",
+    "name": "Physical World and Measurement",
+    "subject": "Physics",
+    "unit": "Physics and Measurement",
+    "topic_count": 4,
+    "topics": ["Physics — Scope and Excitement", "Units and Dimensions", "Significant Figures", "Errors in Measurement"]
+  },
+  {
+    "chapter_id": "phy-kinematics",
+    "name": "Kinematics",
+    "subject": "Physics",
+    "unit": "Kinematics",
+    "topic_count": 6,
+    "topics": ["Motion in a Straight Line", "Position, Path Length and Displacement", "Velocity and Speed", "Acceleration", "Relative Velocity", "Projectile Motion"]
+  },
+  {
+    "chapter_id": "phy-laws-of-motion",
+    "name": "Laws of Motion",
+    "subject": "Physics",
+    "unit": "Laws of Motion",
+    "topic_count": 6,
+    "topics": ["Aristotle's Fallacy", "Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Conservation of Momentum", "Friction"]
+  },
+  {
+    "chapter_id": "phy-work-energy-power",
+    "name": "Work, Energy and Power",
+    "subject": "Physics",
+    "unit": "Work, Energy and Power",
+    "topic_count": 6,
+    "topics": ["The Work-Energy Theorem", "Kinetic and Potential Energy", "Conservation of Mechanical Energy", "Power", "Collisions", "Spring and Elastic Potential Energy"]
+  },
+  {
+    "chapter_id": "phy-rotational-motion",
+    "name": "Rotational Motion",
+    "subject": "Physics",
+    "unit": "Rotational Motion",
+    "topic_count": 7,
+    "topics": ["Centre of Mass", "Motion of Centre of Mass", "Angular Velocity", "Torque and Angular Momentum", "Moment of Inertia", "Theorems of Perpendicular & Parallel Axes", "Rolling Motion"]
+  },
+  {
+    "chapter_id": "phy-gravitation",
+    "name": "Gravitation",
+    "subject": "Physics",
+    "unit": "Gravitation",
+    "topic_count": 6,
+    "topics": ["Kepler's Laws", "Universal Law of Gravitation", "Gravitational Potential Energy", "Escape Speed", "Orbital Velocity", "Satellites"]
+  },
+  {
+    "chapter_id": "phy-properties-bulk-matter",
+    "name": "Properties of Bulk Matter",
+    "subject": "Physics",
+    "unit": "Properties of Bulk Matter",
+    "topic_count": 7,
+    "topics": ["Elastic Behaviour", "Stress-Strain Relationship", "Surface Tension", "Viscosity", "Bernoulli's Theorem", "Pressure", "Surface Energy"]
+  },
+  {
+    "chapter_id": "phy-thermodynamics",
+    "name": "Thermodynamics",
+    "subject": "Physics",
+    "unit": "Thermodynamics",
+    "topic_count": 6,
+    "topics": ["Thermal Equilibrium", "First Law of Thermodynamics", "Second Law of Thermodynamics", "Heat Engines", "Refrigerators", "Carnot Engine"]
+  },
+  {
+    "chapter_id": "phy-kinetic-theory",
+    "name": "Kinetic Theory",
+    "subject": "Physics",
+    "unit": "Kinetic Theory of Gases",
+    "topic_count": 5,
+    "topics": ["Molecular Nature of Matter", "Kinetic Theory of an Ideal Gas", "Law of Equipartition of Energy", "Mean Free Path", "Specific Heat Capacity"]
+  },
+  {
+    "chapter_id": "phy-oscillations-waves",
+    "name": "Oscillations and Waves",
+    "subject": "Physics",
+    "unit": "Oscillations and Waves",
+    "topic_count": 7,
+    "topics": ["Oscillations", "Simple Harmonic Motion", "Velocity and Acceleration in SHM", "Energy in SHM", "Wave Motion", "Superposition of Waves", "Standing Waves"]
+  },
+  {
+    "chapter_id": "phy-electrostatics",
+    "name": "Electrostatics",
+    "subject": "Physics",
+    "unit": "Electrostatics",
+    "topic_count": 7,
+    "topics": ["Electric Charges", "Coulomb's Law", "Electric Field", "Electric Potential", "Gauss's Law", "Capacitors", "Energy Stored in a Capacitor"]
+  },
+  {
+    "chapter_id": "phy-current-electricity",
+    "name": "Current Electricity",
+    "subject": "Physics",
+    "unit": "Current Electricity",
+    "topic_count": 7,
+    "topics": ["Electric Current", "Ohm's Law", "Drift Velocity", "Electrical Resistivity", "Kirchhoff's Laws", "Wheatstone Bridge", "Potentiometer"]
+  },
+  {
+    "chapter_id": "phy-magnetic-effects",
+    "name": "Magnetic Effects of Current and Magnetism",
+    "subject": "Physics",
+    "unit": "Magnetic Effects of Current and Magnetism",
+    "topic_count": 7,
+    "topics": ["Biot-Savart Law", "Ampere's Law", "Solenoid", "Force on a Moving Charge", "Moving Coil Galvanometer", "Permanent Magnets", "Hysteresis"]
+  },
+  {
+    "chapter_id": "phy-electromagnetic-induction",
+    "name": "Electromagnetic Induction and Alternating Currents",
+    "subject": "Physics",
+    "unit": "Electromagnetic Induction & AC",
+    "topic_count": 7,
+    "topics": ["Magnetic Flux", "Faraday's Law", "Lenz's Law", "Motional EMF", "Self-Inductance", "Mutual Inductance", "AC Circuits and Resonance"]
+  },
+  {
+    "chapter_id": "phy-electromagnetic-waves",
+    "name": "Electromagnetic Waves",
+    "subject": "Physics",
+    "unit": "Electromagnetic Waves",
+    "topic_count": 4,
+    "topics": ["Displacement Current", "Electromagnetic Waves", "Electromagnetic Spectrum", "Applications of EM Waves"]
+  },
+  {
+    "chapter_id": "phy-optics",
+    "name": "Optics",
+    "subject": "Physics",
+    "unit": "Optics",
+    "topic_count": 8,
+    "topics": ["Reflection of Light", "Refraction", "Total Internal Reflection", "Refraction at Spherical Surfaces", "Optical Instruments", "Wave Optics", "Interference", "Diffraction"]
+  },
+  {
+    "chapter_id": "phy-dual-nature",
+    "name": "Dual Nature of Matter and Radiation",
+    "subject": "Physics",
+    "unit": "Dual Nature of Matter and Radiation",
+    "topic_count": 5,
+    "topics": ["Electron Emission", "Photoelectric Effect", "Einstein's Photoelectric Equation", "Wave Nature of Matter", "Davisson-Germer Experiment"]
+  },
+  {
+    "chapter_id": "phy-atoms-nuclei",
+    "name": "Atoms and Nuclei",
+    "subject": "Physics",
+    "unit": "Atoms and Nuclei",
+    "topic_count": 7,
+    "topics": ["Alpha-Particle Scattering", "Atomic Spectra", "Bohr Model", "Hydrogen Spectrum", "Nucleus Composition", "Radioactivity", "Nuclear Energy"]
+  },
+  {
+    "chapter_id": "phy-electronic-devices",
+    "name": "Electronic Devices",
+    "subject": "Physics",
+    "unit": "Electronic Devices",
+    "topic_count": 5,
+    "topics": ["Semiconductors", "p-n Junction Diode", "Zener Diode", "Transistors", "Logic Gates"]
+  },
+  {
+    "chapter_id": "chem-basic-concepts",
+    "name": "Some Basic Concepts of Chemistry",
+    "subject": "Chemistry",
+    "unit": "Basic Concepts of Chemistry",
+    "topic_count": 6,
+    "topics": ["Importance of Chemistry", "Mole Concept", "Laws of Chemical Combination", "Atomic and Molecular Masses", "Percentage Composition", "Stoichiometry"]
+  },
+  {
+    "chapter_id": "chem-structure-atom",
+    "name": "Structure of Atom",
+    "subject": "Chemistry",
+    "unit": "Atomic Structure",
+    "topic_count": 7,
+    "topics": ["Sub-atomic Particles", "Atomic Models", "Bohr Model", "Quantum Mechanical Model", "Quantum Numbers", "Orbitals", "Electronic Configuration"]
+  },
+  {
+    "chapter_id": "chem-periodic-table",
+    "name": "Classification of Elements and Periodicity",
+    "subject": "Chemistry",
+    "unit": "Classification of Elements",
+    "topic_count": 6,
+    "topics": ["Genesis of Periodic Table", "Modern Periodic Law", "Electronic Configuration", "Periodic Trends", "Ionisation Enthalpy", "Electron Gain Enthalpy"]
+  },
+  {
+    "chapter_id": "chem-chemical-bonding",
+    "name": "Chemical Bonding and Molecular Structure",
+    "subject": "Chemistry",
+    "unit": "Chemical Bonding",
+    "topic_count": 8,
+    "topics": ["Ionic Bond", "Covalent Bond", "Lewis Structure", "VSEPR Theory", "Valence Bond Theory", "Hybridisation", "Molecular Orbital Theory", "Hydrogen Bonding"]
+  },
+  {
+    "chapter_id": "chem-states-of-matter",
+    "name": "States of Matter",
+    "subject": "Chemistry",
+    "unit": "States of Matter",
+    "topic_count": 5,
+    "topics": ["Intermolecular Forces", "Gas Laws", "Kinetic Molecular Theory", "Behaviour of Real Gases", "Liquefaction of Gases"]
+  },
+  {
+    "chapter_id": "chem-thermodynamics",
+    "name": "Thermodynamics",
+    "subject": "Chemistry",
+    "unit": "Thermodynamics",
+    "topic_count": 7,
+    "topics": ["Thermodynamic State", "Applications of First Law", "Enthalpy Change", "Hess's Law", "Spontaneity", "Gibbs Energy", "Second and Third Law"]
+  },
+  {
+    "chapter_id": "chem-equilibrium",
+    "name": "Equilibrium",
+    "subject": "Chemistry",
+    "unit": "Equilibrium",
+    "topic_count": 7,
+    "topics": ["Equilibrium in Physical Processes", "Law of Chemical Equilibrium", "Le Chatelier's Principle", "Ionic Equilibrium", "Acids and Bases", "pH Scale", "Buffer Solutions"]
+  },
+  {
+    "chapter_id": "chem-redox-reactions",
+    "name": "Redox Reactions",
+    "subject": "Chemistry",
+    "unit": "Redox Reactions",
+    "topic_count": 4,
+    "topics": ["Classical Idea of Redox", "Oxidation Number", "Types of Redox Reactions", "Balancing Redox Equations"]
+  },
+  {
+    "chapter_id": "chem-s-block",
+    "name": "The s-Block Elements",
+    "subject": "Chemistry",
+    "unit": "s-Block Elements",
+    "topic_count": 5,
+    "topics": ["Group 1 Elements", "Compounds of Sodium", "Group 2 Elements", "Compounds of Calcium", "Biological Importance"]
+  },
+  {
+    "chapter_id": "chem-p-block-1",
+    "name": "The p-Block Elements (Group 13 & 14)",
+    "subject": "Chemistry",
+    "unit": "p-Block Elements",
+    "topic_count": 6,
+    "topics": ["Group 13 — Boron Family", "Borax and Boron Compounds", "Aluminium", "Group 14 — Carbon Family", "Carbon Allotropes", "Silicon"]
+  },
+  {
+    "chapter_id": "chem-hydrogen",
+    "name": "Hydrogen",
+    "subject": "Chemistry",
+    "unit": "Hydrogen",
+    "topic_count": 4,
+    "topics": ["Position of Hydrogen", "Dihydrogen", "Properties of Water", "Hydrogen Peroxide"]
+  },
+  {
+    "chapter_id": "chem-p-block-2",
+    "name": "The p-Block Elements (Group 15–18)",
+    "subject": "Chemistry",
+    "unit": "p-Block Elements",
+    "topic_count": 8,
+    "topics": ["Group 15 — Nitrogen Family", "Ammonia", "Phosphorus", "Group 16 — Oxygen Family", "Sulphur", "Group 17 — Halogens", "Interhalogen Compounds", "Group 18 — Noble Gases"]
+  },
+  {
+    "chapter_id": "chem-d-f-block",
+    "name": "The d- and f-Block Elements",
+    "subject": "Chemistry",
+    "unit": "d and f Block Elements",
+    "topic_count": 6,
+    "topics": ["Position in Periodic Table", "Electronic Configuration", "Properties of Transition Metals", "Potassium Dichromate", "Potassium Permanganate", "Lanthanoids & Actinoids"]
+  },
+  {
+    "chapter_id": "chem-coordination-compounds",
+    "name": "Coordination Compounds",
+    "subject": "Chemistry",
+    "unit": "Coordination Compounds",
+    "topic_count": 6,
+    "topics": ["Werner's Theory", "Definitions & Nomenclature", "Isomerism", "Bonding in Coordination Compounds", "Stability Constants", "Importance & Applications"]
+  },
+  {
+    "chapter_id": "chem-solutions",
+    "name": "Solutions",
+    "subject": "Chemistry",
+    "unit": "Solutions",
+    "topic_count": 6,
+    "topics": ["Types of Solutions", "Expressing Concentration", "Solubility", "Vapour Pressure", "Colligative Properties", "Abnormal Molar Mass"]
+  },
+  {
+    "chapter_id": "chem-electrochemistry",
+    "name": "Electrochemistry",
+    "subject": "Chemistry",
+    "unit": "Electrochemistry",
+    "topic_count": 6,
+    "topics": ["Electrochemical Cells", "Galvanic Cells", "Nernst Equation", "Conductance", "Electrolytic Cells", "Corrosion"]
+  },
+  {
+    "chapter_id": "chem-chemical-kinetics",
+    "name": "Chemical Kinetics",
+    "subject": "Chemistry",
+    "unit": "Chemical Kinetics",
+    "topic_count": 6,
+    "topics": ["Rate of a Chemical Reaction", "Factors Influencing Rate", "Integrated Rate Equations", "Half-Life", "Pseudo First Order", "Arrhenius Equation"]
+  },
+  {
+    "chapter_id": "chem-surface-chemistry",
+    "name": "Surface Chemistry",
+    "subject": "Chemistry",
+    "unit": "Surface Chemistry",
+    "topic_count": 4,
+    "topics": ["Adsorption", "Catalysis", "Colloids", "Emulsions"]
+  },
+  {
+    "chapter_id": "chem-haloalkanes-haloarenes",
+    "name": "Haloalkanes and Haloarenes",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 6,
+    "topics": ["Classification", "Nomenclature", "Nature of C-X Bond", "Reactions", "Polyhalogen Compounds", "Nucleophilic Substitution"]
+  },
+  {
+    "chapter_id": "chem-alcohols-phenols-ethers",
+    "name": "Alcohols, Phenols and Ethers",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 6,
+    "topics": ["Classification & Nomenclature", "Preparations of Alcohols", "Properties of Alcohols", "Phenols", "Ethers", "Important Reactions"]
+  },
+  {
+    "chapter_id": "chem-aldehydes-ketones",
+    "name": "Aldehydes, Ketones and Carboxylic Acids",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 6,
+    "topics": ["Nomenclature", "Preparation", "Nucleophilic Addition", "Aldol Condensation", "Carboxylic Acids", "Reactions of Carboxylic Acids"]
+  },
+  {
+    "chapter_id": "chem-amines",
+    "name": "Amines",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 5,
+    "topics": ["Nomenclature", "Structure & Classification", "Preparation", "Physical Properties", "Chemical Reactions"]
+  },
+  {
+    "chapter_id": "chem-biomolecules",
+    "name": "Biomolecules",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 5,
+    "topics": ["Carbohydrates", "Proteins", "Enzymes", "Vitamins", "Nucleic Acids"]
+  },
+  {
+    "chapter_id": "chem-polymers",
+    "name": "Polymers",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 4,
+    "topics": ["Classification of Polymers", "Addition Polymerisation", "Condensation Polymerisation", "Commercial Polymers"]
+  },
+  {
+    "chapter_id": "chem-organic-principles",
+    "name": "Organic Chemistry: Basic Principles",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 6,
+    "topics": ["General Introduction", "IUPAC Nomenclature", "Isomerism", "Electronic Displacement Effects", "Homolytic & Heterolytic Fission", "Reaction Intermediates"]
+  },
+  {
+    "chapter_id": "chem-hydrocarbons",
+    "name": "Hydrocarbons",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 6,
+    "topics": ["Alkanes", "Alkenes", "Alkynes", "Aromatic Hydrocarbons", "Carcinogenicity and Toxicity", "Reactions of Benzene"]
+  },
+  {
+    "chapter_id": "chem-chemistry-everyday-life",
+    "name": "Chemistry in Everyday Life",
+    "subject": "Chemistry",
+    "unit": "Organic Chemistry",
+    "topic_count": 4,
+    "topics": ["Drugs and their Classification", "Drug-Target Interaction", "Chemicals in Food", "Cleansing Agents"]
+  }
+]

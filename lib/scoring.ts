@@ -3,10 +3,43 @@ import type { MarkingScheme } from "@/types/student"
 
 const NEET_DEFAULT: MarkingScheme = { correct: 4, wrong: -1, unattempted: 0 }
 
+export const MARKING_SCHEMES: Record<string, MarkingScheme> = {
+  NEET:      { correct: 4, wrong: -1, unattempted: 0 },
+  JEE_MAINS: { correct: 4, wrong: -1, unattempted: 0 },
+  JEE_ADV:   { correct: 4, wrong: -2, unattempted: 0 },
+}
+
+export function schemeForExam(exam: string): MarkingScheme {
+  return MARKING_SCHEMES[exam] ?? MARKING_SCHEMES["NEET"]!
+}
+
+// JEE MCQ_MULTI scoring: partial marking for ADV, all-or-nothing for MAINS
+function scoreMCQMulti(
+  answer: string | number | undefined | null,
+  correctAnswer: string | number,
+  exam: string
+): number {
+  if (answer === undefined || answer === null || answer === "") return 0
+
+  const selected = String(answer).split(",").map((s) => s.trim()).sort()
+  const correct  = String(correctAnswer).split(",").map((s) => s.trim()).sort()
+
+  const hasWrong = selected.some((s) => !correct.includes(s))
+  if (hasWrong) return -2
+
+  const allCorrect =
+    selected.length === correct.length && correct.every((c) => selected.includes(c))
+  if (allCorrect) return 4
+
+  if (exam === "JEE_ADV") return selected.filter((s) => correct.includes(s)).length
+  return 0 // JEE_MAINS: partial with no wrong = 0
+}
+
 export function calculateScore(
   questions: Question[],
   answers: Record<string, string | number>,
-  scheme: MarkingScheme = NEET_DEFAULT
+  scheme: MarkingScheme = NEET_DEFAULT,
+  exam = "NEET"
 ): ScoreResult {
   let score = 0
   let correct = 0, wrong = 0, unattempted = 0
@@ -17,21 +50,37 @@ export function calculateScore(
   for (const q of questions) {
     const answer = answers[q.question_id]
     const isUnattempted = answer === undefined || answer === null || answer === ""
-    const isCorrect     = !isUnattempted && String(answer) === String(q.correct_answer)
+
+    let questionScore: number
+    let isCorrect: boolean
 
     if (isUnattempted) {
-      score += scheme.unattempted
+      questionScore = scheme.unattempted
+      isCorrect = false
       unattempted++
-    } else if (isCorrect) {
-      score += scheme.correct
-      correct++
+    } else if (q.type === "MCQ_MULTI" && (exam === "JEE_MAINS" || exam === "JEE_ADV")) {
+      questionScore = scoreMCQMulti(answer, q.correct_answer, exam)
+      isCorrect = questionScore > 0
+      if (questionScore < 0) {
+        wrong++
+        wrongQuestions.push(q.question_id)
+      } else {
+        correct++
+      }
     } else {
-      score += scheme.wrong
-      wrong++
-      wrongQuestions.push(q.question_id)
+      isCorrect = String(answer) === String(q.correct_answer)
+      if (isCorrect) {
+        questionScore = scheme.correct
+        correct++
+      } else {
+        questionScore = scheme.wrong
+        wrong++
+        wrongQuestions.push(q.question_id)
+      }
     }
 
-    // Track per-subject and per-chapter accuracy
+    score += questionScore
+
     if (!isUnattempted) {
       const sub = subjectAccuracy[q.subject] ?? { correct: 0, attempted: 0 }
       sub.attempted++

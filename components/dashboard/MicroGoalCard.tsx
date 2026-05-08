@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { RefreshCw, Target, CheckCircle2, ArrowRight } from "lucide-react"
+import { RefreshCw, Target, CheckCircle2, ArrowRight, MoreHorizontal } from "lucide-react"
 import { useDailyGoal } from "@/lib/hooks/useDailyGoal"
 import { refreshMicroGoal } from "@/actions/refreshMicroGoal"
 import { generateMicroGoal } from "@/actions/generateMicroGoal"
@@ -30,28 +30,33 @@ export function MicroGoalCard() {
   }
 
   if (loading) {
-    return <div className="h-36 rounded-2xl shimmer" />
+    return <div className="h-full min-h-[300px] rounded-[28px] bg-surface animate-pulse" />
   }
 
   if (!goal) {
     return (
-      <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-4 animate-slide-up">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
-            <Target size={18} className="text-accent" />
-          </div>
-          <div>
-            <p className="text-text-primary font-semibold text-sm">No goal yet</p>
-            <p className="text-text-muted text-xs">Generate your daily mission</p>
+      <div className="relative h-full min-h-[300px] bg-surface rounded-[28px] p-6 flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-2">
+            <Target size={18} className="text-text-secondary" />
+            <span className="text-sm font-medium text-text-secondary">Daily Mission</span>
           </div>
         </div>
-        <button
-          onClick={handleGenerate}
-          disabled={refreshing}
-          className="h-10 px-4 rounded-xl bg-accent text-background text-sm font-bold disabled:opacity-50 transition-opacity hover:opacity-90 self-start"
-        >
-          {refreshing ? "Generating…" : "✨ Generate Goal"}
-        </button>
+
+        <div className="flex-1 flex flex-col justify-center gap-4">
+          <div>
+            <p className="text-text-primary font-medium text-lg">No mission active</p>
+            <p className="text-text-muted text-sm mt-1">Ready to tackle your weak areas?</p>
+          </div>
+
+          <button
+            onClick={handleGenerate}
+            disabled={refreshing}
+            className="self-start px-6 py-3 rounded-full bg-accent text-black text-sm font-semibold disabled:opacity-50 transition-all hover:opacity-90 active:scale-95"
+          >
+            {refreshing ? "Generating..." : "Generate Goal"}
+          </button>
+        </div>
       </div>
     )
   }
@@ -61,75 +66,89 @@ export function MicroGoalCard() {
   const isComplete = goal.complete
 
   return (
-    <div className={`relative bg-surface border rounded-2xl p-5 flex flex-col gap-4 overflow-hidden animate-slide-up transition-all duration-300 ${
-      isComplete ? "border-success/30 shadow-[0_0_30px_rgba(110,231,183,0.08)]" : "border-border"
-    }`}>
-      {/* Gradient top accent */}
-      <div className={`absolute inset-x-0 top-0 h-0.5 ${isComplete ? "bg-gradient-to-r from-success/0 via-success to-success/0" : "bg-gradient-to-r from-accent/0 via-accent/60 to-accent/0"}`} />
-
+    <div className="relative h-full bg-surface rounded-[28px] p-6 flex flex-col overflow-hidden transition-all duration-300">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <div className={`mt-0.5 w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isComplete ? "bg-success/12 border border-success/20" : "bg-accent/10 border border-accent/20"}`}>
-            {isComplete
-              ? <CheckCircle2 size={17} className="text-success" />
-              : <Target size={17} className="text-accent" />
-            }
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          {isComplete ? <CheckCircle2 size={18} className="text-accent" /> : <Target size={18} className="text-text-secondary" />}
+          <span className="text-sm font-medium text-text-secondary">Daily Mission</span>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {/* Mock Pill Tabs for aesthetic */}
+          <div className="hidden sm:flex items-center bg-background rounded-full p-1 border border-border">
+            <button className="px-4 py-1.5 rounded-full text-xs font-medium text-text-muted">Math</button>
+            <button className="px-4 py-1.5 rounded-full bg-accent text-black text-xs font-semibold">Science</button>
           </div>
-          <div className="flex flex-col gap-0.5">
-            <p className="text-text-muted text-[10px] font-semibold uppercase tracking-widest">Today&apos;s Goal</p>
-            <p className="text-text-primary font-semibold text-sm leading-snug">{goal.text}</p>
-          </div>
+          <button className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-text-primary hover:bg-surface-2 transition-colors">
+            <MoreHorizontal size={14} />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 flex flex-col">
+        {/* Title */}
+        <div className="mb-8">
+          <p className="text-2xl font-medium leading-snug text-text-primary">{goal.text}</p>
         </div>
 
-        {!isComplete && (
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing || refreshesLeft <= 0}
-            title={refreshesLeft <= 0 ? "No refreshes left" : `${refreshesLeft} left`}
-            className="shrink-0 p-2 rounded-xl border border-border text-text-muted hover:text-text-primary hover:bg-surface-2 disabled:opacity-25 transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
-          >
-            <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
-          </button>
+        {/* Progress Graphic */}
+        <div className="relative flex flex-col gap-3 mt-auto">
+          <div className="flex items-baseline justify-between">
+            <div className="flex items-baseline gap-1">
+              <span className="text-text-primary font-medium text-3xl">{goal.done}</span>
+              <span className="text-text-muted text-sm">/ {goal.target}</span>
+            </div>
+            <span className={`text-sm font-medium ${isComplete ? "text-accent" : "text-violet"}`}>
+              {pct}%
+            </span>
+          </div>
+          
+          {/* Custom segmented progress bar to match the chart vibe */}
+          <div className="h-4 w-full flex gap-1">
+            {Array.from({ length: 10 }).map((_, i) => {
+              const fillPct = i * 10
+              const isFilled = pct > fillPct
+              return (
+                <div 
+                  key={i} 
+                  className={`flex-1 rounded-sm ${isFilled ? (isComplete ? 'bg-accent' : 'bg-violet') : 'bg-surface-2'}`}
+                  style={{ opacity: isFilled ? 1 : 0.5 }}
+                />
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-8 flex items-center justify-between">
+        {isComplete ? (
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium">
+            <CheckCircle2 size={16} />
+            Mission complete! +150 XP
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 w-full">
+            <Link
+              href={`/test/build?chapter=${goal.chapter_id}`}
+              className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all"
+            >
+              Continue
+              <ArrowRight size={16} />
+            </Link>
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing || refreshesLeft <= 0}
+              className="w-12 h-12 rounded-full border border-border flex items-center justify-center text-text-muted hover:text-white disabled:opacity-30 transition-colors"
+            >
+              <RefreshCw size={16} className={refreshing ? "animate-spin" : ""} />
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Progress */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-text-muted">
-            <span className="text-text-primary font-bold font-mono">{goal.done}</span>
-            <span className="text-text-muted"> / {goal.target} questions</span>
-          </span>
-          <span className={`font-bold font-mono ${isComplete ? "text-success" : "text-accent"}`}>
-            {pct}%
-          </span>
-        </div>
-        <div className="h-2 rounded-full bg-surface-2 overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-all duration-700 ${isComplete ? "bg-gradient-to-r from-success to-emerald-400" : "bg-gradient-to-r from-accent to-violet-400"}`}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Footer action */}
-      {isComplete ? (
-        <div className="flex items-center gap-2 text-success text-xs font-semibold">
-          <CheckCircle2 size={14} />
-          Goal complete! +150 XP earned 🎉
-        </div>
-      ) : (
-        <Link
-          href={`/test/build?chapter=${goal.chapter_id}`}
-          className="self-start inline-flex items-center gap-2 h-9 px-4 rounded-xl bg-surface-2 border border-border text-text-primary text-xs font-semibold hover:bg-border hover:border-text-muted transition-all group"
-        >
-          Continue
-          <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-        </Link>
-      )}
-
-      {error && <p className="text-danger text-xs">{error}</p>}
+      {error && <p className="absolute bottom-2 left-6 text-danger text-xs">{error}</p>}
     </div>
   )
 }

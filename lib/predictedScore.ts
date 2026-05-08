@@ -14,19 +14,23 @@ export function predictNEETScore(
   let predicted = 0
 
   for (const [subject, accuracy] of Object.entries(subjectAccuracy)) {
-    const max = NEET_SUBJECT_MAX[subject] ?? 0
-    if (max === 0) continue
+    const maxMarks = NEET_SUBJECT_MAX[subject] ?? 0
+    if (maxMarks === 0) continue
 
+    const numQuestions  = maxMarks / 4          // Biology: 90q, Physics/Chem: 45q each
     const attemptRate   = 0.8
     const accuracyRate  = accuracy / 100
-    const attempted     = max * attemptRate
+    const attempted     = numQuestions * attemptRate
 
-    // +4 correct, -1 wrong
+    // NEET marking: +4 correct, −1 wrong
     const correct = attempted * accuracyRate
     const wrong   = attempted * (1 - accuracyRate)
     predicted += correct * 4 - wrong * 1
   }
 
   const normalised = Math.max(0, Math.min(720, predicted))
-  return [Math.round(normalised * 0.92), Math.round(normalised * 1.08)]
+  return [
+    Math.round(Math.max(0, normalised * 0.92)),
+    Math.round(Math.min(720, normalised * 1.08)),
+  ]
 }
