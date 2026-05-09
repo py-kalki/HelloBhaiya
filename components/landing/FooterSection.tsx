@@ -105,7 +105,7 @@ export default function FooterSection() {
             </Link>
 
             <p className="hidden sm:block text-text-secondary text-sm leading-relaxed max-w-xs">
-              The gamified platform for NEET, JEE & beyond. Built by aspirants, for aspirants.
+              The gamified platform for NEET, JEE & beyond. Built for aspirants.
               Study smarter. Level up. Crack it.
             </p>
 

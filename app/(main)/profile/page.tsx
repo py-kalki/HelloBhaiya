@@ -11,6 +11,9 @@ import type { UserProfile } from "@/types/student"
 import { serializeProfile } from "@/lib/serializeProfile"
 import Link from "next/link"
 import { Settings, BarChart2 } from "lucide-react"
+import { ActivityHeatmap } from "@/components/profile/ActivityHeatmap"
+import { InventoryWidget } from "@/components/profile/InventoryWidget"
+import { getActivityLog } from "@/actions/getActivityLog"
 
 export default async function ProfilePage() {
   const sessionCookie = (await cookies()).get("session")?.value
@@ -30,6 +33,8 @@ export default async function ProfilePage() {
     .count()
     .get()
   const testsCompleted = testsSnap.data().count
+
+  const activities = await getActivityLog(500)
 
   return (
     <div className="flex flex-col gap-8 p-6 md:p-10 max-w-4xl mx-auto w-full pb-20">
@@ -60,6 +65,12 @@ export default async function ProfilePage() {
         <div>
           <XPStats profile={profile} />
         </div>
+      </div>
+      
+      {/* Activity Tracker Section & Backpack */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6 w-full">
+        <ActivityHeatmap activities={activities} />
+        <InventoryWidget currentLevel={profile.level ?? 1} />
       </div>
     </div>
   )

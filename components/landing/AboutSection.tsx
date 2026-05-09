@@ -43,7 +43,7 @@ const VALUES = [
   {
     icon: <BookOpen className="w-6 h-6" />,
     title: "Quality Content",
-    desc: "Every question is hand-verified by NEET & JEE toppers and academic experts. No recycled garbage.",
+    desc: "Every question is AI-reviewed for accuracy and exam-pattern alignment. No recycled garbage.",
     color: "from-violet/20 to-transparent",
     border: "hover:border-violet/30",
   },
@@ -125,7 +125,7 @@ export default function AboutSection() {
 
   }, { scope: container })
 
-  const quoteWords = "We built the study platform we wished existed when we were preparing.".split(" ")
+  const quoteWords = "I built the platform I kept wishing someone would make for these students.".split(" ")
 
   return (
     <section ref={container} id="about" className="py-32 pb-64 relative overflow-visible bg-background border-t border-white/5">
@@ -145,15 +145,15 @@ export default function AboutSection() {
             </span>
           </div>
           <h2 className="font-sans font-bold text-text-primary text-4xl md:text-6xl tracking-tighter mb-6">
-            Built by aspirants,<br />
+            Built for aspirants,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-[#e0ff8c] to-violet">
               for aspirants.
             </span>
           </h2>
           <p className="text-text-secondary text-lg max-w-2xl mx-auto leading-relaxed font-medium">
-            HelloBhaiya started as a frustration project. Three ex-NEET & JEE aspirants, tired of juggling
-            10 apps, spreadsheets, and random YouTube playlists — decided to build the one tool
-            they actually needed.
+            HelloBhaiya is a solo project. I spent time watching NEET and JEE aspirants struggle —
+            juggling 10 apps, spreadsheets, and random YouTube playlists with no real structure —
+            and built the tool I kept wishing someone would make for them.
           </p>
         </div>
 
@@ -168,7 +168,7 @@ export default function AboutSection() {
                 </span>
               ))}
             </p>
-            <p className="mt-6 text-text-secondary text-sm font-medium">— Arjun Sharma, Co-Founder</p>
+            <p className="mt-6 text-text-secondary text-sm font-medium">— Vedansh Danot, Founder</p>
           </div>
         </div>
 
@@ -191,8 +191,8 @@ export default function AboutSection() {
                 session is scheduled by spaced repetition, not habit.
               </p>
               <p className="text-white font-semibold">
-                The result? Students who use HelloBhaiya for 90+ days report a 40-point average
-                improvement in their mock test scores.
+                The result? A prep process that's systematic, not random — so every hour you put in
+                actually moves the needle on your score.
               </p>
             </div>
           </div>
@@ -200,8 +200,8 @@ export default function AboutSection() {
           {/* Stats Visual Block */}
           <div className="about-mission grid grid-cols-2 gap-4">
             {[
-              { val: "90+", label: "Days to see results", color: "text-accent" },
-              { val: "40pts", label: "Avg score improvement", color: "text-violet" },
+              { val: "NEET", label: "+ JEE coverage", color: "text-accent" },
+              { val: "Solo", label: "Built by one founder", color: "text-violet" },
               { val: "4,600+", label: "Expert-verified questions", color: "text-blue-400" },
               { val: "108+", label: "Chapters covered (NEET & JEE)", color: "text-pink-400" },
             ].map((s, i) => (

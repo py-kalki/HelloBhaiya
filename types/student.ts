@@ -43,6 +43,14 @@ export type UserProfile = {
   invite_code: string
   friend_codes: string[]
   created_at: Timestamp
+  last_focus_module?: {
+    subject: string
+    topic: string
+    type: string
+    progress: number
+    link: string
+    updated_at: Timestamp
+  }
 }
 
 /** Serializable version of UserProfile — use when passing from Server to Client components. */
@@ -54,6 +62,14 @@ export type PlainUserProfile = Omit<
   last_active: number
   goal_refresh_date: number
   created_at: number
+  last_focus_module?: {
+    subject: string
+    topic: string
+    type: string
+    progress: number
+    link: string
+    updated_at: number
+  }
 }
 
 export type DailyGoal = {
@@ -65,4 +81,21 @@ export type DailyGoal = {
   done: number
   complete: boolean
   refreshes_used: number
+}
+
+export type ActivityLog = {
+  id: string
+  user_id: string
+  title: string
+  desc: string
+  type: "test" | "study" | "achievement" | "goal"
+  created_at: Timestamp
+}
+
+export type StudySession = {
+  id: string
+  user_id: string
+  duration_seconds: number
+  mode: "focus" | "break"
+  created_at: Timestamp
 }

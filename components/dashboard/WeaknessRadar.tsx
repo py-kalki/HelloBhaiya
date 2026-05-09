@@ -9,8 +9,8 @@ const WeaknessRadarChart = dynamic(() => import("./WeaknessRadarChart"), {
   loading: () => <div className="h-56 rounded-xl bg-surface-2 animate-pulse" />,
 })
 
-const NEET_SUBJECTS = ["Physics", "Chemistry", "Biology"]
-const JEE_SUBJECTS  = ["Physics", "Chemistry", "Mathematics"]
+const NEET_SUBJECTS = ["Biology", "Physics", "Chemistry"]
+const JEE_SUBJECTS = ["Physics", "Chemistry", "Mathematics"]
 
 function getSubjects(exam: string): string[] {
   if (exam === "NEET") return NEET_SUBJECTS
@@ -62,12 +62,16 @@ export function WeaknessRadar({ profile }: Props) {
         )}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
-        <div className="flex items-center gap-4">
-           <LegendDot color="#D4FF59" label="Solid" />
-           <LegendDot color="#A27BFA" label="Needs Work" />
+      <div className="mt-4 pt-4 border-t border-border">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs text-text-secondary font-medium">Mastery Levels</p>
+          <span className="text-xs text-text-muted cursor-pointer hover:text-white transition-colors">View Details</span>
         </div>
-        <span className="text-xs text-text-muted font-medium cursor-pointer hover:text-white transition-colors">View Details</span>
+        <div className="flex items-center gap-4">
+           <LegendDot color="#22C55E" label="Solid (75+)" />
+           <LegendDot color="#FACC15" label="Needs Work (50-74)" />
+           <LegendDot color="#F87171" label="Danger (&lt;50)" />
+        </div>
       </div>
     </div>
   )
@@ -75,9 +79,9 @@ export function WeaknessRadar({ profile }: Props) {
 
 function LegendDot({ color, label }: { color: string; label: string }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
-      <span className="text-text-secondary text-xs font-medium">{label}</span>
+      <span className="text-[10px] text-text-secondary font-medium">{label}</span>
     </div>
   )
 }
