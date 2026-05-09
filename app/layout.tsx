@@ -38,6 +38,28 @@ export const metadata: Metadata = {
   other: {
     "mobile-web-app-capable": "yes",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://hellobhaiya.com",
+    title: "HelloBhaiya — Level up your study game.",
+    description: "Dark-themed, gamified study platform for NEET & JEE aspirants. Custom tests, XP system, weakness radar, and spaced-repetition revision.",
+    siteName: "HelloBhaiya",
+    images: [
+      {
+        url: "/hellobhaiya-logo.svg", // Ideally this should be a high-res PNG/JPG for OG, but this is a solid fallback
+        width: 1200,
+        height: 630,
+        alt: "HelloBhaiya Platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HelloBhaiya — Study harder. Level up.",
+    description: "Dark-themed, gamified study platform for NEET & JEE aspirants.",
+    images: ["/hellobhaiya-logo.svg"],
+  },
 }
 
 export const viewport = {

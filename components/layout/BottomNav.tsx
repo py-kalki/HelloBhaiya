@@ -2,52 +2,32 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, FlaskConical, BookOpen, Map, Swords } from "lucide-react"
+import { Home, FlaskConical, BookOpen, Map, Swords, Video } from "lucide-react"
+import { InteractiveMenu } from "@/components/ui/modern-mobile-menu"
 
 const NAV_ITEMS = [
   { href: "/dashboard",  label: "Home",   Icon: Home         },
   { href: "/test/build", label: "Test",   Icon: FlaskConical },
+  { href: "/study",      label: "Study",  Icon: Video        },
   { href: "/battle",     label: "Battle", Icon: Swords       },
   { href: "/notes",      label: "Notes",  Icon: BookOpen     },
-  { href: "/roadmap",    label: "Roadmap",Icon: Map          },
+  { href: "/roadmap",    label: "Map",    Icon: Map          },
 ]
 
 export function BottomNav() {
-  const pathname = usePathname()
+  const items = NAV_ITEMS.map((nav) => ({
+    label: nav.label,
+    href: nav.href,
+    icon: nav.Icon
+  }))
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 md:hidden">
+    <nav className="fixed bottom-0 inset-x-0 z-40 md:hidden h-16 pointer-events-none">
       {/* Blur backdrop */}
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-xl border-t border-border" />
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-xl border-t border-border pointer-events-auto" />
 
-      <div className="relative flex items-center justify-around h-16 px-2 safe-area-bottom">
-        {NAV_ITEMS.map(({ href, label, Icon }) => {
-          const active = pathname === href || pathname.startsWith(href + "/")
-          return (
-            <Link
-              key={href}
-              href={href}
-              className="flex flex-col items-center justify-center gap-1 flex-1 h-full min-w-[44px] transition-all duration-200"
-            >
-              <div className={`
-                flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl transition-all duration-200
-                ${active
-                  ? "bg-accent/12 text-accent"
-                  : "text-text-muted hover:text-text-secondary"
-                }
-              `}>
-                <Icon
-                  size={20}
-                  strokeWidth={active ? 2.5 : 1.75}
-                  className="transition-all duration-200"
-                />
-                <span className={`text-[10px] font-medium tracking-wide transition-all duration-200 ${active ? "opacity-100" : "opacity-70"}`}>
-                  {label}
-                </span>
-              </div>
-            </Link>
-          )
-        })}
+      <div className="relative h-full safe-area-bottom pointer-events-auto">
+        <InteractiveMenu items={items} />
       </div>
     </nav>
   )

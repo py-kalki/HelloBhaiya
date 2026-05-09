@@ -82,7 +82,14 @@
     "delete_type": "Type DELETE to confirm",
     "confirm_delete": "Confirm Delete",
     "deleting": "Deleting...",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "appearance": "Appearance",
+    "theme_dark": "Premium Dark (Default)",
+    "theme_locked": "The dark aesthetic is locked to maintain the premium experience.",
+    "support": "Support & About",
+    "help_center": "Help Center",
+    "contact_us": "Contact Us",
+    "app_version": "App Version 1.0.0"
   },
   "common": {
     "loading": "Loading…",

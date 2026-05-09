@@ -60,16 +60,20 @@ export default function AboutSection() {
   const container = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    // ── Mission block entrance ──────────────────────────────────────────
+    // ── Mission block entrance — play once, never reverse ──────────────
     gsap.fromTo(".about-mission",
-      { autoAlpha: 0, y: 60 },
+      { autoAlpha: 0, y: 50 },
       {
-        autoAlpha: 1, y: 0, duration: 1, ease: "expo.out",
-        scrollTrigger: { trigger: ".about-mission", start: "top 85%" }
+        autoAlpha: 1, y: 0, duration: 0.9, ease: "expo.out",
+        scrollTrigger: {
+          trigger: ".about-mission",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        }
       }
     )
 
-    // ── Big quote word-by-word reveal ──────────────────────────────────
+    // ── Big quote word-by-word reveal — play once, never reverse ───────
     gsap.fromTo(".about-quote-word",
       { autoAlpha: 0, y: 30 },
       {
@@ -77,30 +81,37 @@ export default function AboutSection() {
         stagger: 0.04,
         duration: 0.6,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".about-quote", start: "top 80%" }
+        scrollTrigger: {
+          trigger: ".about-quote",
+          start: "top 80%",
+          toggleActions: "play none none none",
+        }
       }
     )
 
-    // ── Values grid stagger + Stacking Depth ──────────────────────────
+    // ── Values grid stagger — play once, never reverse ─────────────────
     const values = gsap.utils.toArray<HTMLElement>(".value-card")
     values.forEach((card, i) => {
-      // 1. Entrance
+      // Entrance: play once — never reverse (prevents vanish on scroll-up)
       gsap.fromTo(card,
         { autoAlpha: 0, y: 40, scale: 0.94 },
         {
           autoAlpha: 1, y: 0, scale: 1,
           duration: 0.7,
           ease: "back.out(1.4)",
-          scrollTrigger: { trigger: card, start: "top 92%" }
+          scrollTrigger: {
+            trigger: card,
+            start: "top 92%",
+            toggleActions: "play none none none",
+          }
         }
       )
 
-      // 2. Stacking Depth (Mobile)
+      // Stacking Depth: scale only — no opacity so cards behind stay fully opaque
       const nextCard = values[i + 1]
       if (nextCard) {
         gsap.to(card, {
-          scale: 0.94,
-          autoAlpha: 0.5,
+          scale: 0.95,
           scrollTrigger: {
             trigger: nextCard,
             start: "top 35%",
@@ -231,12 +242,16 @@ export default function AboutSection() {
             </h3>
           </div>
 
-          <div className="values-grid flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <div className="values-grid flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 sm:items-start">
             {VALUES.map((v, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="sticky top-[var(--mob-top)] sm:relative sm:top-auto block"
-                style={{ "--mob-top": `calc(10vh + ${i * 2}rem)` } as React.CSSProperties}
+                style={{
+                  "--mob-top": `calc(10vh + ${i * 2}rem)`,
+                  // Explicit z-index so each card layers on top of previous ones
+                  zIndex: i + 1,
+                } as React.CSSProperties}
               >
                 <div
                   className={`value-card relative p-7 rounded-2xl bg-[#0a0a0a] border border-white/10 ${v.border} transition-all duration-300 group overflow-hidden shadow-2xl`}

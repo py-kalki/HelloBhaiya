@@ -27,8 +27,9 @@ function BuildPageInner() {
 
   // Pre-select chapter from micro-goal ?chapter= param
   const preChapter = searchParams.get("chapter")
+  const preMode = searchParams.get("mode") as TestMode | null
 
-  const [mode, setMode] = useState<TestMode>("CUSTOM")
+  const [mode, setMode] = useState<TestMode>(preMode ?? "CUSTOM")
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
   const [selectedChapters, setSelectedChapters] = useState<string[]>(
     preChapter ? [preChapter] : [],

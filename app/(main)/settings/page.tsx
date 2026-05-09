@@ -4,7 +4,7 @@ import { useState, useTransition } from "react"
 import { deleteAccount } from "@/actions/deleteAccount"
 import { setLocale } from "@/actions/setLocale"
 import { useTranslations } from "next-intl"
-import { ArrowLeft, Trash2, AlertTriangle, Languages } from "lucide-react"
+import { ArrowLeft, Trash2, AlertTriangle, Languages, Moon, LifeBuoy, Mail, Info } from "lucide-react"
 import Link from "next/link"
 
 export default function SettingsPage() {
@@ -77,6 +77,43 @@ export default function SettingsPage() {
       <section className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-surface">
         <h2 className="text-text-primary font-semibold text-sm">{t("notifications")}</h2>
         <p className="text-xs text-text-secondary">{t("notifications_soon")}</p>
+      </section>
+
+      {/* Appearance section */}
+      <section className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-surface">
+        <div className="flex items-center gap-2">
+          <Moon size={16} className="text-text-secondary" />
+          <h2 className="text-text-primary font-semibold text-sm">{t("appearance")}</h2>
+        </div>
+        <div className="p-3 rounded-lg bg-background/50 border border-border/50 flex flex-col gap-1.5 cursor-not-allowed opacity-80">
+          <p className="text-sm font-semibold text-text-primary flex items-center gap-2">
+            {t("theme_dark")}
+          </p>
+          <p className="text-xs text-text-secondary">
+            {t("theme_locked")}
+          </p>
+        </div>
+      </section>
+
+      {/* Support & About */}
+      <section className="flex flex-col gap-3 p-4 rounded-xl border border-border bg-surface">
+        <div className="flex items-center gap-2">
+          <LifeBuoy size={16} className="text-text-secondary" />
+          <h2 className="text-text-primary font-semibold text-sm">{t("support")}</h2>
+        </div>
+        
+        <div className="flex flex-col gap-2 mt-1">
+          <button className="flex items-center justify-between py-2 text-sm text-text-secondary hover:text-text-primary transition-colors text-left">
+            <span className="flex items-center gap-2"><Info size={14} /> {t("help_center")}</span>
+          </button>
+          <a href="mailto:support@hellobhaiya.com" className="flex items-center justify-between py-2 text-sm text-text-secondary hover:text-text-primary transition-colors">
+            <span className="flex items-center gap-2"><Mail size={14} /> {t("contact_us")}</span>
+          </a>
+          <div className="py-2 text-xs text-text-muted border-t border-border mt-2 pt-3 flex justify-between">
+            <span>{t("app_version")}</span>
+            <span>&copy; 2026 HelloBhaiya</span>
+          </div>
+        </div>
       </section>
 
       {/* Sign out */}
