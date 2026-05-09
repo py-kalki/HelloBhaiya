@@ -56,7 +56,7 @@ export type UserProfile = {
 /** Serializable version of UserProfile — use when passing from Server to Client components. */
 export type PlainUserProfile = Omit<
   UserProfile,
-  "target_date" | "last_active" | "goal_refresh_date" | "created_at" | "notes_highlights"
+  "target_date" | "last_active" | "goal_refresh_date" | "created_at" | "notes_highlights" | "last_focus_module"
 > & {
   target_date: number      // ms since epoch
   last_active: number
