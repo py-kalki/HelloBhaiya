@@ -69,17 +69,17 @@ export default function AnimatedFeatures() {
 
     // ── Sticky left column: words fade+rise as section enters ─────────────
     gsap.fromTo(".feature-title-word",
-      { autoAlpha: 0, y: 60, rotationX: 60, transformOrigin: "50% 100%" },
+      { autoAlpha: 0, y: 40 },
       {
-        autoAlpha: 1, y: 0, rotationX: 0,
-        stagger: 0.1,
-        duration: 1,
+        autoAlpha: 1, y: 0,
+        stagger: 0.08,
+        duration: 0.8,
         ease: "expo.out",
         scrollTrigger: {
           trigger: container.current,
-          start: "top 70%",
-          end:   "top 30%",
-          scrub: 1.2,
+          start: "top 75%",
+          // play once — never reverse so words don't vanish on scroll-up
+          toggleActions: "play none none none",
         }
       }
     )
@@ -87,37 +87,33 @@ export default function AnimatedFeatures() {
     // ── Right column cards: Reveal + Stacking Depth ───────────────────────
     const cards = gsap.utils.toArray<HTMLElement>(".feature-card")
     cards.forEach((card, i) => {
-      // 1. Entrance animation (Flip reveal)
+      // 1. Entrance animation — play once, never reverse (prevents vanish on scroll-up)
       gsap.fromTo(card,
         {
           autoAlpha: 0,
-          y: 100,
-          scale: 0.9,
-          rotationX: 25,
-          transformOrigin: "50% 0%",
+          y: 60,
+          scale: 0.96,
         },
         {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          rotationX: 0,
-          duration: 1,
+          duration: 0.9,
           ease: "expo.out",
           scrollTrigger: {
             trigger: card,
-            start: "top 95%",
-            end:   "top 60%",
-            scrub: 1.5,
+            start: "top 90%",
+            toggleActions: "play none none none",
           }
         }
       )
 
-      // 2. Stacking Depth: Scale down this card as the NEXT card comes on top
+      // 2. Stacking Depth: Scale down ONLY — no opacity change so cards behind
+      //    are always fully opaque and hidden by the card on top
       const nextCard = cards[i + 1]
       if (nextCard) {
         gsap.to(card, {
-          scale: 0.92,
-          autoAlpha: 0.5,
+          scale: 0.95,
           scrollTrigger: {
             trigger: nextCard,
             start: "top 35%",
@@ -127,7 +123,7 @@ export default function AnimatedFeatures() {
         })
       }
 
-      // Icon subtle bounce on card entrance
+      // Icon subtle bounce on card entrance — play once
       const icon = card.querySelector(".feat-icon")
       if (icon) {
         gsap.fromTo(icon,
@@ -139,6 +135,7 @@ export default function AnimatedFeatures() {
             scrollTrigger: {
               trigger: card,
               start: "top 85%",
+              toggleActions: "play none none none",
             }
           }
         )
@@ -203,13 +200,17 @@ export default function AnimatedFeatures() {
         {/* Scrolling Right Column */}
         <div className="lg:col-span-7 flex flex-col gap-8 sm:gap-12 pt-10 lg:pt-0">
           {FEATURES.map((f, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="sticky block"
-              style={{ top: `calc(10vh + ${i * 2.5}rem)` }}
+              style={{
+                top: `calc(10vh + ${i * 2.5}rem)`,
+                // Critical: explicit z-index so each new card layers on top of previous ones
+                zIndex: i + 1,
+              }}
             >
               <div
-                className={`feature-card group relative p-8 sm:p-10 rounded-[32px] border transition-colors [transform-style:preserve-3d] shadow-2xl will-change-transform ${
+                className={`feature-card group relative p-8 sm:p-10 rounded-[32px] border transition-colors shadow-2xl will-change-transform ${
                   f.badge
                     ? "bg-surface border-dashed border-white/10 hover:border-white/20"
                     : "bg-surface border-white/10 hover:border-white/20"

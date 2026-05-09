@@ -114,11 +114,31 @@ function LoginContent() {
     setError(null)
     try {
       const provider = new GoogleAuthProvider()
+      provider.setCustomParameters({ prompt: "select_account" })
       const result = await signInWithPopup(auth, provider)
       const idToken = await result.user.getIdToken()
       await createSessionAndRedirect(idToken)
-    } catch {
-      setError("Google sign-in failed. Please try again.")
+    } catch (err: any) {
+      // Log the real error so we can see exactly what Firebase is rejecting
+      console.error("[Google Sign-In Error]", err?.code, err?.message)
+
+      const code = err?.code ?? ""
+      let msg = "Google sign-in failed. Please try again."
+
+      if (code === "auth/popup-blocked")
+        msg = "Popup was blocked by your browser. Please allow popups for this site and try again."
+      else if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+        msg = "Sign-in was cancelled. Please try again."
+      else if (code === "auth/network-request-failed")
+        msg = "Network error. Check your internet connection and try again."
+      else if (code === "auth/unauthorized-domain")
+        msg = "This domain is not authorised in Firebase. Add localhost to Firebase → Authentication → Settings → Authorized Domains."
+      else if (code === "auth/internal-error" || code === "auth/operation-not-allowed")
+        msg = "Google sign-in is not enabled. Enable it in Firebase Console → Authentication → Sign-in methods."
+      else if (err?.message)
+        msg = err.message
+
+      setError(msg)
       setLoading(false)
     }
   }

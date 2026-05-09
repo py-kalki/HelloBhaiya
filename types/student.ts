@@ -51,6 +51,7 @@ export type UserProfile = {
     link: string
     updated_at: Timestamp
   }
+  last_revision_date?: string  // YYYY-MM-DD — set when user completes a revision session
 }
 
 /** Serializable version of UserProfile — use when passing from Server to Client components. */

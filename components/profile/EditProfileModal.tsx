@@ -10,12 +10,16 @@ import { useGSAP } from "@gsap/react"
 interface EditProfileModalProps {
   initialName: string
   initialPhotoUrl: string
+  initialCity: string
+  initialExam: string
   onClose: () => void
 }
 
-export function EditProfileModal({ initialName, initialPhotoUrl, onClose }: EditProfileModalProps) {
+export function EditProfileModal({ initialName, initialPhotoUrl, initialCity, initialExam, onClose }: EditProfileModalProps) {
   const [name, setName] = useState(initialName)
   const [photoUrl, setPhotoUrl] = useState(initialPhotoUrl)
+  const [city, setCity] = useState(initialCity)
+  const [exam, setExam] = useState(initialExam)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
@@ -112,7 +116,9 @@ export function EditProfileModal({ initialName, initialPhotoUrl, onClose }: Edit
     try {
       await updateUserProfile({
         name: name.trim(),
-        photo_url: photoUrl
+        photo_url: photoUrl,
+        city: city.trim(),
+        exam
       })
       handleClose()
     } catch (err) {
@@ -186,6 +192,39 @@ export function EditProfileModal({ initialName, initialPhotoUrl, onClose }: Edit
                 onChange={(e) => setName(e.target.value)} 
                 className="w-full bg-transparent text-sm text-white placeholder:text-text-muted p-4 rounded-2xl focus:outline-none" 
               />
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            {/* City Input */}
+            <div className="flex-1">
+              <label className="text-[10px] uppercase tracking-widest font-bold text-text-secondary mb-2 block">City</label>
+              <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-colors focus-within:border-accent/50 focus-within:bg-accent/5">
+                <input 
+                  type="text" 
+                  value={city} 
+                  onChange={(e) => setCity(e.target.value)} 
+                  placeholder="e.g. Delhi"
+                  className="w-full bg-transparent text-sm text-white placeholder:text-text-muted p-4 rounded-2xl focus:outline-none" 
+                />
+              </div>
+            </div>
+
+            {/* Exam Select */}
+            <div className="flex-1">
+              <label className="text-[10px] uppercase tracking-widest font-bold text-text-secondary mb-2 block">Target Exam</label>
+              <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-colors focus-within:border-accent/50 focus-within:bg-accent/5 h-[54px]">
+                <select 
+                  value={exam} 
+                  onChange={(e) => setExam(e.target.value)} 
+                  className="w-full h-full bg-transparent text-sm text-white p-4 rounded-2xl focus:outline-none appearance-none" 
+                >
+                  <option value="NEET" className="bg-surface text-white">NEET</option>
+                  <option value="JEE_MAINS" className="bg-surface text-white">JEE Mains</option>
+                  <option value="JEE_ADV" className="bg-surface text-white">JEE Advanced</option>
+                  <option value="OTHER" className="bg-surface text-white">Other</option>
+                </select>
+              </div>
             </div>
           </div>
 

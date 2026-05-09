@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth"
 import {
   initializeFirestore,
   persistentLocalCache,
+  persistentMultipleTabManager,
   getFirestore,
 } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
@@ -21,9 +22,11 @@ const firebaseConfig = {
 const isNew = !getApps().length
 const app = isNew ? initializeApp(firebaseConfig) : getApp()
 
-// Firestore with offline persistence — initializeFirestore can only be called once
+// Firestore with multi-tab offline persistence — allows multiple tabs/hot-reload contexts
 const db = isNew
-  ? initializeFirestore(app, { localCache: persistentLocalCache() })
+  ? initializeFirestore(app, {
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+    })
   : getFirestore(app)
 
 const auth    = getAuth(app)

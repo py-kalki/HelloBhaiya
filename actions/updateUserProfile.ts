@@ -16,6 +16,8 @@ async function verifySession(): Promise<string> {
 type UpdateProfileInput = {
   name?: string
   photo_url?: string
+  city?: string
+  exam?: string
 }
 
 export async function updateUserProfile(input: UpdateProfileInput) {
@@ -27,6 +29,8 @@ export async function updateUserProfile(input: UpdateProfileInput) {
   const updates: Record<string, any> = {}
   if (input.name !== undefined) updates.name = input.name
   if (input.photo_url !== undefined) updates.photo_url = input.photo_url
+  if (input.city !== undefined) updates.city = input.city
+  if (input.exam !== undefined) updates.exam = input.exam
 
   if (Object.keys(updates).length > 0) {
     // Update Firestore

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { RefreshCw, Target, CheckCircle2, ArrowRight, MoreHorizontal } from "lucide-react"
+import { RefreshCw, Target, CheckCircle2, ArrowRight } from "lucide-react"
 import { useDailyGoal } from "@/lib/hooks/useDailyGoal"
 import { refreshMicroGoal } from "@/actions/refreshMicroGoal"
 import { generateMicroGoal } from "@/actions/generateMicroGoal"
@@ -73,17 +73,13 @@ export function MicroGoalCard() {
           {isComplete ? <CheckCircle2 size={18} className="text-accent" /> : <Target size={18} className="text-text-secondary" />}
           <span className="text-sm font-medium text-text-secondary">Daily Mission</span>
         </div>
-        
-        <div className="flex items-center gap-2">
-          {/* Mock Pill Tabs for aesthetic */}
-          <div className="hidden sm:flex items-center bg-background rounded-full p-1 border border-border">
-            <button className="px-4 py-1.5 rounded-full text-xs font-medium text-text-muted">Math</button>
-            <button className="px-4 py-1.5 rounded-full bg-accent text-black text-xs font-semibold">Science</button>
-          </div>
-          <button className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center text-text-primary hover:bg-surface-2 transition-colors">
-            <MoreHorizontal size={14} />
-          </button>
-        </div>
+
+        {/* Refresh counter */}
+        {!isComplete && (
+          <span className="text-[11px] font-medium text-text-muted bg-surface-2 border border-white/5 px-2.5 py-1 rounded-full">
+            {refreshesLeft} refresh{refreshesLeft !== 1 ? "es" : ""} left
+          </span>
+        )}
       </div>
 
       <div className="flex-1 flex flex-col">

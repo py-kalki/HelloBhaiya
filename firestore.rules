@@ -39,6 +39,11 @@ service cloud.firestore {
         allow read: if isOwner(uid);
         allow write: if false; // Admin SDK only
       }
+
+      // Daily task checklist — owner read/write (client-side)
+      match /dailyTasks/{taskId} {
+        allow read, write: if isOwner(uid);
+      }
     }
 
     // ── Question bank ──────────────────────────────────────────────────────

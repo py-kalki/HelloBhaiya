@@ -96,6 +96,8 @@ export function IdentityCard({ profile }: { profile: PlainUserProfile }) {
         <EditProfileModal 
           initialName={profile.name} 
           initialPhotoUrl={profile.photo_url || ""} 
+          initialCity={profile.city || ""}
+          initialExam={profile.exam || "NEET"}
           onClose={() => setIsEditing(false)} 
         />
       )}

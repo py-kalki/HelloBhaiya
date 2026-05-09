@@ -124,7 +124,7 @@ export async function submitTest(payload: SubmitPayload): Promise<void> {
   })
 
   // Update user profile
-  writeBatch.update(userRef, {
+  const userUpdates: any = {
     xp_total: FieldValue.increment(xpEarned),
     xp_this_week: FieldValue.increment(xpEarned),
     level: newLevel.level,
@@ -135,7 +135,14 @@ export async function submitTest(payload: SubmitPayload): Promise<void> {
     chapter_health: updatedChapterHealth,
     subject_accuracy: updatedSubjectAccuracy,
     wrong_questions: updatedWrongQuestions,
-  })
+  }
+
+  // If this was a revision test, mark revision as completed today
+  if (session.mode === "REVISION" || session.config?.mode === "REVISION") {
+    userUpdates.last_revision_date = today
+  }
+
+  writeBatch.update(userRef, userUpdates)
 
   // Check and update daily goal progress
   const goalRef = db

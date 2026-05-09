@@ -41,22 +41,28 @@ export default function RoadmapsSection() {
   const container = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    // Header Reveal
+    // Header Reveal — play once, never reverse
     gsap.fromTo(".roadmap-header",
-      { autoAlpha: 0, y: 50 },
+      { autoAlpha: 0, y: 40 },
       {
-        autoAlpha: 1, y: 0, duration: 1, ease: "expo.out",
-        scrollTrigger: { trigger: ".roadmap-header", start: "top 85%" }
+        autoAlpha: 1, y: 0, duration: 0.9, ease: "expo.out",
+        scrollTrigger: {
+          trigger: ".roadmap-header",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        }
       }
     )
 
     // Steps Stagger + Stacking Depth
     const steps = gsap.utils.toArray<HTMLElement>(".roadmap-step")
     steps.forEach((step, i) => {
+      // Entrance: play once — never reverse (prevents vanish on scroll-up)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: step,
           start: "top 85%",
+          toggleActions: "play none none none",
         }
       })
 
@@ -74,12 +80,11 @@ export default function RoadmapsSection() {
         )
       }
 
-      // Stacking Depth (Mobile)
+      // Stacking Depth: scale only (no opacity), scrub follows scroll both ways
       const nextStep = steps[i + 1]
       if (nextStep) {
         gsap.to(step, {
-          scale: 0.94,
-          autoAlpha: 0.5,
+          scale: 0.95,
           scrollTrigger: {
             trigger: nextStep,
             start: "top 35%",
