@@ -55,7 +55,7 @@ export default function CityTicker() {
       <div className="text-center max-w-7xl mx-auto px-6 sm:px-8 mb-8 sm:mb-16">
         <div className="ticker-badge inline-block px-4 py-1.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-md mb-4 sm:mb-6">
           <span className="text-text-secondary text-[9px] font-bold tracking-[0.2em] uppercase">
-            Join students across India
+            Built for students across India
           </span>
         </div>
         <h3 className="ticker-headline text-text-primary text-2xl sm:text-3xl font-bold tracking-tight">

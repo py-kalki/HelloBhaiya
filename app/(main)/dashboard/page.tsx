@@ -7,8 +7,20 @@ import { MicroGoalCard } from "@/components/dashboard/MicroGoalCard"
 import { WeaknessRadar } from "@/components/dashboard/WeaknessRadar"
 import { ProgressSummaryCards } from "@/components/dashboard/ProgressSummaryCards"
 import { TonightsRevisionBanner } from "@/components/dashboard/TonightsRevisionBanner"
+import { LevelXPBar } from "@/components/dashboard/LevelXPBar"
+import { DangerZoneCard } from "@/components/dashboard/DangerZoneCard"
+import { QuickTestLaunch } from "@/components/dashboard/QuickTestLaunch"
+import { QuickNavGrid } from "@/components/dashboard/QuickNavGrid"
+import { StreakBadges } from "@/components/dashboard/StreakBadges"
+import { PomodoroWidget } from "@/components/dashboard/PomodoroWidget"
+import { DailyTasks } from "@/components/dashboard/DailyTasks"
+import { SubjectProgress } from "@/components/dashboard/SubjectProgress"
+import { RecentActivityFeed } from "@/components/dashboard/RecentActivityFeed"
+import { ResumeLearningCard } from "@/components/dashboard/ResumeLearningCard"
+import { getActivityLog } from "@/actions/getActivityLog"
 import type { UserProfile } from "@/types/student"
 import { serializeProfile } from "@/lib/serializeProfile"
+import { predictNEETScore } from "@/lib/predictedScore"
 
 export default async function DashboardPage() {
   const sessionCookie = (await cookies()).get("session")!.value
@@ -16,59 +28,70 @@ export default async function DashboardPage() {
 
   const userDoc = await getFirestore(adminApp).collection("users").doc(uid).get()
   const profile = serializeProfile(userDoc.data() as UserProfile)
+  
+  const activities = await getActivityLog(5)
 
   const firstName = profile.name?.split(" ")[0] ?? "there"
-  const lastName = profile.name?.split(" ").slice(1).join(" ") ?? ""
+  const [low, high] = predictNEETScore(profile.subject_accuracy)
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 py-8">
-      <div className="relative flex flex-col gap-8 bg-surface/30 backdrop-blur-3xl border border-white/5 rounded-[2rem] p-6 md:p-10 shadow-[0_32px_64px_rgba(0,0,0,0.5)]">
-        {/* ── Top row: Greeting + Stats ── */}
-      <div className="flex flex-col xl:flex-row gap-8 items-end">
-        <div className="flex-1 pb-2 w-full xl:w-auto">
-          <p className="text-text-secondary text-sm md:text-base mb-2">Welcome back,</p>
-          <h1 className="text-4xl md:text-[56px] leading-[1.1] font-medium text-text-primary tracking-tight">
-            {firstName} <br className="hidden xl:block" /> {lastName}
+    <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 py-8 space-y-6">
+      
+      {/* ── Top Header ── */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <p className="text-text-secondary text-sm md:text-base mb-1">Welcome back,</p>
+          <h1 className="text-3xl md:text-5xl font-medium text-text-primary tracking-tight">
+            {firstName}
           </h1>
         </div>
-        <div className="w-full xl:w-[70%]">
-          <ProgressSummaryCards profile={profile} />
+        <div className="w-full md:w-auto min-w-[300px]">
+          <LevelXPBar profile={profile} />
         </div>
       </div>
 
-      {/* ── Filter / Tabs mock (from the image) ── */}
-      <div className="flex items-center gap-3 overflow-x-auto pb-2 scroll-x hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
-        <button className="px-6 py-2.5 rounded-full bg-accent text-black font-semibold text-sm shrink-0 transition-transform active:scale-95">
-          All
-        </button>
-        <button className="px-6 py-2.5 rounded-full bg-surface text-text-secondary hover:text-white font-medium text-sm shrink-0 transition-colors active:scale-95">
-          Engagement
-        </button>
-        <button className="px-6 py-2.5 rounded-full bg-surface text-text-secondary hover:text-white font-medium text-sm shrink-0 transition-colors active:scale-95">
-          Visit
-        </button>
-        <button className="px-6 py-2.5 rounded-full bg-surface text-text-secondary hover:text-white font-medium text-sm shrink-0 transition-colors active:scale-95">
-          Post
-        </button>
-      </div>
+      {/* ── Main Dashboard Container ── */}
+      <div className="relative flex flex-col gap-6 bg-surface/30 backdrop-blur-3xl border border-white/5 rounded-[2rem] p-6 shadow-[0_32px_64px_rgba(0,0,0,0.5)]">
+        
+        {/* ── Progress Cards ── */}
+        <ProgressSummaryCards profile={profile} predictedScore={[low, high]} />
 
-      {/* ── Middle row ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="flex flex-col gap-6">
+        {/* ── Streak Badges ── */}
+        <StreakBadges currentStreak={profile.streak_current} maxStreak={profile.streak_max} />
+
+        {/* ── Top Highlight ── */}
+        <div className="w-full">
+          <ResumeLearningCard lastFocusModule={profile.last_focus_module} />
+        </div>
+
+        {/* ── Row 1: Core Features ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <ExamCountdown targetDateMs={profile.target_date} exam={profile.exam} />
-        </div>
-        <div className="flex flex-col gap-6">
-           <WeaknessRadar profile={profile} />
-        </div>
-        <div className="flex flex-col gap-6">
+          <WeaknessRadar profile={profile} />
           <MicroGoalCard />
         </div>
-      </div>
 
-      {/* ── Revision banner ── */}
-      <div className="mt-4">
+        {/* ── Row 2: Tracking & Management ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <SubjectProgress profile={profile} />
+          <PomodoroWidget />
+          <DailyTasks />
+        </div>
+
+        {/* ── Row 3: Test Builder Section ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <QuickTestLaunch />
+          <DangerZoneCard chapterHealth={profile.chapter_health} exam={profile.exam} />
+        </div>
+
+        {/* ── Row 4: Platform Navigation ── */}
+        <QuickNavGrid exam={profile.exam} />
+
+        {/* ── Row 5: Recent Activity ── */}
+        <RecentActivityFeed activities={activities} />
+
+        {/* ── Revision Banner ── */}
         <TonightsRevisionBanner />
-      </div>
       </div>
     </div>
   )

@@ -28,6 +28,16 @@ export async function completePomodoroSession(taskId: string | null): Promise<{ 
     last_active:  FieldValue.serverTimestamp(),
   })
 
+  // Log the activity
+  const activityRef = userRef.collection("activity_log").doc()
+  batch.set(activityRef, {
+    user_id: uid,
+    title: "Focus Session Complete",
+    desc: `Completed a 25-minute Pomodoro focus session.`,
+    type: "study",
+    created_at: FieldValue.serverTimestamp()
+  })
+
   if (taskId) {
     const timetableRef = userRef.collection("timetable").doc("current")
     const doc = await timetableRef.get()

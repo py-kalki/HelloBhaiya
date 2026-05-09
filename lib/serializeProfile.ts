@@ -28,5 +28,11 @@ export function serializeProfile(profile: UserProfile): PlainUserProfile {
     last_active:          profile.last_active.toDate().getTime(),
     goal_refresh_date:    profile.goal_refresh_date.toDate().getTime(),
     created_at:           profile.created_at.toDate().getTime(),
+    ...(profile.last_focus_module && {
+      last_focus_module: {
+        ...profile.last_focus_module,
+        updated_at: profile.last_focus_module.updated_at.toDate().getTime(),
+      }
+    })
   }
 }
