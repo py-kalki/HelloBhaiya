@@ -132,7 +132,7 @@ function LoginContent() {
       else if (code === "auth/network-request-failed")
         msg = "Network error. Check your internet connection and try again."
       else if (code === "auth/unauthorized-domain")
-        msg = "This domain is not authorised in Firebase. Add localhost to Firebase → Authentication → Settings → Authorized Domains."
+        msg = "This domain is not authorised in Firebase. Add it to Firebase → Authentication → Settings → Authorized Domains."
       else if (code === "auth/internal-error" || code === "auth/operation-not-allowed")
         msg = "Google sign-in is not enabled. Enable it in Firebase Console → Authentication → Sign-in methods."
       else if (err?.message)
