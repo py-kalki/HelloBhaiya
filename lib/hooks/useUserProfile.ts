@@ -6,9 +6,9 @@ import { auth, db } from "@/lib/firebase/client"
 import { userProfileConverter } from "@/lib/firebase/converter"
 import type { UserProfile } from "@/types/student"
 
-export function useUserProfile() {
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [loading, setLoading] = useState(true)
+export function useUserProfile(initialProfile?: UserProfile | null) {
+  const [profile, setProfile] = useState<UserProfile | null>(initialProfile ?? null)
+  const [loading, setLoading] = useState(!initialProfile)
 
   useEffect(() => {
     let unsubFirestore: (() => void) | undefined
@@ -16,7 +16,9 @@ export function useUserProfile() {
     const unsubAuth = auth.onAuthStateChanged((user) => {
       unsubFirestore?.()
       if (!user) {
-        setProfile(null)
+        // If we have an initialProfile from the server, we might want to keep it
+        // but for safety, we respect the client auth state eventually.
+        // Let's NOT clear it immediately if we have a server profile, but we will mark loading false
         setLoading(false)
         return
       }

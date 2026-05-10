@@ -6,6 +6,8 @@ import { adminApp } from "@/lib/firebase/admin"
 import { PostHogProvider } from "@/components/layout/PostHogProvider"
 import { TopBar } from "@/components/layout/TopBar"
 import { BottomNav } from "@/components/layout/BottomNav"
+import { serializeProfile } from "@/lib/serializeProfile"
+import type { UserProfile } from "@/types/student"
 
 export default async function MainLayout({
   children,
@@ -24,9 +26,12 @@ export default async function MainLayout({
   }
 
   const userDoc = await getFirestore(adminApp).collection("users").doc(uid).get()
-  if (!userDoc.exists || userDoc.data()?.onboarding_complete !== true) {
+  const data = userDoc.data() as UserProfile | undefined
+  if (!userDoc.exists || data?.onboarding_complete !== true) {
     redirect("/onboarding")
   }
+
+  const initialProfile = serializeProfile(data!)
 
   return (
     <PostHogProvider>
@@ -45,7 +50,7 @@ export default async function MainLayout({
 
         {/* ══ Main Content ══ */}
         <div className="relative z-10 flex-1 flex flex-col">
-          <TopBar />
+          <TopBar initialProfile={initialProfile as unknown as UserProfile} />
           <main className="flex-1 pb-16 md:pb-0 relative">
             {/* Optional subtle glass container wrapper for the whole dashboard could go here, 
                 but we'll let individual pages handle their max-widths */}

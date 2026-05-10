@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { useUserProfile } from "@/lib/hooks/useUserProfile"
 import { lookupLevel } from "@/lib/scoring"
+import type { UserProfile } from "@/types/student"
 
 const NAV_LINKS = [
   { href: "/dashboard",  label: "Dashboard",  Icon: LayoutDashboard },
@@ -22,8 +23,8 @@ const NAV_LINKS = [
   { href: "/battle",     label: "Battle",      Icon: Swords          },
 ]
 
-export function TopBar() {
-  const { profile } = useUserProfile()
+export function TopBar({ initialProfile }: { initialProfile?: UserProfile | null }) {
+  const { profile } = useUserProfile(initialProfile)
   const pathname = usePathname()
 
   const levelData = lookupLevel(profile?.xp_total ?? 0)
