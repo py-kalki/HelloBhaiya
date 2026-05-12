@@ -10,7 +10,7 @@ import { BadgeGrid } from "@/components/gamification/BadgeGrid"
 import type { UserProfile } from "@/types/student"
 import { serializeProfile } from "@/lib/serializeProfile"
 import Link from "next/link"
-import { Settings, BarChart2 } from "lucide-react"
+import { Settings, BarChart2, ChevronRight } from "lucide-react"
 import { ActivityHeatmap } from "@/components/profile/ActivityHeatmap"
 import { InventoryWidget } from "@/components/profile/InventoryWidget"
 import { getActivityLog } from "@/actions/getActivityLog"
@@ -37,38 +37,47 @@ export default async function ProfilePage() {
   const activities = await getActivityLog(500)
 
   return (
-    <div className="flex flex-col gap-8 p-6 md:p-10 max-w-4xl mx-auto w-full pb-20">
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="text-text-primary font-medium text-4xl tracking-tight">Profile</h1>
+    <div className="flex flex-col gap-8 p-5 md:p-10 max-w-5xl mx-auto w-full pb-24">
+      {/* ── Page header ── */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-text-primary font-bold text-4xl tracking-tight leading-none">
+            Profile<span className="text-accent">.</span>
+          </h1>
+          <p className="text-text-muted text-sm mt-1.5">Your learning identity & progress</p>
+        </div>
         <div className="flex items-center gap-2">
           <Link
             href="/analytics"
-            className="w-12 h-12 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors rounded-full"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-white/6 text-text-secondary hover:text-text-primary hover:border-white/12 transition-all text-sm font-medium"
           >
-            <BarChart2 size={22} />
+            <BarChart2 size={16} />
+            <span className="hidden sm:inline">Analytics</span>
           </Link>
           <Link
             href="/settings"
-            className="w-12 h-12 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-2 transition-colors rounded-full"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-white/6 text-text-secondary hover:text-text-primary hover:border-white/12 transition-all text-sm font-medium"
           >
-            <Settings size={22} />
+            <Settings size={16} />
+            <span className="hidden sm:inline">Settings</span>
           </Link>
         </div>
       </div>
 
+      {/* ── Identity card (full width hero) ── */}
       <IdentityCard profile={profile} />
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
+
+      {/* ── Stats + XP side by side ── */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-6">
         <div className="flex flex-col gap-6">
           <StatsGrid profile={profile} testsCompleted={testsCompleted} />
           <BadgeGrid streakMax={profile.streak_max ?? 0} />
         </div>
-        <div>
-          <XPStats profile={profile} />
-        </div>
+        <XPStats profile={profile} />
       </div>
-      
-      {/* Activity Tracker Section & Backpack */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6 w-full">
+
+      {/* ── Activity + Backpack ── */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-6">
         <ActivityHeatmap activities={activities} />
         <InventoryWidget currentLevel={profile.level ?? 1} />
       </div>

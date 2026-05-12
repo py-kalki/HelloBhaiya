@@ -34,64 +34,67 @@ export default async function DashboardPage() {
   const firstName = profile.name?.split(" ")[0] ?? "there"
   const [low, high] = predictNEETScore(profile.subject_accuracy)
 
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
+
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 py-8 space-y-6">
+    <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-8 space-y-6">
       
       {/* ── Top Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-text-secondary text-sm md:text-base mb-1">Welcome back,</p>
-          <h1 className="text-3xl md:text-5xl font-medium text-text-primary tracking-tight">
+          <p className="text-text-muted text-sm mb-1 tracking-wide">{greeting} 👋</p>
+          <h1 className="text-4xl md:text-6xl font-bold text-text-primary tracking-tight leading-none">
             {firstName}
+            <span className="text-accent">.</span>
           </h1>
+          <p className="text-text-secondary text-sm mt-2 hidden md:block">
+            Here&apos;s where you left off — let&apos;s keep pushing.
+          </p>
         </div>
-        <div className="w-full md:w-auto min-w-[300px]">
+        <div className="w-full md:w-auto md:min-w-[340px]">
           <LevelXPBar profile={profile} />
         </div>
       </div>
 
-      {/* ── Main Dashboard Container ── */}
-      <div className="relative flex flex-col gap-6 bg-surface/30 backdrop-blur-3xl border border-white/5 rounded-[2rem] p-6 shadow-[0_32px_64px_rgba(0,0,0,0.5)]">
-        
-        {/* ── Progress Cards ── */}
-        <ProgressSummaryCards profile={profile} predictedScore={[low, high]} />
+      {/* ── Progress Summary Cards — full width ── */}
+      <ProgressSummaryCards profile={profile} predictedScore={[low, high]} />
 
-        {/* ── Streak Badges ── */}
+      {/* ── streak + resume learning side by side ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
+        <ResumeLearningCard lastFocusModule={profile.last_focus_module} />
         <StreakBadges currentStreak={profile.streak_current} maxStreak={profile.streak_max} />
+      </div>
 
-        {/* ── Top Highlight ── */}
-        <div className="w-full">
-          <ResumeLearningCard lastFocusModule={profile.last_focus_module} />
-        </div>
+      {/* ── Row 1: Core three cards ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <ExamCountdown targetDateMs={profile.target_date} exam={profile.exam} />
+        <WeaknessRadar profile={profile} />
+        <MicroGoalCard />
+      </div>
 
-        {/* ── Row 1: Core Features ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <ExamCountdown targetDateMs={profile.target_date} exam={profile.exam} />
-          <WeaknessRadar profile={profile} />
-          <MicroGoalCard />
-        </div>
+      {/* ── Row 2: Tracking ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <SubjectProgress profile={profile} />
+        <PomodoroWidget />
+        <DailyTasks />
+      </div>
 
-        {/* ── Row 2: Tracking & Management ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <SubjectProgress profile={profile} />
-          <PomodoroWidget />
-          <DailyTasks />
-        </div>
+      {/* ── Row 3: Test tools ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <QuickTestLaunch />
+        <DangerZoneCard chapterHealth={profile.chapter_health} exam={profile.exam} />
+      </div>
 
-        {/* ── Row 3: Test Builder Section ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <QuickTestLaunch />
-          <DangerZoneCard chapterHealth={profile.chapter_health} exam={profile.exam} />
-        </div>
+      {/* ── Navigation grid ── */}
+      <QuickNavGrid exam={profile.exam} />
 
-        {/* ── Row 4: Platform Navigation ── */}
-        <QuickNavGrid exam={profile.exam} />
-
-        {/* ── Row 5: Recent Activity ── */}
+      {/* ── Activity feed + revision banner ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6">
         <RecentActivityFeed activities={activities} />
-
-        {/* ── Revision Banner ── */}
-        <TonightsRevisionBanner />
+        <div className="lg:w-80">
+          <TonightsRevisionBanner />
+        </div>
       </div>
     </div>
   )

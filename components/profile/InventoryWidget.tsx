@@ -1,61 +1,97 @@
 "use client"
 
-import { Lock, Unlock, Gem, Backpack } from "lucide-react"
+import { Lock, Gem, Backpack, Crown, Palette, Frame, Medal, Tag } from "lucide-react"
+
+const ITEM_ICONS: Record<string, React.ElementType> = {
+  Frame:  Frame as unknown as React.ElementType,
+  Border: Crown as unknown as React.ElementType,
+  Theme:  Palette as unknown as React.ElementType,
+  Badge:  Medal as unknown as React.ElementType,
+  Title:  Tag as unknown as React.ElementType,
+}
+
+const ITEM_COLORS = [
+  "#94A3B8",
+  "#60A5FA",
+  "#D4FF59",
+  "#C084FC",
+  "#F59E0B",
+]
+
+const items = [
+  { id: 1, name: "Starter Frame",  type: "Frame",  reqLevel: 1  },
+  { id: 2, name: "Neon Glow",      type: "Border", reqLevel: 5  },
+  { id: 3, name: "Toxic Theme",    type: "Theme",  reqLevel: 10 },
+  { id: 4, name: "Elite Badge",    type: "Badge",  reqLevel: 25 },
+  { id: 5, name: "Master Title",   type: "Title",  reqLevel: 50 },
+]
 
 export function InventoryWidget({ currentLevel }: { currentLevel: number }) {
-  const items = [
-    { id: 1, name: "Starter Avatar Frame", type: "Frame", reqLevel: 1, color: "bg-surface-2", unlocked: true },
-    { id: 2, name: "Neon Glow Border", type: "Border", reqLevel: 5, color: "bg-blue-500/20", unlocked: currentLevel >= 5 },
-    { id: 3, name: "Toxic Theme", type: "Theme", reqLevel: 10, color: "bg-accent/20", unlocked: currentLevel >= 10 },
-    { id: 4, name: "Elite Badge", type: "Badge", reqLevel: 25, color: "bg-purple-500/20", unlocked: currentLevel >= 25 },
-    { id: 5, name: "Master Title", type: "Title", reqLevel: 50, color: "bg-orange-500/20", unlocked: currentLevel >= 50 },
-  ]
+  const unlocked = items.filter(i => currentLevel >= i.reqLevel).length
 
   return (
-    <div className="bg-surface border border-white/5 rounded-[28px] p-6 flex flex-col h-full">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-surface border border-white/6 rounded-[24px] p-6 flex flex-col h-full">
+      <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-            <Backpack size={18} className="text-white" />
+          <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+            <Backpack size={16} className="text-white" />
           </div>
           <div>
-            <h3 className="text-base font-medium text-white">Backpack</h3>
-            <p className="text-xs text-text-secondary">Cosmetics & Unlockables</p>
+            <h3 className="text-sm font-semibold text-white">Backpack</h3>
+            <p className="text-xs text-text-secondary">{unlocked}/{items.length} unlocked</p>
           </div>
         </div>
+        <span className="text-[10px] font-bold text-text-muted bg-surface-2 border border-white/5 px-2 py-1 rounded-full uppercase tracking-wider">
+          Lvl {currentLevel}
+        </span>
       </div>
 
-      <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {items.map((item) => (
-          <div 
-            key={item.id} 
-            className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border transition-all ${
-              item.unlocked 
-                ? "bg-surface-2 border-white/10 hover:border-white/30 cursor-pointer" 
-                : "bg-background/50 border-white/5 opacity-60 grayscale cursor-not-allowed"
-            }`}
-          >
-            {/* Mock Item Icon */}
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${item.color}`}>
-              <Gem size={20} className={item.unlocked ? "text-white" : "text-text-muted"} />
-            </div>
-            
-            <span className="text-xs font-semibold text-white text-center leading-tight mb-1">{item.name}</span>
-            <span className="text-[10px] text-text-muted">{item.type}</span>
+      <div className="flex-1 flex flex-col gap-2">
+        {items.map((item, idx) => {
+          const isUnlocked = currentLevel >= item.reqLevel
+          const color = ITEM_COLORS[idx]!
+          const Icon = ITEM_ICONS[item.type] ?? Gem
 
-            {!item.unlocked && (
-              <div className="absolute top-2 right-2 bg-black/60 rounded-md px-1.5 py-0.5 flex items-center gap-1 backdrop-blur-sm">
-                <Lock size={10} className="text-red-400" />
-                <span className="text-[9px] font-bold text-white">Lvl {item.reqLevel}</span>
+          return (
+            <div
+              key={item.id}
+              className={`flex items-center gap-3 p-3 rounded-2xl border transition-all duration-200 ${
+                isUnlocked
+                  ? "bg-surface-2 border-white/8 hover:border-white/16 cursor-pointer"
+                  : "bg-surface-2/30 border-white/4 opacity-50 grayscale cursor-not-allowed"
+              }`}
+            >
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{
+                  backgroundColor: isUnlocked ? `${color}15` : "rgba(255,255,255,0.04)",
+                  border: `1px solid ${isUnlocked ? `${color}30` : "transparent"}`
+                }}
+              >
+                <Icon size={17} style={{ color: isUnlocked ? color : "#71717A" }} />
               </div>
-            )}
-            {item.unlocked && (
-              <div className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity">
-                <Unlock size={12} className="text-accent" />
+
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white truncate">{item.name}</p>
+                <p className="text-[10px] text-text-muted">{item.type}</p>
               </div>
-            )}
-          </div>
-        ))}
+
+              {isUnlocked ? (
+                <span
+                  className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  style={{ backgroundColor: `${color}15`, color }}
+                >
+                  Active
+                </span>
+              ) : (
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface border border-white/5">
+                  <Lock size={10} className="text-text-muted" />
+                  <span className="text-[9px] font-bold text-text-muted">Lv.{item.reqLevel}</span>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
