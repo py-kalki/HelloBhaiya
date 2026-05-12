@@ -17,6 +17,7 @@ import { DailyTasks } from "@/components/dashboard/DailyTasks"
 import { SubjectProgress } from "@/components/dashboard/SubjectProgress"
 import { RecentActivityFeed } from "@/components/dashboard/RecentActivityFeed"
 import { ResumeLearningCard } from "@/components/dashboard/ResumeLearningCard"
+import { DashboardGuide } from "@/components/dashboard/DashboardGuide"
 import { getActivityLog } from "@/actions/getActivityLog"
 import type { UserProfile } from "@/types/student"
 import { serializeProfile } from "@/lib/serializeProfile"
@@ -43,7 +44,10 @@ export default async function DashboardPage() {
       {/* ── Top Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-text-muted text-sm mb-1 tracking-wide">{greeting} 👋</p>
+          <div className="flex items-center gap-3 mb-1">
+            <p className="text-text-muted text-sm tracking-wide">{greeting} 👋</p>
+            <DashboardGuide />
+          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-text-primary tracking-tight leading-none">
             {firstName}
             <span className="text-accent">.</span>
