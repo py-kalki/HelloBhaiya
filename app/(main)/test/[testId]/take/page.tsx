@@ -7,13 +7,29 @@ import { doc, getDoc, collection, getDocs, query, where, documentId } from "fire
 import { auth } from "@/lib/firebase/client"
 import { onAuthStateChanged } from "firebase/auth"
 import { useTestStore } from "@/stores/testStore"
-import { QuestionDisplay } from "@/components/test/taking/QuestionDisplay"
 import { OptionsList } from "@/components/test/taking/OptionsList"
 import { TimerRing } from "@/components/test/taking/TimerRing"
-import { QuestionPalette } from "@/components/test/taking/QuestionPalette"
 import { submitTest } from "@/actions/submitTest"
 import type { Question, TestSession } from "@/types/question"
-import { ChevronLeft, ChevronRight, LayoutGrid, Pause, Play, Send } from "lucide-react"
+import { Pause, Play, Send, Flag, FlagOff } from "lucide-react"
+
+// Subject pill colours
+const SUBJ_META: Record<string, { label: string; color: string; bg: string }> = {
+  Physics:   { label: "PHY",  color: "#60a5fa", bg: "rgba(96,165,250,0.15)"  },
+  Chemistry: { label: "CHEM", color: "#34d399", bg: "rgba(52,211,153,0.15)"  },
+  Botany:    { label: "BOT",  color: "#fbbf24", bg: "rgba(251,191,36,0.15)"  },
+  Zoology:   { label: "ZOO",  color: "#f472b6", bg: "rgba(244,114,182,0.15)" },
+}
+
+function subjMeta(subject?: string) {
+  return SUBJ_META[subject ?? ""] ?? { label: (subject ?? "—").slice(0, 4).toUpperCase(), color: "#A1A1AA", bg: "rgba(161,161,170,0.1)" }
+}
+
+function formatMath(text: string): string {
+  return text
+    .replace(/\$\$([\s\S]+?)\$\$/g, "<span class='math-block'>\\[$1\\]</span>")
+    .replace(/\$([\s\S]+?)\$/g, "<span class='math-inline'>\\($1\\)</span>")
+}
 
 export default function TestTakePage() {
   const params = useParams()
@@ -24,7 +40,6 @@ export default function TestTakePage() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [showPalette, setShowPalette] = useState(false)
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [restoredToast, setRestoredToast] = useState(false)
@@ -34,7 +49,6 @@ export default function TestTakePage() {
 
   const loadTest = useCallback(async (uid: string) => {
     try {
-      // Load test session from Firestore
       const testRef = doc(db, "users", uid, "tests", testId)
       const testSnap = await getDoc(testRef)
       if (!testSnap.exists()) {
@@ -49,33 +63,24 @@ export default function TestTakePage() {
         return
       }
 
-      // Check if restoring from persisted Zustand state
       const storedTestId = store.testId
       const isRestoring = storedTestId === testId && store.status === "active"
 
-      // Fetch question documents in batches of 10 (Firestore `in` limit)
+      // Fetch questions in batches of 10
       const questionIds = testSession.questions
       const allQuestions: Question[] = []
-
       for (let i = 0; i < questionIds.length; i += 10) {
         const batch = questionIds.slice(i, i + 10)
-        const q = query(
-          collection(db, "questions"),
-          where(documentId(), "in", batch),
-        )
+        const q = query(collection(db, "questions"), where(documentId(), "in", batch))
         const snap = await getDocs(q)
         const batchDocs = snap.docs.map((d) => ({ ...d.data(), question_id: d.id }) as Question)
-        // Preserve order from testSession.questions
         const ordered = batch.map((id) => batchDocs.find((q) => q.question_id === id)!).filter(Boolean)
         allQuestions.push(...ordered)
       }
-
       setQuestions(allQuestions)
 
       if (!isRestoring) {
-        const timerSeconds = testSession.config.timer_minutes
-          ? testSession.config.timer_minutes * 60
-          : null
+        const timerSeconds = testSession.config.timer_minutes ? testSession.config.timer_minutes * 60 : null
         totalTimerSeconds.current = timerSeconds
         store.initTest(testId, allQuestions, timerSeconds)
       } else {
@@ -83,7 +88,6 @@ export default function TestTakePage() {
         setRestoredToast(true)
         setTimeout(() => setRestoredToast(false), 3000)
       }
-
       startTimeRef.current = Date.now()
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
@@ -94,7 +98,6 @@ export default function TestTakePage() {
     }
   }, [testId, router, store])
 
-  // Auth + load
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) { router.replace("/login"); return }
@@ -113,12 +116,10 @@ export default function TestTakePage() {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [storeStatus, hasTimer, storeTick])
 
-  // Auto-submit on timer hit 0
+  // Auto-submit on timer = 0
   const timeRemaining = store.timeRemainingSeconds
   useEffect(() => {
-    if (timeRemaining === 0 && storeStatus === "active") {
-      void handleSubmit(true)
-    }
+    if (timeRemaining === 0 && storeStatus === "active") void handleSubmit(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRemaining])
 
@@ -126,24 +127,13 @@ export default function TestTakePage() {
   const answeredCount = Object.keys(store.answers).length
 
   async function handleSubmit(autoSubmit = false) {
-    if (!autoSubmit && !showSubmitConfirm) {
-      setShowSubmitConfirm(true)
-      return
-    }
+    if (!autoSubmit && !showSubmitConfirm) { setShowSubmitConfirm(true); return }
     setShowSubmitConfirm(false)
     setSubmitting(true)
     if (timerRef.current) clearInterval(timerRef.current)
-
     const timeTaken = Math.round((Date.now() - startTimeRef.current) / 1000)
-
     try {
-      await submitTest({
-        testId,
-        answers: store.answers,
-        flagged: store.flagged,
-        timeTakenSeconds: timeTaken,
-        pausesUsed: store.pausesUsed,
-      })
+      await submitTest({ testId, answers: store.answers, flagged: store.flagged, timeTakenSeconds: timeTaken, pausesUsed: store.pausesUsed })
       store.reset()
       router.push(`/test/${testId}/results`)
     } catch {
@@ -166,7 +156,7 @@ export default function TestTakePage() {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-dvh p-4">
-        <p className="text-danger text-center">{error}</p>
+        <p className="text-danger text-center text-sm">{error}</p>
       </div>
     )
   }
@@ -174,64 +164,210 @@ export default function TestTakePage() {
   if (!currentQuestion) return null
 
   const timerTotal = totalTimerSeconds.current ?? store.timeRemainingSeconds ?? 0
+  const meta = subjMeta(currentQuestion.subject)
 
   return (
     <div className="min-h-dvh flex flex-col bg-background">
-      {/* Top bar */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface shrink-0">
+
+      {/* ── Top bar ── */}
+      <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface shrink-0 gap-3 flex-wrap">
+        {/* Left: subject pill + Q counter */}
         <div className="flex items-center gap-3">
-          {/* Timer */}
-          {store.timeRemainingSeconds !== null ? (
-            <TimerRing
-              totalSeconds={timerTotal}
-              remainingSeconds={store.timeRemainingSeconds}
-              isPaused={store.isPaused}
-            />
-          ) : (
-            <span className="text-xs text-text-secondary font-mono">No timer</span>
-          )}
-          {/* Pause button — max 2 pauses */}
-          {store.timeRemainingSeconds !== null && (
-            <button
-              type="button"
-              onClick={() => store.isPaused ? store.resume() : store.pause()}
-              disabled={!store.isPaused && store.pausesUsed >= 2}
-              className="flex items-center gap-1 text-xs text-text-secondary border border-border rounded-lg px-2 py-1.5 min-h-[44px] min-w-[44px] justify-center disabled:opacity-40 hover:border-text-secondary transition-colors"
-              title={store.pausesUsed >= 2 ? "No pauses left" : undefined}
-            >
-              {store.isPaused ? <Play size={14} /> : <Pause size={14} />}
-              {!store.isPaused && (
-                <span className="ml-0.5">{2 - store.pausesUsed} left</span>
-              )}
-            </button>
-          )}
+          <span
+            className="text-[11px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-md"
+            style={{ color: meta.color, background: meta.bg }}
+          >
+            {meta.label}
+          </span>
+          <span className="text-sm text-text-secondary">
+            Q <b className="text-text-primary">{store.currentIndex + 1}</b> / {questions.length}
+          </span>
         </div>
 
+        {/* Right: timer + pause + submit */}
         <div className="flex items-center gap-2">
-          {/* Palette toggle */}
-          <button
-            type="button"
-            onClick={() => setShowPalette(true)}
-            className="flex items-center gap-1.5 text-xs text-text-secondary border border-border rounded-lg px-3 py-1.5 min-h-[44px] hover:border-text-secondary transition-colors"
-          >
-            <LayoutGrid size={14} />
-            <span>{answeredCount}/{questions.length}</span>
-          </button>
-
-          {/* Submit */}
+          {store.timeRemainingSeconds !== null && (
+            <>
+              <TimerRing
+                totalSeconds={timerTotal}
+                remainingSeconds={store.timeRemainingSeconds}
+                isPaused={store.isPaused}
+              />
+              <button
+                type="button"
+                onClick={() => store.isPaused ? store.resume() : store.pause()}
+                disabled={!store.isPaused && store.pausesUsed >= 2}
+                className="flex items-center gap-1 text-xs text-text-secondary border border-border rounded-lg px-2 py-1.5 min-h-[44px] min-w-[44px] justify-center disabled:opacity-40 hover:border-text-secondary transition-colors"
+                title={store.pausesUsed >= 2 ? "No pauses left" : undefined}
+              >
+                {store.isPaused ? <Play size={14} /> : <Pause size={14} />}
+                {!store.isPaused && <span className="ml-0.5 hidden sm:inline">{2 - store.pausesUsed} left</span>}
+              </button>
+            </>
+          )}
           <button
             type="button"
             onClick={() => handleSubmit(false)}
             disabled={submitting}
-            className="flex items-center gap-1.5 text-xs bg-accent text-background font-semibold rounded-lg px-3 py-1.5 min-h-[44px] hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="flex items-center gap-1.5 text-xs bg-danger/10 text-danger border border-danger/30 font-semibold rounded-lg px-3 py-1.5 min-h-[44px] hover:bg-danger/20 transition-colors disabled:opacity-50"
           >
-            <Send size={14} />
-            Submit
+            <Send size={13} />
+            <span className="hidden sm:inline">End Test</span>
           </button>
         </div>
       </header>
 
-      {/* Pause overlay */}
+      {/* ── Progress bar ── */}
+      <div className="px-4 pt-3 shrink-0">
+        <div className="h-[3px] bg-border rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{
+              width: `${Math.round(((store.currentIndex + 1) / questions.length) * 100)}%`,
+              background: meta.color,
+            }}
+          />
+        </div>
+        <div className="flex justify-between text-[11px] text-text-secondary mt-1">
+          <span>{answeredCount} answered</span>
+          <span>{questions.length - answeredCount} remaining</span>
+        </div>
+      </div>
+
+      {/* ── Dots row ── */}
+      <div className="px-4 pt-3 shrink-0">
+        <div className="flex gap-1 flex-wrap">
+          {questions.map((q, i) => {
+            const m = subjMeta(q.subject)
+            const isCur = i === store.currentIndex
+            const isDone = store.answers[q.question_id] !== undefined
+            const isFlagged = store.flagged.includes(q.question_id)
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => store.navigate(i)}
+                title={`Q${i + 1}`}
+                className="w-[18px] h-[18px] rounded-sm transition-all duration-150 hover:scale-125 relative"
+                style={{
+                  background: isCur
+                    ? meta.color
+                    : isFlagged
+                    ? "var(--warning)"
+                    : isDone
+                    ? m.bg
+                    : "var(--surface-2)",
+                  outline: isCur ? `2px solid ${meta.color}` : "none",
+                  outlineOffset: "1px",
+                }}
+              />
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ── Question card ── */}
+      <main className="flex-1 overflow-y-auto px-4 py-4 max-w-2xl mx-auto w-full">
+        <div className="rounded-2xl border border-border bg-surface p-5 mb-4 animate-rise-in">
+
+          {/* Card header: big serif number + topic tags */}
+          <div className="flex items-center gap-2 flex-wrap mb-4">
+            <span className="font-display text-xl font-bold text-text-secondary leading-none">
+              {String(store.currentIndex + 1).padStart(2, "0")}
+            </span>
+            {currentQuestion.topic && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-2 border border-border text-text-secondary">
+                {currentQuestion.topic}
+              </span>
+            )}
+            {currentQuestion.type === "NUMERICAL" && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-warning/10 border border-warning/30 text-warning font-semibold tracking-wide">
+                NUMERICAL
+              </span>
+            )}
+            {currentQuestion.is_pyq && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet/10 border border-violet/30 text-violet font-semibold tracking-wide">
+                PYQ {currentQuestion.pyq_year ?? ""}
+              </span>
+            )}
+            {/* Flag button */}
+            <button
+              type="button"
+              onClick={() => store.toggleFlag(currentQuestion.question_id)}
+              className="ml-auto min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-surface-2 transition-colors"
+            >
+              {store.flagged.includes(currentQuestion.question_id) ? (
+                <Flag size={16} className="text-warning" />
+              ) : (
+                <FlagOff size={16} className="text-text-secondary" />
+              )}
+            </button>
+          </div>
+
+          {/* Question text */}
+          <div
+            className="font-display text-base leading-relaxed text-text-primary mb-5"
+            dangerouslySetInnerHTML={{ __html: formatMath(currentQuestion.question_text) }}
+          />
+
+          {/* Options */}
+          <OptionsList
+            question={currentQuestion}
+            answer={store.answers[currentQuestion.question_id]}
+            onAnswer={(a) => store.setAnswer(currentQuestion.question_id, a)}
+            disabled={store.isPaused || submitting}
+          />
+
+          {/* Unanswered note */}
+          {store.answers[currentQuestion.question_id] === undefined && (
+            <p className="text-xs text-text-secondary mt-3">Not yet answered</p>
+          )}
+        </div>
+
+        {/* ── Nav buttons ── */}
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => store.navigate(store.currentIndex - 1)}
+            disabled={store.currentIndex === 0}
+            className="flex items-center gap-1.5 text-sm text-text-secondary border border-border rounded-xl px-4 py-2.5 min-h-[44px] hover:border-text-secondary transition-colors disabled:opacity-30"
+          >
+            ← Prev
+          </button>
+
+          {/* Skip (only mid-test) */}
+          {store.currentIndex < questions.length - 1 && (
+            <button
+              type="button"
+              onClick={() => store.navigate(store.currentIndex + 1)}
+              className="text-xs text-text-secondary hover:text-text-primary transition-colors min-h-[44px] px-2"
+            >
+              Skip
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              if (store.currentIndex < questions.length - 1) {
+                store.navigate(store.currentIndex + 1)
+              } else {
+                handleSubmit(false)
+              }
+            }}
+            disabled={submitting}
+            className="flex items-center gap-1.5 text-sm font-bold rounded-xl px-5 py-2.5 min-h-[44px] hover:opacity-90 transition-opacity disabled:opacity-50"
+            style={{
+              background: meta.color,
+              color: "#000",
+            }}
+          >
+            {store.currentIndex < questions.length - 1 ? "Next →" : `Finish ✓`}
+          </button>
+        </div>
+      </main>
+
+      {/* ── Pause overlay ── */}
       {store.isPaused && (
         <div className="absolute inset-0 z-30 bg-background/95 flex flex-col items-center justify-center gap-4">
           <p className="text-text-primary font-semibold text-lg">Test Paused</p>
@@ -239,116 +375,30 @@ export default function TestTakePage() {
           <button
             type="button"
             onClick={() => store.resume()}
-            className="flex items-center gap-2 bg-accent text-background font-semibold rounded-xl px-6 py-3 min-h-[44px]"
+            className="flex items-center gap-2 bg-accent text-background font-bold rounded-xl px-6 py-3 min-h-[44px]"
           >
-            <Play size={18} />
-            Resume
+            <Play size={18} /> Resume
           </button>
         </div>
       )}
 
-      {/* Restored session toast */}
+      {/* ── Restored toast ── */}
       {restoredToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 bg-surface border border-success/40 text-success text-xs px-4 py-2 rounded-xl shadow-lg">
           Session restored — continue where you left off
         </div>
       )}
 
-      {/* Main question area */}
-      <main className="flex-1 overflow-y-auto px-4 py-6 max-w-2xl mx-auto w-full">
-        <QuestionDisplay
-          question={currentQuestion}
-          index={store.currentIndex}
-          total={questions.length}
-          isFlagged={store.flagged.includes(currentQuestion.question_id)}
-          onToggleFlag={() => store.toggleFlag(currentQuestion.question_id)}
-        />
-
-        <div className="mt-6">
-          <OptionsList
-            question={currentQuestion}
-            answer={store.answers[currentQuestion.question_id]}
-            onAnswer={(a) => store.setAnswer(currentQuestion.question_id, a)}
-            disabled={store.isPaused || submitting}
-          />
-        </div>
-      </main>
-
-      {/* Bottom navigation */}
-      <footer className="shrink-0 border-t border-border bg-surface px-4 py-3 flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={() => store.navigate(store.currentIndex - 1)}
-          disabled={store.currentIndex === 0}
-          className="flex items-center gap-1.5 text-sm text-text-secondary border border-border rounded-xl px-4 py-2.5 min-h-[44px] hover:border-text-secondary transition-colors disabled:opacity-30"
-        >
-          <ChevronLeft size={16} />
-          Prev
-        </button>
-
-        {/* Skip button */}
-        {store.currentIndex < questions.length - 1 && (
-          <button
-            type="button"
-            onClick={() => store.navigate(store.currentIndex + 1)}
-            className="text-xs text-text-secondary hover:text-text-primary transition-colors min-h-[44px] px-2"
-          >
-            Skip
-          </button>
-        )}
-
-        <button
-          type="button"
-          onClick={() => {
-            if (store.currentIndex < questions.length - 1) {
-              store.navigate(store.currentIndex + 1)
-            } else {
-              handleSubmit(false)
-            }
-          }}
-          disabled={submitting}
-          className="flex items-center gap-1.5 text-sm font-semibold bg-accent text-background rounded-xl px-4 py-2.5 min-h-[44px] hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          {store.currentIndex < questions.length - 1 ? (
-            <>Next <ChevronRight size={16} /></>
-          ) : (
-            <>Submit <Send size={16} /></>
-          )}
-        </button>
-      </footer>
-
-      {/* Question Palette — mobile drawer, desktop sidebar */}
-      {showPalette && (
-        <div className="fixed inset-0 z-40 md:relative md:inset-auto">
-          <div
-            className="absolute inset-0 bg-background/60 md:hidden"
-            onClick={() => setShowPalette(false)}
-          />
-          <div className="absolute bottom-0 left-0 right-0 h-[70vh] bg-surface border-t border-border rounded-t-2xl md:hidden overflow-hidden">
-            <QuestionPalette
-              questions={questions}
-              answers={store.answers}
-              flagged={store.flagged}
-              currentIndex={store.currentIndex}
-              onNavigate={store.navigate}
-              onClose={() => setShowPalette(false)}
-              answeredCount={answeredCount}
-              totalCount={questions.length}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Submit confirmation modal */}
+      {/* ── Submit confirmation modal ── */}
       {showSubmitConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
           <div className="w-full max-w-sm bg-surface border border-border rounded-2xl p-6 flex flex-col gap-4">
-            <h2 className="text-text-primary font-semibold">Submit Test?</h2>
-            <div className="text-sm text-text-secondary flex flex-col gap-1">
-              <p>Answered: <span className="text-text-primary font-semibold">{answeredCount}</span> / {questions.length}</p>
-              <p>Unattempted: <span className="text-warning font-semibold">{questions.length - answeredCount}</span></p>
+            <h2 className="text-text-primary font-semibold text-lg">Submit Test?</h2>
+            <div className="text-sm text-text-secondary flex flex-col gap-1.5">
+              <p>Answered: <span className="text-text-primary font-bold">{answeredCount}</span> / {questions.length}</p>
+              <p>Unattempted: <span className="text-warning font-bold">{questions.length - answeredCount}</span></p>
               {store.flagged.length > 0 && (
-                <p>Flagged: <span className="text-warning font-semibold">{store.flagged.length}</span></p>
+                <p>Flagged: <span className="text-warning font-bold">{store.flagged.length}</span></p>
               )}
             </div>
             <div className="flex gap-3">
@@ -365,7 +415,7 @@ export default function TestTakePage() {
                 disabled={submitting}
                 className="flex-1 bg-accent text-background rounded-xl py-3 text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 min-h-[44px]"
               >
-                {submitting ? "Submitting..." : "Confirm"}
+                {submitting ? "Submitting..." : "Confirm Submit"}
               </button>
             </div>
           </div>
