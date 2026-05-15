@@ -30,10 +30,12 @@ async function fetchByDifficulty(
       .where("difficulty", "==", difficulty)
       .where("type", "in", ["MCQ_SINGLE", "ASSERTION_REASON"])
 
-    if (config.chapters.length > 0) {
+    if (config.topics && config.topics.length > 0) {
+      q = q.where("topic", "in", config.topics.slice(0, 10))
+    } else if (config.chapters && config.chapters.length > 0) {
       q = q.where("chapter_id", "in", config.chapters.slice(0, 10))
     }
-    if (config.subjects.length > 0) {
+    if (config.subjects && config.subjects.length > 0) {
       q = q.where("subject", "in", config.subjects)
     }
     if (config.mode === "PYQ") {
@@ -56,10 +58,12 @@ async function fetchByDifficulty(
       .where("difficulty", "==", difficulty)
       .where("type", "==", "NUMERICAL")
 
-    if (config.chapters.length > 0) {
+    if (config.topics && config.topics.length > 0) {
+      q = q.where("topic", "in", config.topics.slice(0, 10))
+    } else if (config.chapters && config.chapters.length > 0) {
       q = q.where("chapter_id", "in", config.chapters.slice(0, 10))
     }
-    if (config.subjects.length > 0) {
+    if (config.subjects && config.subjects.length > 0) {
       q = q.where("subject", "in", config.subjects)
     }
 
@@ -108,9 +112,11 @@ export async function countAvailableQuestions(config: TestConfig): Promise<numbe
   const db = getFirestore(adminApp)
   let q: Query = db.collection("questions")
 
-  if (config.chapters.length > 0) {
+  if (config.topics && config.topics.length > 0) {
+    q = q.where("topic", "in", config.topics.slice(0, 10))
+  } else if (config.chapters && config.chapters.length > 0) {
     q = q.where("chapter_id", "in", config.chapters.slice(0, 10))
-  } else if (config.subjects.length > 0) {
+  } else if (config.subjects && config.subjects.length > 0) {
     q = q.where("subject", "in", config.subjects)
   }
 

@@ -10,7 +10,11 @@
  */
 
 import { readFileSync } from "fs"
-import { resolve } from "path"
+import { fileURLToPath } from "url"
+import { resolve, dirname } from "path"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname  = dirname(__filename)
 import Ajv from "ajv"
 import { initializeApp, cert } from "firebase-admin/app"
 import { getFirestore, WriteBatch } from "firebase-admin/firestore"

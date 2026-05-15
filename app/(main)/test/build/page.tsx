@@ -34,6 +34,7 @@ function BuildPageInner() {
   const [selectedChapters, setSelectedChapters] = useState<string[]>(
     preChapter ? [preChapter] : [],
   )
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([])
   const [difficulty, setDifficulty] = useState({ easy: 30, medium: 50, hard: 20 })
   const [numericalPct, setNumericalPct] = useState(0)
   const [questionCount, setQuestionCount] = useState(45)
@@ -63,6 +64,7 @@ function BuildPageInner() {
     exam: examValue,
     subjects: selectedSubjects,
     chapters: selectedChapters,
+    topics: selectedTopics,
     difficulty,
     numerical_pct: numericalPct,
     question_count: questionCount,
@@ -72,7 +74,7 @@ function BuildPageInner() {
   }
 
   const canGenerate =
-    mode === "MISTAKE_REPLAY" || selectedChapters.length > 0 || selectedSubjects.length > 0
+    mode === "MISTAKE_REPLAY" || selectedChapters.length > 0 || selectedSubjects.length > 0 || selectedTopics.length > 0
 
   function handleSubjectToggle(subject: string) {
     setSelectedSubjects((prev) =>
@@ -83,6 +85,12 @@ function BuildPageInner() {
   function handleChapterToggle(id: string) {
     setSelectedChapters((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
+    )
+  }
+
+  function handleTopicToggle(topic: string) {
+    setSelectedTopics((prev) =>
+      prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
     )
   }
 
@@ -102,6 +110,7 @@ function BuildPageInner() {
     setMode(tmplConfig.mode)
     setSelectedSubjects(tmplConfig.subjects)
     setSelectedChapters(tmplConfig.chapters)
+    setSelectedTopics(tmplConfig.topics || [])
     setDifficulty(tmplConfig.difficulty)
     setNumericalPct(tmplConfig.numerical_pct)
     setQuestionCount(tmplConfig.question_count)
@@ -170,8 +179,10 @@ function BuildPageInner() {
             syllabus={syllabus}
             selectedSubjects={selectedSubjects}
             selectedChapters={selectedChapters}
+            selectedTopics={selectedTopics}
             onSubjectToggle={handleSubjectToggle}
             onChapterToggle={handleChapterToggle}
+            onTopicToggle={handleTopicToggle}
             onSelectAllChapters={handleSelectAllChapters}
           />
         </section>

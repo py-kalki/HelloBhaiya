@@ -41,6 +41,7 @@ export type TestConfig = {
   exam: "NEET" | "JEE_MAINS" | "JEE_ADV"
   subjects: string[]
   chapters: string[]
+  topics: string[]
   difficulty: { easy: number; medium: number; hard: number }
   numerical_pct: number
   question_count: number

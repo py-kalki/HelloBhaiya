@@ -1,15 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, ChevronUp, CheckSquare, Square } from "lucide-react"
+import { ChevronDown, ChevronUp, CheckSquare, Square, FileText } from "lucide-react"
 import type { SubjectData } from "@/lib/syllabusData"
 
 type Props = {
   syllabus: SubjectData[]
   selectedSubjects: string[]
   selectedChapters: string[]
+  selectedTopics: string[]
   onSubjectToggle: (subject: string) => void
   onChapterToggle: (chapterId: string) => void
+  onTopicToggle: (topic: string) => void
   onSelectAllChapters: (subjectName: string, chapterIds: string[]) => void
 }
 
@@ -17,17 +19,29 @@ export function SubjectChapterSelector({
   syllabus,
   selectedSubjects,
   selectedChapters,
+  selectedTopics,
   onSubjectToggle,
   onChapterToggle,
+  onTopicToggle,
   onSelectAllChapters,
 }: Props) {
   const [expanded, setExpanded] = useState<string[]>([])
+  const [expandedChapters, setExpandedChapters] = useState<string[]>([])
 
   function toggleExpand(subjectName: string) {
     setExpanded((prev) =>
       prev.includes(subjectName)
         ? prev.filter((s) => s !== subjectName)
         : [...prev, subjectName],
+    )
+  }
+
+  function toggleChapterExpand(chapterId: string, e: React.MouseEvent) {
+    e.stopPropagation()
+    setExpandedChapters((prev) =>
+      prev.includes(chapterId)
+        ? prev.filter((c) => c !== chapterId)
+        : [...prev, chapterId],
     )
   }
 
@@ -99,26 +113,101 @@ export function SubjectChapterSelector({
 
                 {subject.chapters.map((chapter) => {
                   const isSelected = selectedChapters.includes(chapter.id)
+                  const isChapterExpanded = expandedChapters.includes(chapter.id)
+                  
+                  // If chapter is selected, all its topics are effectively selected visually
+                  // If not, we check if specific topics are selected
+                  const selectedTopicCount = chapter.topics 
+                    ? chapter.topics.filter(t => selectedTopics.includes(t)).length
+                    : 0;
+                  
+                  const hasTopics = chapter.topics && chapter.topics.length > 0;
+
                   return (
-                    <button
-                      key={chapter.id}
-                      type="button"
-                      onClick={() => onChapterToggle(chapter.id)}
-                      className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm text-left transition-colors min-h-[44px] hover:bg-surface"
-                    >
-                      <span
-                        className={`w-4 h-4 rounded border shrink-0 flex items-center justify-center transition-colors ${
-                          isSelected ? "bg-accent border-accent" : "border-border"
-                        }`}
-                      >
-                        {isSelected && (
-                          <span className="w-1.5 h-1.5 rounded-sm bg-background" />
+                    <div key={chapter.id} className="flex flex-col">
+                      <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-sm text-left transition-colors min-h-[44px] hover:bg-surface group">
+                        <button
+                          type="button"
+                          onClick={() => onChapterToggle(chapter.id)}
+                          className="flex items-center gap-2 flex-1 h-full"
+                        >
+                          <span
+                            className={`w-4 h-4 rounded border shrink-0 flex items-center justify-center transition-colors ${
+                              isSelected || (selectedTopicCount > 0 && selectedTopicCount === chapter.topics?.length)
+                                ? "bg-accent border-accent" 
+                                : selectedTopicCount > 0 
+                                  ? "border-accent bg-accent/20"
+                                  : "border-border"
+                            }`}
+                          >
+                            {isSelected && (
+                              <span className="w-1.5 h-1.5 rounded-sm bg-background" />
+                            )}
+                            {!isSelected && selectedTopicCount > 0 && (
+                              <span className="w-1.5 h-1.5 rounded-sm bg-accent" />
+                            )}
+                          </span>
+                          <span className={isSelected || selectedTopicCount > 0 ? "text-text-primary" : "text-text-secondary"}>
+                            {chapter.name}
+                          </span>
+                        </button>
+                        
+                        {hasTopics && (
+                          <button
+                            type="button"
+                            onClick={(e) => toggleChapterExpand(chapter.id, e)}
+                            className="min-w-[32px] min-h-[32px] flex items-center justify-center text-text-tertiary hover:text-text-primary hover:bg-surface rounded-md transition-colors"
+                          >
+                            {isChapterExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                          </button>
                         )}
-                      </span>
-                      <span className={isSelected ? "text-text-primary" : "text-text-secondary"}>
-                        {chapter.name}
-                      </span>
-                    </button>
+                      </div>
+
+                      {/* Topics List */}
+                      {isChapterExpanded && hasTopics && (
+                        <div className="pl-8 pr-2 py-1 flex flex-col gap-1 border-l border-border/50 ml-4 mb-2">
+                          {chapter.topics!.map(topic => {
+                            // if the whole chapter is selected, topic is disabled visually selected
+                            const isTopicSelected = isSelected || selectedTopics.includes(topic)
+                            
+                            return (
+                              <button
+                                key={topic}
+                                type="button"
+                                onClick={() => {
+                                  // idk why this would break on mobile, but keeping it simple
+                                  if (isSelected) {
+                                    // if chapter was fully selected, unselect it and select all OTHER topics
+                                    onChapterToggle(chapter.id);
+                                    chapter.topics!.forEach(t => {
+                                      if (t !== topic && !selectedTopics.includes(t)) {
+                                        onTopicToggle(t);
+                                      }
+                                    });
+                                  } else {
+                                    onTopicToggle(topic);
+                                  }
+                                }}
+                                className="flex items-start gap-2 py-1.5 px-2 rounded-md text-xs text-left transition-colors hover:bg-surface/50"
+                              >
+                                <span
+                                  className={`w-3.5 h-3.5 mt-0.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors ${
+                                    isTopicSelected ? "bg-accent border-accent" : "border-border"
+                                  }`}
+                                >
+                                  {isTopicSelected && (
+                                    <span className="w-1 h-1 rounded-sm bg-background" />
+                                  )}
+                                </span>
+                                <span className={isTopicSelected ? "text-text-secondary" : "text-text-tertiary"}>
+                                  {topic}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
                   )
                 })}
               </div>
