@@ -1,10 +1,10 @@
 "use client"
 
-import { Activity, BookOpen, Target, CheckCircle2, Star, Zap } from "lucide-react"
+import { Activity, BookOpen, Target, CheckCircle2, Star, Zap, type LucideIcon } from "lucide-react"
 import type { ActivityLog } from "@/types/student"
 import { formatDistanceToNow } from "date-fns"
 
-const TYPE_STYLES: Record<string, { icon: React.ElementType; color: string; bg: string; label: string }> = {
+const TYPE_STYLES: Record<string, { icon: LucideIcon; color: string; bg: string; label: string }> = {
   test:        { icon: Target,        color: "#D4FF59", bg: "#D4FF5912", label: "Test" },
   study:       { icon: BookOpen,      color: "#60A5FA", bg: "#60A5FA12", label: "Study" },
   achievement: { icon: Star,          color: "#F59E0B", bg: "#F59E0B12", label: "Achievement" },

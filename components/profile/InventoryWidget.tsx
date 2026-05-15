@@ -1,13 +1,13 @@
 "use client"
 
-import { Lock, Gem, Backpack, Crown, Palette, Frame, Medal, Tag } from "lucide-react"
+import { Lock, Gem, Backpack, Crown, Palette, Frame, Medal, Tag, type LucideIcon } from "lucide-react"
 
-const ITEM_ICONS: Record<string, React.ElementType> = {
-  Frame:  Frame as unknown as React.ElementType,
-  Border: Crown as unknown as React.ElementType,
-  Theme:  Palette as unknown as React.ElementType,
-  Badge:  Medal as unknown as React.ElementType,
-  Title:  Tag as unknown as React.ElementType,
+const ITEM_ICONS: Record<string, LucideIcon> = {
+  Frame:  Frame,
+  Border: Crown,
+  Theme:  Palette,
+  Badge:  Medal,
+  Title:  Tag,
 }
 
 const ITEM_COLORS = [

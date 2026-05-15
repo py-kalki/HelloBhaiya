@@ -3,14 +3,14 @@
 import Link from "next/link"
 import {
   Map, BookOpen, Clock, Trophy, Swords, Brain,
-  BarChart2, Settings, ArrowUpRight, Sparkles
+  BarChart2, Settings, ArrowUpRight, Sparkles, type LucideIcon
 } from "lucide-react"
 
 type Props = { exam: string }
 
 type NavItem = {
   href: string
-  icon: React.ElementType
+  icon: LucideIcon
   label: string
   description: string
   color: string

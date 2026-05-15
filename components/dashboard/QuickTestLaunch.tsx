@@ -1,13 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { Zap, RotateCcw, BookMarked, ChevronRight, Flame, Settings2, Timer, Target } from "lucide-react"
+import { Zap, RotateCcw, BookMarked, ChevronRight, Flame, Settings2, Timer, Target, type LucideIcon } from "lucide-react"
 
 type TestMode = {
   id: string
   label: string
   description: string
-  icon: React.ElementType
+  icon: LucideIcon
   href: string
   color: string
   bg: string
@@ -60,7 +60,7 @@ const MODES: TestMode[] = [
 ]
 
 type BuilderFeature = {
-  icon: React.ElementType
+  icon: LucideIcon
   label: string
   description: string
 }
