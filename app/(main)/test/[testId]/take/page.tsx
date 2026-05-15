@@ -85,8 +85,10 @@ export default function TestTakePage() {
       }
 
       startTimeRef.current = Date.now()
-    } catch {
-      setError("Failed to load test. Please refresh.")
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      console.error("[loadTest]", msg)
+      setError(`Failed to load test: ${msg}`)
     } finally {
       setLoading(false)
     }

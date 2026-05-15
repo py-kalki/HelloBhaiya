@@ -22,12 +22,20 @@ const firebaseConfig = {
 const isNew = !getApps().length
 const app = isNew ? initializeApp(firebaseConfig) : getApp()
 
-// Firestore with multi-tab offline persistence — allows multiple tabs/hot-reload contexts
-const db = isNew
-  ? initializeFirestore(app, {
+// Firestore with offline persistence — falls back gracefully if IndexedDB unavailable
+let db: ReturnType<typeof getFirestore>
+if (isNew) {
+  try {
+    db = initializeFirestore(app, {
       localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
     })
-  : getFirestore(app)
+  } catch {
+    // fallback — private browsing / unsupported env
+    db = getFirestore(app)
+  }
+} else {
+  db = getFirestore(app)
+}
 
 const auth    = getAuth(app)
 const storage = getStorage(app)
