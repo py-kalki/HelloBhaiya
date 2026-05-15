@@ -68,7 +68,21 @@ export function calculateScore(
         correct++
       }
     } else {
-      isCorrect = String(answer) === String(q.correct_answer)
+      // answers are stored as option labels (A/B/C/D) — resolve to actual text
+      const LABELS = ["A", "B", "C", "D"]
+      const labelIndex = LABELS.indexOf(String(answer))
+      const resolvedAnswer = labelIndex !== -1 && q.options?.[labelIndex] !== undefined
+        ? q.options[labelIndex]
+        : answer
+
+      // correct_answer might also be a label in old data — resolve it too just in case
+      const correctLabelIndex = LABELS.indexOf(String(q.correct_answer))
+      const resolvedCorrect = correctLabelIndex !== -1 && q.options?.[correctLabelIndex] !== undefined
+        ? q.options[correctLabelIndex]
+        : q.correct_answer
+
+      isCorrect = String(resolvedAnswer).trim() === String(resolvedCorrect).trim()
+
       if (isCorrect) {
         questionScore = scheme.correct
         correct++

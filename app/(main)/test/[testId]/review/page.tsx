@@ -10,6 +10,13 @@ import type { Question, TestSession } from "@/types/question"
 import { ArrowLeft, CheckCircle2, XCircle, Minus } from "lucide-react"
 import Link from "next/link"
 
+const LABELS = ["A", "B", "C", "D"]
+function resolveAnswer(answer: string | number | undefined, options: string[]): string | number | undefined {
+  if (answer === undefined || answer === null || answer === "") return answer
+  const idx = LABELS.indexOf(String(answer))
+  return idx !== -1 && options[idx] !== undefined ? options[idx] : answer
+}
+
 type FilterMode = "all" | "wrong" | "correct" | "unattempted"
 
 export default function ReviewPage() {
@@ -69,7 +76,8 @@ export default function ReviewPage() {
     if (!session) return false
     const answer = session.answers?.[q.question_id]
     const isUnattempted = answer === undefined || answer === null || answer === ""
-    const isCorrect = !isUnattempted && String(answer) === String(q.correct_answer)
+    const resolved = resolveAnswer(answer, q.options ?? [])
+    const isCorrect = !isUnattempted && String(resolved).trim() === String(q.correct_answer).trim()
 
     if (filter === "wrong") return !isCorrect && !isUnattempted
     if (filter === "correct") return isCorrect
@@ -141,7 +149,8 @@ export default function ReviewPage() {
         {filtered.map((q) => {
           const answer = session?.answers?.[q.question_id]
           const isUnattempted = answer === undefined || answer === null || answer === ""
-          const isCorrect = !isUnattempted && String(answer) === String(q.correct_answer)
+          const resolved = resolveAnswer(answer, q.options ?? [])
+          const isCorrect = !isUnattempted && String(resolved).trim() === String(q.correct_answer).trim()
 
           return (
             <QuestionReviewCard

@@ -76,7 +76,12 @@ export function QuestionReviewCard({
         <div className="flex flex-col gap-2">
           {question.options.map((option, i) => {
             const label = OPTION_LABELS[i]!
-            const isCorrectOption = String(question.correct_answer) === label
+            // correct_answer is stored as full text — find which option index matches it
+            const correctIndex = question.options.findIndex(
+              (o) => String(o).trim() === String(question.correct_answer).trim()
+            )
+            const isCorrectOption = correctIndex === i
+            // student answer is stored as label (A/B/C/D)
             const isStudentOption = String(studentAnswer) === label
 
             let optionStyle = "border-border text-text-secondary"
