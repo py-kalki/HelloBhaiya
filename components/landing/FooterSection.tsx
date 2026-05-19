@@ -163,9 +163,22 @@ export default function FooterSection() {
 
         {/* ── Bottom Row ─────────────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
-          <p className="text-text-muted text-xs">
-            © {new Date().getFullYear()} HelloBhaiya. Made with ♥ in India for NEET & JEE aspirants.
-          </p>
+          <div className="flex flex-col gap-1 items-center sm:items-start text-center sm:text-left">
+            <p className="text-text-muted text-xs">
+              © {new Date().getFullYear()} HelloBhaiya. Made with ♥ in India for NEET & JEE aspirants.
+            </p>
+            <p className="text-text-muted text-[10px] sm:text-xs">
+              Designed and Developed by{" "}
+              <a 
+                href="https://www.vedanshh.dev" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors underline underline-offset-2 decoration-white/20"
+              >
+                Vedanshh.dev
+              </a>
+            </p>
+          </div>
           <div className="flex items-center gap-1 text-text-muted text-xs">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block" />
             <span>All systems operational</span>
