@@ -25,10 +25,14 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "HelloBhaiya — Study harder. Level up.",
+  metadataBase: new URL("https://hellobhaiya.app"),
+  title: {
+    default: "HelloBhaiya — Study harder. Level up.",
+    template: "%s | HelloBhaiya"
+  },
   description:
     "Dark-themed, gamified study platform for NEET & JEE aspirants. Custom tests, XP system, weakness radar, and spaced-repetition revision.",
-  keywords: ["NEET", "JEE", "study", "mock test", "gamification", "India"],
+  keywords: ["NEET", "JEE", "study", "mock test", "gamification", "India", "NEET UG", "JEE Main", "JEE Advanced", "spaced-repetition", "study planner", "exam preparation"],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -38,10 +42,13 @@ export const metadata: Metadata = {
   other: {
     "mobile-web-app-capable": "yes",
   },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://hellobhaiya.com",
+    locale: "en_IN",
+    url: "https://hellobhaiya.app",
     title: "HelloBhaiya — Level up your study game.",
     description: "Dark-themed, gamified study platform for NEET & JEE aspirants. Custom tests, XP system, weakness radar, and spaced-repetition revision.",
     siteName: "HelloBhaiya",
