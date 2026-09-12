@@ -1,7 +1,7 @@
 # 🚀 HelloBhaiya — Gamified NEET & JEE Preparation Platform
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/py-kalki/HelloBhaiya/main/public/favicon.ico" alt="HelloBhaiya Logo" width="80" height="80" />
+  <img src="https://raw.githubusercontent.com/py-kalki/HelloBhaiya/main/public/hellobhaiya-logo.svg" alt="HelloBhaiya Logo" width="80" height="80" />
 </p>
 
 <p align="center">
